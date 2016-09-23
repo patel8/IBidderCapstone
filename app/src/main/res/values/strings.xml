@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">IBidder</string>
+    <string name="no_account_yet_create_one">No account yet? Create One</string>
+    <string name="email">Email</string>
 </resources>
