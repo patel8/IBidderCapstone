@@ -2,4 +2,10 @@
     <string name="app_name">IBidder</string>
     <string name="no_account_yet_create_one">No account yet? Create One</string>
     <string name="email">Email</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/email"
-                android:id="@+id/txtEmail"
+                android:id="@+id/textViewEmail"
                 android:textColor="@color/LabelColor" />
 
             <EditText
@@ -40,28 +40,28 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
                 android:ems="10"
-                android:id="@+id/editText" />
+                android:id="@+id/editTextEmail" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:ems="10"
-                android:id="@+id/editText2" />
+                android:id="@+id/editTextPassword" />
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Login"
-                android:id="@+id/btnLogin"
+                android:id="@+id/buttonLogin"
                 android:textColor="@color/LabelColor"
-                android:background="#f4ad32" />
+                android:background="@color/buttonLogin" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:id="@+id/txtSignUp"
+                android:id="@+id/textViewSignUp"
                 android:gravity="center"
                 android:text="@string/no_account_yet_create_one"
                 android:textColor="@color/LabelColor" />

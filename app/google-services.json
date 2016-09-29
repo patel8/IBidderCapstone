@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "175881529191",
+    "firebase_url": "https://ibidder-a1629.firebaseio.com",
+    "project_id": "ibidder-a1629",
+    "storage_bucket": "ibidder-a1629.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175881529191:android:c8257547eafea92c",
+        "android_client_info": {
+          "package_name": "edu.uwm.ibidder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "175881529191-t2kdbtisa03ttdoua592l9j66udte5k1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.uwm.ibidder",
+            "certificate_hash": "BF170CDEB3C96F537D03FCE2A3DD5658590D3FE6"
+          }
+        },
+        {
+          "client_id": "175881529191-oa4ddgvat5b682o5jj5uiib0ni9hga9i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBl668aP_fRp55FKg1MtmnLN8ZiTtw_2SU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "175881529191-oa4ddgvat5b682o5jj5uiib0ni9hga9i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
