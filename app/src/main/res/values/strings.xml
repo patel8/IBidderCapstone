@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">IBidder</string>
-    <string name="no_account_yet_create_one">No account yet? Create One</string>
+    <string name="no_account_yet_create_one">SIGN UP</string>
     <string name="email">Email</string>
 
 
@@ -12,6 +12,7 @@
 
     <string name="login_activity_lable">LOGIN</string>
     <string name="sign_up_activity_lable">SIGN UP</string>
+    <string name="forgot_your_password">Forgot Password?</string>
     <string name="fb_login_protocol_scheme">fb633724556807673</string>
 
     <!-- All following Strings are related to Profile Activity-->
