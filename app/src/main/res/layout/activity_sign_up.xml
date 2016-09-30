@@ -14,14 +14,14 @@
         android:inputType="textPersonName"
         android:ems="10"
         android:id="@+id/editTextFirstName"
-        android:hint="First Name"
+        android:hint="  Name"
         android:background="@android:drawable/editbox_background"
         android:padding="10dp"
         android:layout_marginLeft="5dp"
-        android:drawableLeft="@android:drawable/ic_dialog_email"
+        android:drawableLeft="@drawable/usericon"
         android:layout_marginRight="5dp" />
 
-    <EditText
+    EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
@@ -39,11 +39,12 @@
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/editTextEmail"
-        android:hint="Email"
+        android:hint="  Email"
         android:background="@android:drawable/editbox_background"
         android:padding="10dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:drawableLeft="@android:drawable/sym_action_email"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -51,9 +52,11 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/editTextPasswordSignUp"
-        android:hint="password"
+        android:hint="  password"
         android:background="@android:drawable/editbox_background"
         android:padding="10dp"
+        android:drawablePadding="2dp"
+        android:drawableLeft="@drawable/passwordicon"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp" />
 
@@ -63,10 +66,11 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/editTextConfirmPasswordSingUp"
-        android:hint="Confirm Passowrd"
+        android:hint="  Confirm Passowrd"
         android:background="@android:drawable/editbox_background"
         android:padding="10dp"
         android:layout_marginLeft="5dp"
+        android:drawableLeft="@drawable/passwordicon"
         android:layout_marginRight="5dp" />
 
     <EditText
@@ -75,17 +79,19 @@
         android:inputType="number"
         android:ems="10"
         android:id="@+id/editTextPhoneNumber"
-        android:hint="phone number"
+        android:hint="    phone number"
         android:background="@android:drawable/editbox_background"
         android:padding="10dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:drawableLeft="@android:drawable/stat_sys_vp_phone_call"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:id="@+id/button"
+        android:background="@color/TopBarColor"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp" />
 

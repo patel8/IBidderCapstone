@@ -1,5 +1,6 @@
 package edu.uwm.ibidder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -62,9 +65,16 @@ public class ProfileActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+       switch(id){
+           case R.id.action_settings:
+               //Todo - What should happen in settings  GOES HERE
+               break;
+           case R.id.action_logOut:
+               // Log out current User and send it back to login Screen.
+               FirebaseAuth.getInstance().signOut();
+               startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+               break;
+       }
 
         return super.onOptionsItemSelected(item);
     }

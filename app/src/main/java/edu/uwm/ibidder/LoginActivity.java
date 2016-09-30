@@ -2,16 +2,18 @@ package edu.uwm.ibidder;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.telecom.Call;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -19,9 +21,12 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.facebook.FacebookSdk;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -35,6 +40,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //Facebook Login Widgets and Variables
     LoginButton buttonFacebookLogin;
     CallbackManager callbackManager;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +52,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         intializeAllWidgets();
         ResiterOnClickListener();
+
+
+        // Check if any user is Logged in. If yes, then Go to Profile Activity
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                } else {
+
+                }
+                // ...
+            }
+        };
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        if (mAuthListener != null) {
+            firebaseAuth.removeAuthStateListener(mAuthListener);
+        }
 
     }
 
@@ -55,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart() {
         super.onStart();
         intializeAllWidgets();
+        firebaseAuth.addAuthStateListener(mAuthListener);
     }
 
     // All private Helper Methods
@@ -75,7 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         buttonFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-
+                handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
@@ -110,7 +138,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 LoginUser();
                 break;
             case R.id.textViewSignUp:
-                // // TODO: 9/28/2016  User have clicked on Generic Sign Up Button. 
+                // // TODO: 9/28/2016  User have clicked on Generic Sign Up Button.
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
                 break;
             default:
                 Toast.makeText(this, "Unregistered Widget"+view.toString(), Toast.LENGTH_SHORT).show();
@@ -124,6 +153,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // Login the user
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString();
+        //Make sure that Email/Password is Not Empty
+        if(email.trim().equals("") || password.equals(""))
+        {
+            Toast.makeText(LoginActivity.this, "Please Enter Email or Password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Logging in. Please wait!!");
         progressDialog.show();
@@ -142,6 +178,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                           Toast.makeText(getApplicationContext(), "Login failed!! Please try again", Toast.LENGTH_SHORT).show();
                           progressDialog.dismiss();
                       }
+                    }
+                });
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Authentication Success.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                        }
+
+                        // ...
                     }
                 });
     }
