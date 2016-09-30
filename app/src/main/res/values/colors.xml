@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="LabelColor">#d32b11</color>
     <color name="buttonLogin">#f4ad32</color>
+    <color name="TopBarColor">#af1b0b</color>
 </resources>

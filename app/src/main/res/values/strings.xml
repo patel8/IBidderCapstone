@@ -8,4 +8,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="facebook_app_id">633724556807673</string>
+
+    <string name="login_activity_lable">LOGIN</string>
+    <string name="sign_up_activity_lable">SIGN UP</string>
+    <string name="fb_login_protocol_scheme">fb633724556807673</string>
 </resources>
