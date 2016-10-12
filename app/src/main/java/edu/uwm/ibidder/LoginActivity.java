@@ -134,6 +134,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void ResiterOnClickListener(){
         buttonLogin.setOnClickListener(this);
         textViewSignUp.setOnClickListener(this);
+
     }
     // Register All On Click Listener
     public void onClick(View view)
@@ -147,6 +148,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // // TODO: 9/28/2016  User have clicked on Generic Sign Up Button.
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
                 break;
+            case R.id.textForgotPassword:
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+
             default:
                 Toast.makeText(this, "Unregistered Widget"+view.toString(), Toast.LENGTH_SHORT).show();
         }

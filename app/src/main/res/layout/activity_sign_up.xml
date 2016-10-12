@@ -7,6 +7,18 @@
     tools:context="edu.uwm.ibidder.SignUpActivity"
     android:background="@color/LabelColor">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editTextUserName"
+        android:hint="  User Name"
+        android:background="@android:drawable/editbox_background"
+        android:padding="10dp"
+        android:layout_marginLeft="5dp"
+        android:drawableLeft="@drawable/usericon"
+        android:layout_marginRight="5dp"/>
 
     <EditText
         android:layout_width="match_parent"
@@ -20,19 +32,6 @@
         android:layout_marginLeft="5dp"
         android:drawableLeft="@drawable/usericon"
         android:layout_marginRight="5dp" />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/editTextLastName"
-        android:hint="Last Name"
-        android:background="@android:drawable/editbox_background"
-        android:padding="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp" />
-
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -90,7 +89,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:id="@+id/button"
+        android:id="@+id/buttonSignUp"
         android:background="@color/TopBarColor"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp" />
