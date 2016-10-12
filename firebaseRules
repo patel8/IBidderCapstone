@@ -15,6 +15,30 @@
         ".read": "auth !== null",
         ".write": "newData.child('ownerId').val() === auth.uid",
 
+      	"description": {
+          ".validate": "newData.val() !== null && newData.isString()"
+        },
+
+        "title": {
+          ".validate": "newData.val() !== null && newData.isString()"
+        },
+
+        "ownerId": {
+          ".validate": "newData.val() !== null && newData.isString()"
+        },
+
+        "isTaskItNow": {
+          ".validate": "newData.val() !== null && newData.isBoolean()"
+        },
+
+        "expirationTime": {
+          ".validate": "newData.val() !== null && newData.isNumber()"
+        },
+
+        "maxPrice": {
+          ".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0"
+        },
+
         "bidIds": {
           ".read": "auth !== null",
           ".write": "auth !== null"
