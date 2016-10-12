@@ -9,7 +9,17 @@
 
     "tasks": {
       ".read": "auth !== null",
-    	".write": "auth !== null"
+    	".write": "auth !== null",
+
+      "$taskid": {
+        ".read": "auth !== null",
+        ".write": "newData.child('ownerId').val() === auth.uid",
+
+        "bidIds": {
+          ".read": "auth !== null",
+          ".write": "auth !== null"
+        }
+      }
     }
   }
 }
