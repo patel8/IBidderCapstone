@@ -1,5 +1,8 @@
 package edu.uwm.ibidder.dbaccess;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 /**
@@ -7,13 +10,20 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
  */
 public class DataAccessor {
 
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
     /**
      * Takes a task model and puts it in firebase.  Returns the id of the created task.
      * @param taskToCreate the model of the task to create
      */
     public String CreateTask(TaskModel taskToCreate){
-        //TODO
-        return "";
+
+        DatabaseReference ref = database.getReference("tasks");
+
+        DatabaseReference pushedRef = ref.push();
+        pushedRef.setValue(taskToCreate);
+
+        return pushedRef.getKey();
     }
 
     /**
