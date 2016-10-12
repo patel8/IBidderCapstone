@@ -56,18 +56,11 @@
                 android:background="@color/LabelColor"
                 android:textSize="20dp"
                 android:layout_weight="1" />
-
-            <com.facebook.login.widget.LoginButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/facebookLogin"
-                android:layout_weight="1" />
-
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -87,6 +80,21 @@
                     android:textColor="@color/LabelColor"
                     android:layout_weight="1" />
             </LinearLayout>
+            <com.facebook.login.widget.LoginButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/facebookLogin"
+                android:layout_weight="1" />
+
+            <com.google.android.gms.common.SignInButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:id="@+id/googleSignInButton"
+                ></com.google.android.gms.common.SignInButton>
+
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>
