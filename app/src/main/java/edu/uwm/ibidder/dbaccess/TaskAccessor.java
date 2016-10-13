@@ -84,7 +84,7 @@ public class TaskAccessor {
     }
 
     /**
-     * Updates a task with the ID of taskKey to be equal to the TaskModel taskToUpdate
+     * Updates a task with the ID of taskKey to be equal to the TaskModel taskToUpdate.  If the task no longer has the status READY, the location is deleted.
      *
      * @param taskKey      The task to update's string key
      * @param taskToUpdate The model to update the task to
@@ -92,6 +92,9 @@ public class TaskAccessor {
     public void updateTask(String taskKey, TaskModel taskToUpdate) {
         DatabaseReference ref = database.getReference("tasks/" + taskKey);
         ref.setValue(taskToUpdate);
+
+        if (!taskToUpdate.getStatus().equals(TaskModel.TaskStatusType.READY.toString()))
+            geoFire.removeLocation(taskKey);
     }
 
     /**
