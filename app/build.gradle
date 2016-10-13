@@ -38,6 +38,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.google.android.gms:play-services-auth:9.6.1'
+    compile 'com.firebase:geofire-android:2.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

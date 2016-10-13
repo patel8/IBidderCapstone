@@ -9,15 +9,15 @@ import java.util.Map;
  */
 public class TaskModel {
 
-    //TODO: location field (unsure how this will be stored for now)
     private String description;
-    private String status;
+    private String status; //The status of this task- use the status enum
     private double maxPrice;
     private Date expirationTime;
     private String ownerId;
     private String title;
     private boolean isTaskItNow;
-    private Map<String, Boolean> bidIds;
+    private boolean isLocalTask; //True if the task requires someone to be in a physical location.
+    private Map<String, Boolean> bidIds; //The ids for bids on this task.  Keep this as a new dictionary when modifying or creating tasks
 
     /**
      * Default constructor.  Needed for firebase serialization.
