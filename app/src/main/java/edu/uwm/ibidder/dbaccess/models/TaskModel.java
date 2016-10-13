@@ -9,6 +9,13 @@ import java.util.Map;
  */
 public class TaskModel {
 
+    public enum TaskStatusType{
+        READY,
+        ACCEPTED,
+        FINISHED,
+        TIMED_OUT
+    }
+
     private String description;
     private String status; //The status of this task- use the status enum
     private double maxPrice;
