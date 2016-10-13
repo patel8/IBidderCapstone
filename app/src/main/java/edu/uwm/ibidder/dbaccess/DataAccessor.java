@@ -1,8 +1,11 @@
 package edu.uwm.ibidder.dbaccess;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
@@ -28,12 +31,20 @@ public class DataAccessor {
     }
 
     /**
-     * Gets a task model from firebase using the provided taskid.
+     * Gets a databaseReference for returns it.  This reference can be used for linking events up.
      * @param taskId The id of the task
-     * @return The populated task model for the task
+     * @return The databaseReference for the task
      */
-    public TaskModel GetTask(String taskId){
-        return new TaskModel();//TODO
+    public DatabaseReference GetTask(String taskId){
+        return database.getReference("tasks/" + taskId);
+    }
+
+    /**
+     * Gets a reference of all tasks.  This is a temporary method until we have a location service and filter.
+     * @return The database reference for all tasks
+     */
+    public DatabaseReference GetTasks(){
+        return database.getReference("tasks");
     }
 
 }
