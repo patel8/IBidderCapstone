@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         intializeAllWidgets();
-        ResiterOnClickListener();
+        RegisterOnClickListener();
 
 
         // Check if any user is Logged in. If yes, then Go to Profile Activity
@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
      * This Method is used to register all On click Listener
      * NOTE: MAKE SURE YOU ADD WIDGET TO onClick().
      */
-    public void ResiterOnClickListener(){
+    public void RegisterOnClickListener(){
         buttonLogin.setOnClickListener(this);
         textViewSignUp.setOnClickListener(this);
         buttonGoogleSignIn.setOnClickListener(this);
@@ -167,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 break;
             case R.id.textViewSignUp:
                 // // TODO: 9/28/2016  User have clicked on Generic Sign Up Button.
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                this.startActivity(new Intent(this, SignUpActivity.class));
                 break;
             case R.id.textForgotPassword:
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
