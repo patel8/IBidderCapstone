@@ -39,6 +39,10 @@
           ".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0"
         },
 
+        "status": {
+          ".validate": "newData.val() != null && newData.isString()"
+        },
+
         "bidIds": {
           ".read": "auth !== null",
           ".write": "auth !== null"
