@@ -41,7 +41,7 @@ public class TaskAccessor {
      *
      * @param taskToCreate the model of the task to create
      */
-    public String CreateTask(TaskModel taskToCreate) {
+    public String createTask(TaskModel taskToCreate) {
         DatabaseReference ref = database.getReference("tasks");
 
         DatabaseReference pushedRef = ref.push();
@@ -56,7 +56,7 @@ public class TaskAccessor {
      * @param taskId               The id of the task
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
-    public void GetTaskOnce(String taskId, TaskCallbackListener taskCallbackListener) {
+    public void getTaskOnce(String taskId, TaskCallbackListener taskCallbackListener) {
         DatabaseReference ref = database.getReference("tasks/" + taskId);
         ref.addListenerForSingleValueEvent(taskCallbackListener);
     }
@@ -67,7 +67,7 @@ public class TaskAccessor {
      * @param taskId               The id of the task
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
-    public void GetTask(String taskId, TaskCallbackListener taskCallbackListener) {
+    public void getTask(String taskId, TaskCallbackListener taskCallbackListener) {
         DatabaseReference ref = database.getReference("tasks/" + taskId);
         storedValueEventListeners.push(ref.addValueEventListener(taskCallbackListener));
         storedDatabaseRefs.push(ref);
@@ -78,7 +78,7 @@ public class TaskAccessor {
      * TODO
      * @return The database reference for all tasks
      */
-    public DatabaseReference GetTasksOnce() {
+    public DatabaseReference getTasksOnce() {
         return database.getReference("tasks");
     }
 
