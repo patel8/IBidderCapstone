@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class TaskModel {
 
-    //TODO: location field
+    //TODO: location field (unsure how this will be stored for now)
     private String description;
     private String status;
     private double maxPrice;

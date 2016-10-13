@@ -11,7 +11,7 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
 import static android.content.ContentValues.TAG;
 
 /**
- * Listener that handles callbacks from the DataAccessor.  Needs the dataUpdate method implemented.
+ * Listener that handles callbacks from the TaskAccessor.  Needs the dataUpdate method implemented.
  */
 public abstract class TaskCallbackListener implements ValueEventListener {
 

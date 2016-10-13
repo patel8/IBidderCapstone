@@ -13,16 +13,16 @@ import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 /**
- * Handles firebase data access and manipulation
+ * Handles task data access and manipulation
  */
-public class DataAccessor {
+public class TaskAccessor {
 
     final private FirebaseDatabase database = FirebaseDatabase.getInstance();
     final private FirebaseAuth auth = FirebaseAuth.getInstance();
     private Stack<DatabaseReference> storedDatabaseRefs;
     private Stack<ValueEventListener> storedValueEventListeners;
 
-    public DataAccessor(){
+    public TaskAccessor(){
         storedDatabaseRefs = new Stack<DatabaseReference>();
         storedValueEventListeners = new Stack<ValueEventListener>();
     }
