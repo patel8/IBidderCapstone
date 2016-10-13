@@ -26,6 +26,14 @@ public class TaskModel {
 
     }
 
+    public boolean isLocalTask() {
+        return isLocalTask;
+    }
+
+    public void setLocalTask(boolean localTask) {
+        isLocalTask = localTask;
+    }
+
     public String getDescription() {
         return description;
     }

@@ -83,6 +83,10 @@
           ".validate": "newData.val() != null && newData.isString()"
         },
 
+        "isLocalTask": {
+          ".validate": "newData.val() != null && newData.isBoolean()"
+        },
+
         "bidIds": {
           ".read": "auth !== null",
           ".write": "auth !== null"
