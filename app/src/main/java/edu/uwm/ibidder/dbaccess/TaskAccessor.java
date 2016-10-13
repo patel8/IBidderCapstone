@@ -102,6 +102,7 @@ public class TaskAccessor {
     public void removeTask(String taskKey) {
         DatabaseReference ref = database.getReference("tasks/" + taskKey);
         ref.removeValue();
+        geoFire.removeLocation(taskKey);
     }
 
     /**
