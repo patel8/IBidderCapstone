@@ -2,19 +2,13 @@ package edu.uwm.ibidder.dbaccess.models;
 
 
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.Map;
 
 /**
  * Represents a task
  */
 public class TaskModel {
-
-    public enum TaskStatusType {
-        READY,
-        ACCEPTED,
-        FINISHED,
-        TIMED_OUT
-    }
 
     private String description;
     private String status; //The status of this task- use the status enum
@@ -24,12 +18,21 @@ public class TaskModel {
     private String title;
     private boolean isTaskItNow;
     private boolean isLocalTask; //True if the task requires someone to be in a physical location.
+    private Dictionary<String, Boolean> tags; //stores the tags in format <Tag, True>
 
     /**
      * Default constructor.  Needed for firebase serialization.
      */
     public TaskModel() {
 
+    }
+
+    public Dictionary<String, Boolean> getTags() {
+        return tags;
+    }
+
+    public void setTags(Dictionary<String, Boolean> tags) {
+        this.tags = tags;
     }
 
     public boolean isLocalTask() {
@@ -94,5 +97,12 @@ public class TaskModel {
 
     public void setTaskItNow(boolean taskItNow) {
         isTaskItNow = taskItNow;
+    }
+
+    public enum TaskStatusType {
+        READY,
+        ACCEPTED,
+        FINISHED,
+        TIMED_OUT
     }
 }

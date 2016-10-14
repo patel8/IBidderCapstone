@@ -53,6 +53,8 @@
       // Anyone signed in can write new tasks.
       ".read": "auth !== null",
 
+      ".indexOn": ["ownerId", "status"],
+
       "$taskid": {
         // Anyone can read a task.  Only the owner can write it.
         ".read": "auth !== null",
@@ -98,6 +100,11 @@
           ".validate": "newData.val() != null && newData.isBoolean()"
         },
 
+        // The isLocalTask field must not be null and must be a boolean
+        "tags": {
+
+        },
+
         // No other fields are allowed on a task
         "$other": { ".validate": false }
       }
@@ -107,6 +114,8 @@
       // You must be logged-in to read/write tasks
       // Anyone signed in can write new tasks.
       ".read": "auth !== null",
+
+      ".indexOn": ["bidderId", "taskId"],
 
       "$bidid":{
         //Only the original bidder can modify their bid
