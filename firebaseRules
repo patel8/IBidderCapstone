@@ -2,6 +2,7 @@
   "rules": {
     "users": {
       "$uid": {
+        // only the user themself can read/write their own data
         ".read": "$uid === auth.uid",
         ".write": "$uid === auth.uid"
       }
@@ -129,5 +130,7 @@
         "$other": { ".validate": false }
       }
     }
+
+
   }
 }
