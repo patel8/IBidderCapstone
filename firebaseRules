@@ -98,33 +98,36 @@
           ".validate": "newData.val() != null && newData.isBoolean()"
         },
 
-        "bidIds": {
-          // Anyone logged in can read/write to the bidIds field.
-          // Anyone logged in can make new bids
-          ".read": "auth !== null",
+        // No other fields are allowed on a task
+        "$other": { ".validate": false }
+      }
+    },
 
-          "$bidid": {
-            // Anyone can read individual bids
-            ".read": "auth !== null",
-            // Only this bid's creator can write to it
-            ".write": "newData.child('bidderId').val() === auth.uid",
+    "bids":{
+      // You must be logged-in to read/write tasks
+      // Anyone signed in can write new tasks.
+      ".read": "auth !== null",
 
-            // The bidder's user id must be defined, and it must be a string
-            "bidderId": {
-              ".validate": "newData.val() != null && newData.isString()"
-            },
+      "$bidid":{
+        //Only the original bidder can modify their bid
+        ".write": "newData.child('bidderId').val() === auth.uid",
 
-            // The bid value must be defined, and it must be a number
-            "bidValue": {
-              ".validate": "newData.val() != null && newData.isNumber()"
-            },
-
-            // No other fields are allowed on a bid
-            "$other": { ".validate": false }
-          }
+        //bidderId must be a non null string
+        "bidderId":{
+            ".validate": "newData.val() !== null && newData.isString()"
         },
 
-        // No other fields are allowed on a task
+        //taskId must be a non null string
+        "taskId": {
+            ".validate": "newData.val() !== null && newData.isString()"
+        },
+
+        //bid value must be a number greater than 0
+        "bidValue": {
+          	".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0"
+        },
+
+        // No other fields are allowed on a bid
         "$other": { ".validate": false }
       }
     }

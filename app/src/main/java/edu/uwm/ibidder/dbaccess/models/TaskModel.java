@@ -24,7 +24,6 @@ public class TaskModel {
     private String title;
     private boolean isTaskItNow;
     private boolean isLocalTask; //True if the task requires someone to be in a physical location.
-    private Map<String, Boolean> bidIds; //The ids for bids on this task.  Keep this as a new dictionary when modifying or creating tasks
 
     /**
      * Default constructor.  Needed for firebase serialization.
@@ -95,13 +94,5 @@ public class TaskModel {
 
     public void setTaskItNow(boolean taskItNow) {
         isTaskItNow = taskItNow;
-    }
-
-    public Map<String, Boolean> getBidIds() {
-        return bidIds;
-    }
-
-    public void setBidIds(Map<String, Boolean> bidIds) {
-        this.bidIds = bidIds;
     }
 }
