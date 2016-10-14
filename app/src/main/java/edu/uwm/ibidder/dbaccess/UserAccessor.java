@@ -20,14 +20,17 @@ public class UserAccessor extends BaseAccessor {
      * Creates a user object in firebase with the provided UserModel and FireBaseAuth's UID.
      *
      * @param userToCreate The user to put in the database
-     * @return The key for this given user.
-     * @throws NullPointerException if the user is not authenticated in FirebaseAuth
+     * @return true if it worked
      */
-    public String createUser(UserModel userToCreate) {
-        DatabaseReference ref = database.getReference("users/" + auth.getCurrentUser().getUid());
-        ref.setValue(userToCreate);
+    public boolean createUser(UserModel userToCreate) {
+        try {
+            DatabaseReference ref = database.getReference("users/" + auth.getCurrentUser().getUid());
+            ref.setValue(userToCreate);
+        } catch (NullPointerException npe){
+            return false;
+        }
 
-        return ref.getKey();
+        return true;
     }
 
 }
