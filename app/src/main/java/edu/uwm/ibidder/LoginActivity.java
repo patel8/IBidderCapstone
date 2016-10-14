@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         intializeAllWidgets();
-        RegisterOnClickListener();
+        ResiterOnClickListener();
 
 
         // Check if any user is Logged in. If yes, then Go to Profile Activity
@@ -150,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
      * This Method is used to register all On click Listener
      * NOTE: MAKE SURE YOU ADD WIDGET TO onClick().
      */
-    public void RegisterOnClickListener(){
+    public void ResiterOnClickListener(){
         buttonLogin.setOnClickListener(this);
         textViewSignUp.setOnClickListener(this);
         buttonGoogleSignIn.setOnClickListener(this);
@@ -167,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 break;
             case R.id.textViewSignUp:
                 // // TODO: 9/28/2016  User have clicked on Generic Sign Up Button.
-                this.startActivity(new Intent(this, SignUpActivity.class));
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
                 break;
             case R.id.textForgotPassword:
                 startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
@@ -226,6 +226,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Authentication Success.",
                                     Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                         }
                         else {
                             Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
@@ -251,6 +252,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (task.isSuccessful()) {
+                            startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                             Toast.makeText(LoginActivity.this, "Authentication Successful.",
                                     Toast.LENGTH_SHORT).show();
                         }
