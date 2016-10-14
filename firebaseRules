@@ -48,50 +48,84 @@
     },
 
     "tasks": {
+      // You must be logged-in to read/write tasks
+      // Anyone signed in can write new tasks.
       ".read": "auth !== null",
     	".write": "auth !== null",
 
       "$taskid": {
+        // Anyone can read a task.  Only the owner can write it.
         ".read": "auth !== null",
         ".write": "newData.child('ownerId').val() === auth.uid",
 
+        // A task's description must not be null and must be a string
       	"description": {
           ".validate": "newData.val() !== null && newData.isString()"
         },
 
+        // A task's title must not be null and must be a string
         "title": {
           ".validate": "newData.val() !== null && newData.isString()"
         },
 
+        // A task's ownerId must not be null and must be a string
         "ownerId": {
           ".validate": "newData.val() !== null && newData.isString()"
         },
 
+        // An isTaskItNow field must not be null and must be a boolean
         "isTaskItNow": {
           ".validate": "newData.val() !== null && newData.isBoolean()"
         },
 
+        // The expiration time must not be null and must be a number
         "expirationTime": {
           ".validate": "newData.val() !== null && newData.isNumber()"
         },
 
+        // The max price must not be null, must be a number, and must be greater than 0
         "maxPrice": {
           ".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0"
         },
 
+        // A tasks' status must not be null, and it must be a string
         "status": {
           ".validate": "newData.val() != null && newData.isString()"
         },
 
+        // The isLocalTask field must not be null and must be a boolean
         "isLocalTask": {
           ".validate": "newData.val() != null && newData.isBoolean()"
         },
 
         "bidIds": {
+          // Anyone logged in can read/write to the bidIds field.
+          // Anyone logged in can make new bids
           ".read": "auth !== null",
-          ".write": "auth !== null"
+          ".write": "auth !== null",
+
+          "$bidid": {
+            // Anyone can read individual bids
+            ".read": "auth !== null",
+            // Only this bid's creator can write to it
+            ".write": "newData.child('bidderId').val() === auth.uid",
+
+            // The bidder's user id must be defined, and it must be a string
+            "bidderId": {
+              ".validate": "newData.val() != null && newData.isString()"
+            },
+
+            // The bid value must be defined, and it must be a number
+            "bidValue": {
+              ".validate": "newData.val() != null && newData.isNumber()"
+            },
+
+            // No other fields are allowed on a bid
+            "$other": { ".validate": false }
+          }
         },
 
+        // No other fields are allowed on a task
         "$other": { ".validate": false }
       }
     }
