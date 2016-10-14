@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class TaskModel {
 
-    public enum TaskStatusType{
+    public enum TaskStatusType {
         READY,
         ACCEPTED,
         FINISHED,

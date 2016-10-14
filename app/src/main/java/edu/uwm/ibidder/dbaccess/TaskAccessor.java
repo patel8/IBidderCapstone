@@ -25,30 +25,13 @@ import static android.content.ContentValues.TAG;
 /**
  * Handles task data access and manipulation
  */
-public class TaskAccessor {
-
-    final private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    final private FirebaseAuth auth = FirebaseAuth.getInstance();
-    final private GeoFire geoFire = new GeoFire(database.getReference("geofire"));
-
-    private Stack<DatabaseReference> storedDatabaseRefs;
-    private Stack<ValueEventListener> storedValueEventListeners;
+public class TaskAccessor extends BaseAccessor {
 
     /**
-     * Creates a TaskAccessor with its own pool of listeners
+     * Default constructor, initializes with no listeners
      */
     public TaskAccessor() {
-        storedDatabaseRefs = new Stack<DatabaseReference>();
-        storedValueEventListeners = new Stack<ValueEventListener>();
-    }
-
-    /**
-     * Unhooks all persistent listeners.
-     */
-    public void stopListening() {
-        while (!storedDatabaseRefs.empty() && !storedValueEventListeners.empty()) {
-            storedDatabaseRefs.pop().removeEventListener(storedValueEventListeners.pop());
-        }
+        super();
     }
 
     /**

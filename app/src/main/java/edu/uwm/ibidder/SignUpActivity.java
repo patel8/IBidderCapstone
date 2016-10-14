@@ -1,9 +1,6 @@
 package edu.uwm.ibidder;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -11,13 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.*;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.HashMap;
+import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -86,15 +79,15 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         progressDialog.setMessage("Logging in. Please wait!!");
         progressDialog.show();
 
-        User userInfo = new User();
-        userInfo.setEmail(Email);
-        userInfo.setFirstName(UserName);
-        userInfo.setPhoneNumber(PhoneNumber);
-        userInfo.setFirstName(firstName.getText().toString());
-        userInfo.setLastName(lastName.getText().toString());
+        UserModel userModelInfo = new UserModel();
+        userModelInfo.setEmail(Email);
+        userModelInfo.setFirstName(UserName);
+        userModelInfo.setPhoneNumber(PhoneNumber);
+        userModelInfo.setFirstName(firstName.getText().toString());
+        userModelInfo.setLastName(lastName.getText().toString());
 
         /**
-         * Todo - Call Method in DB class to Register user with userInfo object. This method should return true/ false. True if successful else false.
+         * Todo - Call Method in DB class to Register user with userModelInfo object. This method should return true/ false. True if successful else false.
          */
 
 
