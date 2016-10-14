@@ -52,7 +52,6 @@
       // You must be logged-in to read/write tasks
       // Anyone signed in can write new tasks.
       ".read": "auth !== null",
-    	".write": "auth !== null",
 
       "$taskid": {
         // Anyone can read a task.  Only the owner can write it.
@@ -103,7 +102,6 @@
           // Anyone logged in can read/write to the bidIds field.
           // Anyone logged in can make new bids
           ".read": "auth !== null",
-          ".write": "auth !== null",
 
           "$bidid": {
             // Anyone can read individual bids
@@ -131,6 +129,5 @@
       }
     }
 
-
+    }
   }
-}
