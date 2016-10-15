@@ -19,6 +19,7 @@ public class UserAccessor extends BaseAccessor {
 
     /**
      * Creates a user object in firebase with the provided UserModel and FireBaseAuth's UID.
+     * This also sets the UserModel's userId automatically.
      *
      * @param userToCreate The user to put in the database
      * @return true if it worked
@@ -26,6 +27,7 @@ public class UserAccessor extends BaseAccessor {
     public boolean createUser(UserModel userToCreate) {
         try {
             DatabaseReference ref = database.getReference("users/" + auth.getCurrentUser().getUid());
+            userToCreate.setUserId(auth.getCurrentUser().getUid());
             ref.setValue(userToCreate);
         } catch (NullPointerException npe) {
             return false;
