@@ -2,6 +2,7 @@ package edu.uwm.ibidder.dbaccess.listeners;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -17,13 +18,33 @@ import static android.content.ContentValues.TAG;
  */
 public abstract class TaskCallbackListener implements ValueEventListener {
 
+    private boolean statusRestricted;
+    private TaskModel.TaskStatusType statusRestrictionType;
+
+    /**
+     * Creates a TaskCallbackListener with NO restrictions on what tasks are returned.
+     */
+    public TaskCallbackListener() {
+        statusRestricted = false;
+    }
+
+    /**
+     * Creates a TaskCallbackListener that only returns tasks with the status of the passed-in restriction enum
+     *
+     * @param restriction The TaskStatusType that should be returned by this TaskCallbackListener.
+     */
+    public TaskCallbackListener(TaskModel.TaskStatusType restriction) {
+        statusRestricted = true;
+        statusRestrictionType = restriction;
+    }
+
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         Iterator<DataSnapshot> it = dataSnapshot.getChildren().iterator();
 
         while (it.hasNext()) {
             TaskModel taskModel = it.next().getValue(TaskModel.class);
-            if (taskModel != null)
+            if (taskModel != null && (!statusRestricted || statusRestrictionType.toString().equals(taskModel.getStatus())))
                 dataUpdate(taskModel);
         }
     }
