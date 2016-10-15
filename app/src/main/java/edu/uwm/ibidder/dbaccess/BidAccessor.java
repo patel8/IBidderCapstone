@@ -79,7 +79,7 @@ public class BidAccessor extends BaseAccessor {
     }
 
     /**
-     * Gets all bids made by the user with the given user id.  Send to the passed-in callback listener once.
+     * Gets all bids made by the user with the given user id.  Send to the passed-in callback listener once.  The tasks are passed to the callback one-by-one.
      *
      * @param userId the uid to get the bids for
      */
@@ -89,10 +89,11 @@ public class BidAccessor extends BaseAccessor {
     }
 
     /**
-     * Gets all bids made for a task with the given id.  Send to the passed-in callback listener once.
+     * Gets all bids made for a task with the given id.  Send to the passed-in callback listener once.  The tasks are passed to the callback one-by-one.
      */
     public void getTaskBids(String taskId, BidCallbackListener bidCallbackListener) {
-        //TODO
+        DatabaseReference ref = database.getReference("bids");
+        ref.orderByChild("taskId").equalTo(taskId).addListenerForSingleValueEvent(bidCallbackListener);
     }
 
 }
