@@ -3,7 +3,9 @@ package edu.uwm.ibidder.dbaccess;
 import com.google.firebase.database.DatabaseReference;
 
 import edu.uwm.ibidder.dbaccess.listeners.ReportCallbackListener;
+import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.ReportModel;
+import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 /**
  * Handles the creation of user reports
@@ -18,7 +20,7 @@ public class ReportAccessor extends BaseAccessor {
     }
 
     /**
-     * Creates a report and returns its id.
+     * Creates a report and returns its id.  Also updates the related task's report count.
      *
      * @param reportToCreate The report to create
      * @return The id of the new report
@@ -28,6 +30,18 @@ public class ReportAccessor extends BaseAccessor {
 
         DatabaseReference pushedRef = ref.push();
         pushedRef.setValue(reportToCreate);
+
+        final String taskId = reportToCreate.getTaskId();
+
+        final TaskAccessor ta = new TaskAccessor();
+        ta.getTaskOnce(taskId, new TaskCallbackListener() {
+            @Override
+            public void dataUpdate(TaskModel tm) {
+                //TODO: see if there is a safer/better way to handle this without a node server
+                tm.setReportCount(tm.getReportCount() + 1);
+                ta.updateTask(taskId, tm);
+            }
+        });
 
         return pushedRef.getKey();
     }

@@ -1,7 +1,5 @@
 package edu.uwm.ibidder.dbaccess;
 
-import android.provider.ContactsContract;
-
 import com.google.firebase.database.DatabaseReference;
 
 import edu.uwm.ibidder.dbaccess.listeners.BidCallbackListener;

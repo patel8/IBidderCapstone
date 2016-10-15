@@ -3,7 +3,6 @@ package edu.uwm.ibidder.dbaccess.models;
 
 import java.util.Date;
 import java.util.Dictionary;
-import java.util.Map;
 
 /**
  * Represents a task
@@ -19,6 +18,7 @@ public class TaskModel {
     private boolean isTaskItNow;
     private boolean isLocalTask; //True if the task requires someone to be in a physical location.
     private Dictionary<String, Boolean> tags; //stores the tags in format <Tag, True>
+    private int reportCount;
 
     /**
      * Default constructor.  Needed for firebase serialization.
@@ -53,6 +53,14 @@ public class TaskModel {
 
     public String getStatus() {
         return status;
+    }
+
+    public int getReportCount() {
+        return reportCount;
+    }
+
+    public void setReportCount(int reportCount) {
+        this.reportCount = reportCount;
     }
 
     public void setStatus(String status) {

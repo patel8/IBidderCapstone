@@ -9,7 +9,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Iterator;
 
 import edu.uwm.ibidder.dbaccess.models.ReportModel;
-import edu.uwm.ibidder.dbaccess.models.ReportModel;
 
 import static android.content.ContentValues.TAG;
 

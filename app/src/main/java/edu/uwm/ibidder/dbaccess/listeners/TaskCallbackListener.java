@@ -72,7 +72,8 @@ public abstract class TaskCallbackListener implements ValueEventListener {
         while (it.hasNext()) {
             TaskModel taskModel = it.next().getValue(TaskModel.class);
 
-            if (taskModel != null && (!isStatusRestricted || statusRestrictionType.toString().equals(taskModel.getStatus()))) {
+            //prevent taskModels with report counts greater than 5 and bad statuses
+            if (taskModel != null && taskModel.getReportCount() < 5 && (!isStatusRestricted || statusRestrictionType.toString().equals(taskModel.getStatus()))) {
 
                 boolean canUpdateData = true;
 
