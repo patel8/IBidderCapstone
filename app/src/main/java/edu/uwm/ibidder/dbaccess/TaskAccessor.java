@@ -32,7 +32,8 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * Takes a task model and puts it in firebase.  Returns the id of the created task.
-     * This also sets the taskId field on the TaskModel automatically.  
+     * This also sets the taskId field on the TaskModel automatically.
+     *
      * @param taskToCreate the model of the task to create
      */
     public String createTask(TaskModel taskToCreate) {

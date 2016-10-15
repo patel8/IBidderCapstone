@@ -107,6 +107,11 @@
           ".write": "newData.parent().child('ownerId').val() === auth.uid"
         },
 
+        // The taskId field can be anything for now
+        "taskId": {
+          ".write": "newData.parent().child('ownerId').val() === auth.uid"
+        },
+
         // The tags field can be anything for now
         "tags": {
         	".write": "newData.parent().child('ownerId').val() === auth.uid"
