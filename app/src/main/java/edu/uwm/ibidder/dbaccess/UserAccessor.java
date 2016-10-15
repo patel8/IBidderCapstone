@@ -40,7 +40,7 @@ public class UserAccessor extends BaseAccessor {
      * @param userId               The id of the user (aka the uid)
      * @param userCallbackListener The UserCallbackListener that will get the UserModel
      */
-    public void getUserOnce(String userId,final UserCallbackListener userCallbackListener) {
+    public void getUserOnce(String userId, final UserCallbackListener userCallbackListener) {
         DatabaseReference ref = database.getReference("users/" + userId);
         ref.addListenerForSingleValueEvent(userCallbackListener);
     }
@@ -51,7 +51,7 @@ public class UserAccessor extends BaseAccessor {
      * @param userId               The id of the user (aka the uid)
      * @param userCallbackListener The UserCallbackListener that will get the UserModel
      */
-    public void getUser(String userId,final UserCallbackListener userCallbackListener) {
+    public void getUser(String userId, final UserCallbackListener userCallbackListener) {
         DatabaseReference ref = database.getReference("users/" + userId);
         storedValueEventListeners.push(ref.addValueEventListener(userCallbackListener));
         storedDatabaseRefs.push(ref);
