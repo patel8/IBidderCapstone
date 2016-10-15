@@ -126,6 +126,17 @@ public class TaskAccessor extends BaseAccessor {
     }
 
     /**
+     * Gets all the tasks for some owner by their id.  They are passed once to the taskCallbackListener one-by-one.
+     *
+     * @param ownerId              The id of the owner we are getting the tasks for
+     * @param taskCallbackListener The callback listener to pass the tasks to.
+     */
+    public void getTasksByOwnerId(String ownerId, TaskCallbackListener taskCallbackListener) {
+        DatabaseReference ref = database.getReference("tasks");
+        ref.orderByChild("ownerId").equalTo(ownerId).addListenerForSingleValueEvent(taskCallbackListener);
+    }
+
+    /**
      * Gets tasks within a circle.  These tasks are only returned once to save battery life.
      *
      * @param callback  The TaskCallbackListener that the tasks are sent to (one by one)
