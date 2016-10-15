@@ -3,7 +3,9 @@ package edu.uwm.ibidder;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.location.Location;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -22,10 +25,14 @@ import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -34,9 +41,12 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
 
     EditText editTextEmail;
     EditText editTextPassword;
@@ -44,6 +54,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     TextView textViewSignUp;
     FirebaseAuth firebaseAuth;
     ProgressDialog progressDialog;
+
+    LocationRequest mLocationRequest = null;
+    public static final long LOCATION_UPDATE_INTERVAL = 10000;
+    public static final long FASTEST_LOCATION_INTERVAL = LOCATION_UPDATE_INTERVAL / 2;
+
+
+
 
     //Facebook Login Widgets and Variables
     LoginButton buttonFacebookLogin;
@@ -72,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                    Toast.makeText(LoginActivity.this, " User ID : "+ user.getUid() + " Name "+ user.getDisplayName()+ " Email: "+ user.getEmail(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, " User ID : " + user.getUid() + " Name " + user.getDisplayName() + " Email: " + user.getEmail(), Toast.LENGTH_SHORT).show();
                 } else {
 
                 }
@@ -93,6 +110,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .build();
     }
 
+
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -107,6 +126,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onStart();
         intializeAllWidgets();
         firebaseAuth.addAuthStateListener(mAuthListener);
+    }
+
+    protected void createLocationRequest() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(LOCATION_UPDATE_INTERVAL);
+        mLocationRequest.setFastestInterval(FASTEST_LOCATION_INTERVAL);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     // All private Helper Methods
@@ -205,6 +231,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                       {
                           //Navigate user to Home Screen
                           Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+
+                          //Check current Location settings. Will continue to work on this in the next few days - Austin
+                          //LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                           //       .addLocationRequest(mLocationRequest);
+                          //PendingResult<LocationSettingsResult> result =
+                           //       LocationServices.SettingsApi.checkLocationSettings(mGoogleClient,
+                           //               builder.build());
+
                           progressDialog.dismiss();
                           startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                       }
