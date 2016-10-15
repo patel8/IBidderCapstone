@@ -2,11 +2,12 @@ package edu.uwm.ibidder.dbaccess.listeners;
 
 import android.util.Log;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Iterator;
 
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
@@ -18,14 +19,16 @@ import static android.content.ContentValues.TAG;
  */
 public abstract class TaskCallbackListener implements ValueEventListener {
 
-    private boolean statusRestricted;
+    private boolean isStatusRestricted;
     private TaskModel.TaskStatusType statusRestrictionType;
+    private boolean isTagRestricted;
+    private Collection<String> tagRestrictions;
 
     /**
      * Creates a TaskCallbackListener with NO restrictions on what tasks are returned.
      */
     public TaskCallbackListener() {
-        statusRestricted = false;
+        isStatusRestricted = false;
     }
 
     /**
@@ -34,8 +37,32 @@ public abstract class TaskCallbackListener implements ValueEventListener {
      * @param restriction The TaskStatusType that should be returned by this TaskCallbackListener.
      */
     public TaskCallbackListener(TaskModel.TaskStatusType restriction) {
-        statusRestricted = true;
+        isStatusRestricted = true;
         statusRestrictionType = restriction;
+    }
+
+    /**
+     * Creates a TaskCallbackListener that only returns tasks with one or more of the tags in the Collection.
+     *
+     * @param tags The collection of tags to look for.
+     */
+    public TaskCallbackListener(Collection<String> tags) {
+        isStatusRestricted = false;
+        isTagRestricted = true;
+        tagRestrictions = tags;
+    }
+
+    /**
+     * Creates a TaskCallbackListener that only returns tasks that match one or more of the tags and have the proper status restriction.
+     *
+     * @param restriction The status of tasks to return
+     * @param tags        The collection of tags to look for
+     */
+    public TaskCallbackListener(TaskModel.TaskStatusType restriction, Collection<String> tags) {
+        isStatusRestricted = true;
+        statusRestrictionType = restriction;
+        isTagRestricted = true;
+        tagRestrictions = tags;
     }
 
     @Override
@@ -44,8 +71,26 @@ public abstract class TaskCallbackListener implements ValueEventListener {
 
         while (it.hasNext()) {
             TaskModel taskModel = it.next().getValue(TaskModel.class);
-            if (taskModel != null && (!statusRestricted || statusRestrictionType.toString().equals(taskModel.getStatus())))
-                dataUpdate(taskModel);
+
+            if (taskModel != null && (!isStatusRestricted || statusRestrictionType.toString().equals(taskModel.getStatus()))) {
+
+                boolean canUpdateData = true;
+
+                //check that at least one tag matches when needed
+                if (isTagRestricted) {
+                    canUpdateData = false;
+
+                    Enumeration<String> keys = taskModel.getTags().keys();
+                    while (keys.hasMoreElements() && !canUpdateData) {
+                        if (tagRestrictions.contains(keys.nextElement()))
+                            canUpdateData = true;
+                    }
+                }
+
+                if (canUpdateData)
+                    dataUpdate(taskModel);
+
+            }
         }
     }
 

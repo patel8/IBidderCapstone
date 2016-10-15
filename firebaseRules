@@ -100,7 +100,7 @@
           ".validate": "newData.val() != null && newData.isBoolean()"
         },
 
-        // The isLocalTask field must not be null and must be a boolean
+        // The tags field can be anything for now
         "tags": {
 
         },
