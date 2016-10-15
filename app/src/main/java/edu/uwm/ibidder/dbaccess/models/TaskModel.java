@@ -19,12 +19,21 @@ public class TaskModel {
     private boolean isLocalTask; //True if the task requires someone to be in a physical location.
     private Dictionary<String, Boolean> tags; //stores the tags in format <Tag, True>
     private int reportCount;
+    private String taskId;
 
     /**
      * Default constructor.  Needed for firebase serialization.
      */
     public TaskModel() {
 
+    }
+
+    public String getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
     public Dictionary<String, Boolean> getTags() {
@@ -55,16 +64,16 @@ public class TaskModel {
         return status;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public int getReportCount() {
         return reportCount;
     }
 
     public void setReportCount(int reportCount) {
         this.reportCount = reportCount;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public double getMaxPrice() {
