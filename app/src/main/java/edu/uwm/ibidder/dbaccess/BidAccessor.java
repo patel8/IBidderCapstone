@@ -40,7 +40,7 @@ public class BidAccessor extends BaseAccessor {
      * @param bidId               The id of the bid
      * @param bidCallbackListener The BidCallbackListener that will get the BidModel
      */
-    public void getBidOnce(String bidId, BidCallbackListener bidCallbackListener) {
+    public void getBidOnce(String bidId,final BidCallbackListener bidCallbackListener) {
         DatabaseReference ref = database.getReference("bids/" + bidId);
         ref.addListenerForSingleValueEvent(bidCallbackListener);
     }
@@ -51,7 +51,7 @@ public class BidAccessor extends BaseAccessor {
      * @param bidId               The id of the bid
      * @param bidCallbackListener The bidCallbackListener that will get the bidModel
      */
-    public void getBid(String bidId, BidCallbackListener bidCallbackListener) {
+    public void getBid(String bidId,final BidCallbackListener bidCallbackListener) {
         DatabaseReference ref = database.getReference("bids/" + bidId);
         storedValueEventListeners.push(ref.addValueEventListener(bidCallbackListener));
         storedDatabaseRefs.push(ref);
@@ -83,7 +83,7 @@ public class BidAccessor extends BaseAccessor {
      *
      * @param userId the uid to get the bids for
      */
-    public void getUserBids(String userId, BidCallbackListener bidCallbackListener) {
+    public void getUserBids(String userId,final BidCallbackListener bidCallbackListener) {
         DatabaseReference ref = database.getReference("bids");
         ref.orderByChild("bidderId").equalTo(userId).addListenerForSingleValueEvent(bidCallbackListener);
     }
@@ -91,7 +91,7 @@ public class BidAccessor extends BaseAccessor {
     /**
      * Gets all bids made for a task with the given id.  Send to the passed-in callback listener once.  The tasks are passed to the callback one-by-one.
      */
-    public void getTaskBids(String taskId, BidCallbackListener bidCallbackListener) {
+    public void getTaskBids(String taskId,final BidCallbackListener bidCallbackListener) {
         DatabaseReference ref = database.getReference("bids");
         ref.orderByChild("taskId").equalTo(taskId).addListenerForSingleValueEvent(bidCallbackListener);
     }

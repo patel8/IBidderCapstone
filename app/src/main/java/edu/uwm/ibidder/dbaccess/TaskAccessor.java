@@ -95,11 +95,11 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * Deletes a task asynchronously with the ID of taskKey.  The completion listener is hooked up to the task if you want to do something on completion.
-     *
+     * TODO: see if we need completion listeners like this for everything.
      * @param taskKey            The key of the task to delete
      * @param completionListener The completion listener to hook up to the delete task
      */
-    public void removeTask(String taskKey, DatabaseReference.CompletionListener completionListener) {
+    public void removeTask(String taskKey,final DatabaseReference.CompletionListener completionListener) {
         DatabaseReference ref = database.getReference("tasks/" + taskKey);
         ref.removeValue(completionListener);
     }
@@ -110,7 +110,7 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskId               The id of the task
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
-    public void getTaskOnce(String taskId, TaskCallbackListener taskCallbackListener) {
+    public void getTaskOnce(String taskId,final TaskCallbackListener taskCallbackListener) {
         DatabaseReference ref = database.getReference("tasks/" + taskId);
         ref.addListenerForSingleValueEvent(taskCallbackListener);
     }
@@ -121,7 +121,7 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskId               The id of the task
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
-    public void getTask(String taskId, TaskCallbackListener taskCallbackListener) {
+    public void getTask(String taskId, final TaskCallbackListener taskCallbackListener) {
         DatabaseReference ref = database.getReference("tasks/" + taskId);
         storedValueEventListeners.push(ref.addValueEventListener(taskCallbackListener));
         storedDatabaseRefs.push(ref);
@@ -133,7 +133,7 @@ public class TaskAccessor extends BaseAccessor {
      * @param ownerId              The id of the owner we are getting the tasks for
      * @param taskCallbackListener The callback listener to pass the tasks to.
      */
-    public void getTasksByOwnerId(String ownerId, TaskCallbackListener taskCallbackListener) {
+    public void getTasksByOwnerId(String ownerId, final TaskCallbackListener taskCallbackListener) {
         DatabaseReference ref = database.getReference("tasks");
         ref.orderByChild("ownerId").equalTo(ownerId).addListenerForSingleValueEvent(taskCallbackListener);
     }

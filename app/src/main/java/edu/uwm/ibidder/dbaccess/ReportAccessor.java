@@ -38,7 +38,7 @@ public class ReportAccessor extends BaseAccessor {
      * @param taskId                 The task id to get reports for
      * @param reportCallbackListener The listener to send the bids to
      */
-    public void getReportsByTaskId(String taskId, ReportCallbackListener reportCallbackListener) {
+    public void getReportsByTaskId(String taskId,final ReportCallbackListener reportCallbackListener) {
         DatabaseReference ref = database.getReference("reports");
         ref.orderByChild("taskId").equalTo(taskId).addListenerForSingleValueEvent(reportCallbackListener);
     }
@@ -49,7 +49,7 @@ public class ReportAccessor extends BaseAccessor {
      * @param reporterId             The reporter id to get reports for
      * @param reportCallbackListener The listener to send the bids to
      */
-    public void getReportsByReporterId(String reporterId, ReportCallbackListener reportCallbackListener) {
+    public void getReportsByReporterId(String reporterId,final ReportCallbackListener reportCallbackListener) {
         DatabaseReference ref = database.getReference("reports");
         ref.orderByChild("reporterId").equalTo(reporterId).addListenerForSingleValueEvent(reportCallbackListener);
     }
