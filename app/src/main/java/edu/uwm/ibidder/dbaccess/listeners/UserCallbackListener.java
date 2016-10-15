@@ -39,6 +39,16 @@ public abstract class UserCallbackListener implements ValueEventListener {
     @Override
     public void onCancelled(DatabaseError databaseError) {
         Log.w(TAG, "loadUserModel:onCancelled", databaseError.toException());
+        dataError(databaseError);
+    }
+
+    /**
+     * This is an overridable method to handle DB errors.  It's not necessary to implement, but you can use it to do special things on error when needed.  It does nothing by default.
+     *
+     * @param databaseError The database's error object
+     */
+    public void dataError(DatabaseError databaseError) {
+        // do nothing
     }
 
 }

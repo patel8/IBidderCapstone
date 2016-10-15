@@ -9,6 +9,9 @@ public class ReportModel {
     private String description;
     private String reporterId;
 
+    /**
+     * Default constructor for firebase
+     */
     public ReportModel() {
 
     }
