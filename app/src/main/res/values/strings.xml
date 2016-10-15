@@ -12,7 +12,7 @@
 
     <string name="login_activity_lable">LOGIN</string>
     <string name="sign_up_activity_lable">SIGN UP</string>
-    <string name="forgot_your_password">Forgot Password?</string>
+
     <string name="fb_login_protocol_scheme">fb633724556807673</string>
 
     <!-- All following Strings are related to Profile Activity-->
@@ -25,4 +25,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="request_new_password">Request New Password</string>
+
+    <!-- All String in Following Block are related to ForgotPassWord -->
+    <string name="password_reset_instruction">Please Enter your Email Address. Password Reset Instruction will be sent to your email</string>
+    <string name="forgot_your_password">Forgot Password?</string>
 </resources>

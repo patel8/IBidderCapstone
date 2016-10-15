@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     TextView textViewSignUp;
     FirebaseAuth firebaseAuth;
     ProgressDialog progressDialog;
+    TextView forgotPassword;
 
     //Facebook Login Widgets and Variables
     LoginButton buttonFacebookLogin;
@@ -119,6 +120,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
         textViewSignUp = (TextView) findViewById(R.id.textViewSignUp);
+        forgotPassword = (TextView) findViewById(R.id.textForgotPassword);
 
 
         buttonFacebookLogin = (LoginButton) findViewById(R.id.facebookLogin);
@@ -154,6 +156,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         buttonLogin.setOnClickListener(this);
         textViewSignUp.setOnClickListener(this);
         buttonGoogleSignIn.setOnClickListener(this);
+        forgotPassword.setOnClickListener(this);
 
 
     }
@@ -278,8 +281,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 firebaseAuthWithGoogle(account);
             } else {
                 // Google Sign In failed, update UI appropriately
-                // [START_EXCLUDE]
-                // [END_EXCLUDE]
+
             }
         }
     }
@@ -299,6 +301,5 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finish();
     }
 }
