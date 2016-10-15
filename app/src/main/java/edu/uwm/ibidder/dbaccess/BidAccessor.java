@@ -1,5 +1,7 @@
 package edu.uwm.ibidder.dbaccess;
 
+import android.provider.ContactsContract;
+
 import com.google.firebase.database.DatabaseReference;
 
 import edu.uwm.ibidder.dbaccess.listeners.BidCallbackListener;
@@ -82,7 +84,8 @@ public class BidAccessor extends BaseAccessor {
      * @param userId the uid to get the bids for
      */
     public void getUserBids(String userId, BidCallbackListener bidCallbackListener) {
-        //TODO
+        DatabaseReference ref = database.getReference("bids");
+        ref.orderByChild("bidderId").equalTo(userId).addListenerForSingleValueEvent(bidCallbackListener);
     }
 
     /**
