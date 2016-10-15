@@ -13,7 +13,7 @@ public class BidModel {
     /**
      * Default Constructor.  Required for firebase serialization.
      */
-    BidModel() {
+    public BidModel() {
 
     }
 
