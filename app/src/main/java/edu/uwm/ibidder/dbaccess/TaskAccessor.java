@@ -17,7 +17,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import edu.uwm.ibidder.dbaccess.listeners.BidCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
+import edu.uwm.ibidder.dbaccess.models.BidModel;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 import static android.content.ContentValues.TAG;
@@ -134,6 +136,23 @@ public class TaskAccessor extends BaseAccessor {
     public void getTasksByOwnerId(String ownerId, TaskCallbackListener taskCallbackListener) {
         DatabaseReference ref = database.getReference("tasks");
         ref.orderByChild("ownerId").equalTo(ownerId).addListenerForSingleValueEvent(taskCallbackListener);
+    }
+
+    /**
+     * Gets all the tasks that some user has bid on using their userId/bidderId.  The tasks are passed once to the taskCallbackListener one-by-one.
+     *
+     * @param bidderId             the bidder id to get all the tasks for
+     * @param taskCallbackListener the taskCallback that the tasks will be sent to
+     */
+    public void getTasksByBidderId(String bidderId, final TaskCallbackListener taskCallbackListener) {
+        BidAccessor ba = new BidAccessor();
+
+        ba.getUserBids(bidderId, new BidCallbackListener() {
+            @Override
+            public void dataUpdate(BidModel bm) {
+                getTaskOnce(bm.getTaskId(), taskCallbackListener);
+            }
+        });
     }
 
     /**
