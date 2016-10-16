@@ -72,35 +72,18 @@ public class SignUpActivity extends AppCompatActivity{
         String Password = password.getText().toString();
         String ConfirmPassword = confirmPassword.getText().toString();
 
-        if(!Password.equals(ConfirmPassword))
+        if(!Password.equals(ConfirmPassword)) {
             Toast.makeText(SignUpActivity.this, "Password and Confirm password does not match", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         String PhoneNumber = phoneNumber.getText().toString();
         //// TODO: 10/11/2016 Figure out how to validate Phone Number
 
         SignUpUser(Email, Password);
-        LoginUser(Email, Password);
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Logging in. Please wait!!");
-        progressDialog.show();
-
-        UserModel userModelInfo = new UserModel();
-        userModelInfo.setEmail(Email);
-        userModelInfo.setFirstName("TEST");
-        userModelInfo.setPhoneNumber(PhoneNumber);
-        userModelInfo.setFirstName(firstName.getText().toString());
-        userModelInfo.setLastName(lastName.getText().toString());
-
-        /**
-         * Todo - Call Method in DB class to Register user with userModelInfo object. This method should return true/ false. True if successful else false.
-         */
-        UserAccessor userAccessor = new UserAccessor();
-       if(userAccessor.createUser(userModelInfo))
-           startActivity(new Intent(SignUpActivity.this, ProfileActivity.class));
-        progressDialog.dismiss();
     }
 
-    private void LoginUser(String email, String password) {
+    private void LoginUser(final String email, final String password) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -109,15 +92,34 @@ public class SignUpActivity extends AppCompatActivity{
                 {
                     //Navigate user to Home Screen
                     Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+                    UserModel userModelInfo = new UserModel();
+                    userModelInfo.setEmail(email);
+                    //TODO: Don't re-read these from the UI in case the user changes them while sign-up is processing
+                    userModelInfo.setFirstName(firstName.getText().toString());
+                    userModelInfo.setPhoneNumber(phoneNumber.getText().toString());
+                    userModelInfo.setFirstName(firstName.getText().toString());
+                    userModelInfo.setLastName(lastName.getText().toString());
+
+                    /**
+                     * Todo - Call Method in DB class to Register user with userModelInfo object. This method should return true/ false. True if successful else false.
+                     */
+                    UserAccessor userAccessor = new UserAccessor();
+                    if(userAccessor.createUser(userModelInfo))
+                        startActivity(new Intent(SignUpActivity.this, ProfileActivity.class));
+                    progressDialog.dismiss();
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Login failed!! From SiGN Up", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Logging in. Please wait!!");
+        progressDialog.show();
     }
 
-    private void SignUpUser(String email, String password) {
+    private void SignUpUser(final String email, final String password) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
@@ -129,6 +131,7 @@ public class SignUpActivity extends AppCompatActivity{
                         if (task.isSuccessful()) {
                             Toast.makeText(SignUpActivity.this, "New User Has been Created." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
+                            LoginUser(email, password);
                         } else {
                             Toast.makeText(SignUpActivity.this, "ERROR CREATING SIGN UP." + task.getException(),
                                     Toast.LENGTH_SHORT).show();
