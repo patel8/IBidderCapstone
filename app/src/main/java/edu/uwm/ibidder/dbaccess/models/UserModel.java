@@ -12,6 +12,7 @@ public class UserModel {
     private String email;
     private String firstName;
     private String lastName;
+    private String userId;
 
     public UserModel() {
     }
@@ -22,6 +23,14 @@ public class UserModel {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getName() {

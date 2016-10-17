@@ -78,7 +78,7 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:id="@+id/editTextEmail"
+        android:id="@+id/editTextEmailSignUp"
         android:hint="  Email"
         android:background="@android:drawable/editbox_background"
         android:padding="10dp"

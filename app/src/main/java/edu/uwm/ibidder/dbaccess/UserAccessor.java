@@ -19,6 +19,7 @@ public class UserAccessor extends BaseAccessor {
 
     /**
      * Creates a user object in firebase with the provided UserModel and FireBaseAuth's UID.
+     * This also sets the UserModel's userId automatically.
      *
      * @param userToCreate The user to put in the database
      * @return true if it worked
@@ -26,6 +27,7 @@ public class UserAccessor extends BaseAccessor {
     public boolean createUser(UserModel userToCreate) {
         try {
             DatabaseReference ref = database.getReference("users/" + auth.getCurrentUser().getUid());
+            userToCreate.setUserId(auth.getCurrentUser().getUid());
             ref.setValue(userToCreate);
         } catch (NullPointerException npe) {
             return false;
@@ -40,7 +42,7 @@ public class UserAccessor extends BaseAccessor {
      * @param userId               The id of the user (aka the uid)
      * @param userCallbackListener The UserCallbackListener that will get the UserModel
      */
-    public void getUserOnce(String userId, UserCallbackListener userCallbackListener) {
+    public void getUserOnce(String userId, final UserCallbackListener userCallbackListener) {
         DatabaseReference ref = database.getReference("users/" + userId);
         ref.addListenerForSingleValueEvent(userCallbackListener);
     }
@@ -51,7 +53,7 @@ public class UserAccessor extends BaseAccessor {
      * @param userId               The id of the user (aka the uid)
      * @param userCallbackListener The UserCallbackListener that will get the UserModel
      */
-    public void getUser(String userId, UserCallbackListener userCallbackListener) {
+    public void getUser(String userId, final UserCallbackListener userCallbackListener) {
         DatabaseReference ref = database.getReference("users/" + userId);
         storedValueEventListeners.push(ref.addValueEventListener(userCallbackListener));
         storedDatabaseRefs.push(ref);

@@ -2,22 +2,18 @@ package edu.uwm.ibidder.dbaccess;
 
 import android.util.Log;
 
-import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
+import edu.uwm.ibidder.dbaccess.listeners.BidCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
+import edu.uwm.ibidder.dbaccess.models.BidModel;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 import static android.content.ContentValues.TAG;
@@ -36,6 +32,7 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * Takes a task model and puts it in firebase.  Returns the id of the created task.
+     * This also sets the taskId field on the TaskModel automatically.
      *
      * @param taskToCreate the model of the task to create
      */
@@ -43,6 +40,7 @@ public class TaskAccessor extends BaseAccessor {
         DatabaseReference ref = database.getReference("tasks");
 
         DatabaseReference pushedRef = ref.push();
+        taskToCreate.setTaskId(pushedRef.getKey());
         pushedRef.setValue(taskToCreate);
 
         return pushedRef.getKey();
@@ -93,11 +91,12 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * Deletes a task asynchronously with the ID of taskKey.  The completion listener is hooked up to the task if you want to do something on completion.
+     * TODO: see if we need completion listeners like this for everything.
      *
      * @param taskKey            The key of the task to delete
      * @param completionListener The completion listener to hook up to the delete task
      */
-    public void removeTask(String taskKey, DatabaseReference.CompletionListener completionListener) {
+    public void removeTask(String taskKey, final DatabaseReference.CompletionListener completionListener) {
         DatabaseReference ref = database.getReference("tasks/" + taskKey);
         ref.removeValue(completionListener);
     }
@@ -108,7 +107,7 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskId               The id of the task
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
-    public void getTaskOnce(String taskId, TaskCallbackListener taskCallbackListener) {
+    public void getTaskOnce(String taskId, final TaskCallbackListener taskCallbackListener) {
         DatabaseReference ref = database.getReference("tasks/" + taskId);
         ref.addListenerForSingleValueEvent(taskCallbackListener);
     }
@@ -119,10 +118,38 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskId               The id of the task
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
-    public void getTask(String taskId, TaskCallbackListener taskCallbackListener) {
+    public void getTask(String taskId, final TaskCallbackListener taskCallbackListener) {
         DatabaseReference ref = database.getReference("tasks/" + taskId);
         storedValueEventListeners.push(ref.addValueEventListener(taskCallbackListener));
         storedDatabaseRefs.push(ref);
+    }
+
+    /**
+     * Gets all the tasks for some owner by their id.  They are passed once to the taskCallbackListener one-by-one.
+     *
+     * @param ownerId              The id of the owner we are getting the tasks for
+     * @param taskCallbackListener The callback listener to pass the tasks to.
+     */
+    public void getTasksByOwnerId(String ownerId, final TaskCallbackListener taskCallbackListener) {
+        DatabaseReference ref = database.getReference("tasks");
+        ref.orderByChild("ownerId").equalTo(ownerId).addListenerForSingleValueEvent(taskCallbackListener);
+    }
+
+    /**
+     * Gets all the tasks that some user has bid on using their userId/bidderId.  The tasks are passed once to the taskCallbackListener one-by-one.
+     *
+     * @param bidderId             the bidder id to get all the tasks for
+     * @param taskCallbackListener the taskCallback that the tasks will be sent to
+     */
+    public void getTasksByBidderId(String bidderId, final TaskCallbackListener taskCallbackListener) {
+        BidAccessor ba = new BidAccessor();
+
+        ba.getUserBids(bidderId, new BidCallbackListener() {
+            @Override
+            public void dataUpdate(BidModel bm) {
+                getTaskOnce(bm.getTaskId(), taskCallbackListener);
+            }
+        });
     }
 
     /**
