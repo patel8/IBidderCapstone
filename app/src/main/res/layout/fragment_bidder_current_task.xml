@@ -5,8 +5,11 @@
     tools:context="edu.uwm.ibidder.bidder_current_task">
 
     <!-- TODO: Update blank fragment layout -->
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Hello World"/>
+
+    <ListView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/bidder_current_task_listView">
+    </ListView>
+
 </RelativeLayout>
