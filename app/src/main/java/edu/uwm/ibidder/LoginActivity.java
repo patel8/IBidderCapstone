@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(LoginActivity.this);
         setContentView(R.layout.activity_login);
         intializeAllWidgets();
         ResiterOnClickListener();
@@ -121,10 +121,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
         textViewSignUp = (TextView) findViewById(R.id.textViewSignUp);
         forgotPassword = (TextView) findViewById(R.id.textForgotPassword);
+        firebaseAuth = FirebaseAuth.getInstance();
 
-
-        buttonFacebookLogin = (LoginButton) findViewById(R.id.facebookLogin);
         callbackManager = CallbackManager.Factory.create();
+        buttonFacebookLogin = (LoginButton) findViewById(R.id.facebookLogin);
+
 
         buttonFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -144,7 +145,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
 
         buttonGoogleSignIn = (SignInButton) findViewById(R.id.googleSignInButton);
-        firebaseAuth = FirebaseAuth.getInstance();
 
     }
 
