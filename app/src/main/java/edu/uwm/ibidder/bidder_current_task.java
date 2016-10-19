@@ -28,20 +28,9 @@ public class bidder_current_task extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bidder_current_task, container, false);
-        /*TaskModel task1 = new TaskModel(); TODO: remove test code
-        task1.setDescription("Sagar");
-        task1.setMaxPrice(3243.4);
-        TaskModel task2 = new TaskModel();
-        task2.setDescription("TEST");
-        task2.setMaxPrice(123.4);*/
         listView = (ListView)v.findViewById(R.id.bidder_current_task_listView);
 
-        //TODO: clean up this array instantiation in the constructor
-        final ArrayList<TaskModel> list = new ArrayList<>();
-        /*list.add(task1); TODO: remove test code
-        list.add(task2);*/
-
-        final ListAdapter adapter = new ListAdapter(getContext(), list, R.layout.bidder_current_task_list_template);
+        final ListAdapter adapter = new ListAdapter(getContext(), R.layout.bidder_current_task_list_template);
         listView.setAdapter(adapter);
 
         TaskAccessor ta = new TaskAccessor();
