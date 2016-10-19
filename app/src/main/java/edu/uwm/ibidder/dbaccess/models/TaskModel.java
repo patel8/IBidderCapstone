@@ -3,6 +3,7 @@ package edu.uwm.ibidder.dbaccess.models;
 
 import java.util.Date;
 import java.util.Dictionary;
+import java.util.HashMap;
 
 /**
  * Represents a task
@@ -17,7 +18,7 @@ public class TaskModel {
     private String title;
     private boolean isTaskItNow;
     private boolean isLocalTask; //True if the task requires someone to be in a physical location.
-    private Dictionary<String, Boolean> tags; //stores the tags in format <Tag, True>
+    private HashMap<String, Boolean> tags; //stores the tags in format <Tag, True>
     private int reportCount;
     private String taskId;
 
@@ -36,11 +37,11 @@ public class TaskModel {
         this.taskId = taskId;
     }
 
-    public Dictionary<String, Boolean> getTags() {
+    public HashMap<String, Boolean> getTags() {
         return tags;
     }
 
-    public void setTags(Dictionary<String, Boolean> tags) {
+    public void setTags(HashMap<String, Boolean> tags) {
         this.tags = tags;
     }
 

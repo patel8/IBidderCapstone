@@ -124,6 +124,12 @@ public class TaskAccessor extends BaseAccessor {
         storedDatabaseRefs.push(ref);
     }
 
+    //TODO: THIS IS A TEMP METHOD, ONLY USE THIS WHEN TESTING, IT GETS ALL TASKS IN EXISTENCE ONCE!!!
+    public void getTasksOnce(TaskCallbackListener taskCallbackListener){
+        DatabaseReference ref = database.getReference("tasks");
+        ref.addListenerForSingleValueEvent(taskCallbackListener);
+    }
+
     /**
      * Gets all the tasks for some owner by their id.  They are passed once to the taskCallbackListener one-by-one.
      *
@@ -151,6 +157,8 @@ public class TaskAccessor extends BaseAccessor {
             }
         });
     }
+
+
 
     /**
      * Gets tasks within a circle.  These tasks are only returned once to save battery life.

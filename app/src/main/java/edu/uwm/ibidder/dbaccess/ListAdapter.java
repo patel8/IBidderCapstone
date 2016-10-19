@@ -35,6 +35,11 @@ public class ListAdapter extends BaseAdapter {
         this.layout = layout;
     }
 
+    public void addTask(TaskModel tm){
+        list.add(tm);
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public TaskModel getItem(int i) {
 
