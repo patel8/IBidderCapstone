@@ -6,4 +6,10 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+    <ListView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@+id/bidder_current_task_listView">
+    </ListView>
+
 </RelativeLayout>
