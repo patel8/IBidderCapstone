@@ -43,8 +43,6 @@ import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
 
@@ -55,13 +53,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     FirebaseAuth firebaseAuth;
     ProgressDialog progressDialog;
     TextView forgotPassword;
-
-    LocationRequest mLocationRequest = null;
-    public static final long LOCATION_UPDATE_INTERVAL = 10000;
-    public static final long FASTEST_LOCATION_INTERVAL = LOCATION_UPDATE_INTERVAL / 2;
-
-
-
 
     //Facebook Login Widgets and Variables
     LoginButton buttonFacebookLogin;
@@ -127,13 +118,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onStart();
         intializeAllWidgets();
         firebaseAuth.addAuthStateListener(mAuthListener);
-    }
-
-    protected void createLocationRequest() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(LOCATION_UPDATE_INTERVAL);
-        mLocationRequest.setFastestInterval(FASTEST_LOCATION_INTERVAL);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
     // All private Helper Methods
@@ -235,13 +219,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                       {
                           //Navigate user to Home Screen
                           Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
-
-                          //Check current Location settings. Will continue to work on this in the next few days - Austin
-                          //LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                           //       .addLocationRequest(mLocationRequest);
-                          //PendingResult<LocationSettingsResult> result =
-                           //       LocationServices.SettingsApi.checkLocationSettings(mGoogleClient,
-                           //               builder.build());
 
                           progressDialog.dismiss();
                           startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
