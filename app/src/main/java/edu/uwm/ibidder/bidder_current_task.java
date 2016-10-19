@@ -1,12 +1,12 @@
 package edu.uwm.ibidder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
-
-import java.util.ArrayList;
 
 import edu.uwm.ibidder.dbaccess.ListAdapter;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
@@ -18,7 +18,7 @@ public class bidder_current_task extends android.support.v4.app.Fragment {
 
     ListView listView;
 
-  @Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -41,8 +41,20 @@ public class bidder_current_task extends android.support.v4.app.Fragment {
             }
         });
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object o = listView.getItemAtPosition(position);
+                TaskModel task = (TaskModel) o;
+                Intent taskIntent = new Intent(getActivity(), TaskActivity.class);
+                taskIntent.putExtra("task_desc", task.getDescription());
+                taskIntent.putExtra("task_own", task.getOwnerId());
+                startActivity(taskIntent);
+            }
+        });
+
         return v;
-        }
+    }
 
 
 }

@@ -3,9 +3,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/Profile"
+            android:id="@+id/user_profile"
             android:icon="@drawable/ic_menu_manage"
-            android:title="PROFILE" />
+            android:title="@string/user_profile"/>
 
     </group>
 

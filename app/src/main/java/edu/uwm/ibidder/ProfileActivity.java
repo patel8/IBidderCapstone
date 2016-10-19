@@ -2,10 +2,12 @@ package edu.uwm.ibidder;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -54,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.profile, menu);
         return true;
     }
-
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
        //Todo - What happens when they click on Setting
@@ -69,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
        switch(id){
            case R.id.action_settings:
-               //Todo - What should happen in settings  GOES HERE
+               startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
                break;
            case R.id.action_logOut:
                // Log out current User and send it back to login Screen.
@@ -102,6 +104,8 @@ public class ProfileActivity extends AppCompatActivity
 
         } else if (id == R.id.creater_posted_task) {
 
+        } else if(id == R.id.user_profile){
+            startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
         }
 
         try{
@@ -110,8 +114,10 @@ public class ProfileActivity extends AppCompatActivity
         {
             e.printStackTrace();
         }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        if(fragment != null){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
