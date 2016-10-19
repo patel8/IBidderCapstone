@@ -80,12 +80,13 @@ public abstract class TaskCallbackListener implements ValueEventListener {
                 //check that at least one tag matches when needed
                 if (isTagRestricted) {
                     canUpdateData = false;
-/* TODO: fix for not map
-                    Enumeration<String> keys = taskModel.getTags().keySet().;
-                    while (keys.hasMoreElements() && !canUpdateData) {
-                        if (tagRestrictions.contains(keys.nextElement()))
+
+                    for (String key : taskModel.getTags().keySet()) {
+                        if (tagRestrictions.contains(key)) {
                             canUpdateData = true;
-                    }*/
+                            break;
+                        }
+                    }
                 }
 
                 if (canUpdateData)
