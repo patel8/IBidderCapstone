@@ -2,14 +2,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.uwm.ibidder.bidder_current_task">
+    tools:context="edu.uwm.ibidder.Fragments.bidder_current_task">
 
     <!-- TODO: Update blank fragment layout -->
-
+<android.support.v4.widget.SwipeRefreshLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/swipe_bidder_current_task"
+    >
     <ListView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@+id/bidder_current_task_listView">
     </ListView>
+</android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

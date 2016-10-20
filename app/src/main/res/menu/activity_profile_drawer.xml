@@ -13,28 +13,30 @@
         <menu>
             <item
                 android:id="@+id/bidder_current_task"
-                android:title="Current Tasks" />
+                android:title="@string/task_in_progress" />
             <item
-                android:id="@+id/bidder_finished_task"
-                android:title="Finished Tasks" />
+                android:id="@+id/bidder_history_task"
+                android:title="@string/history_tasks" />
+            <item
+                android:id="@+id/bidder_won_tasks"
+                android:title="@string/won_tasks"/>
 
-            <item
-                android:id="@+id/bidder_bidded_task"
-                android:title="Bidded Tasks" />
         </menu>
     </item>
     <item android:title="TASK CREATOR">
         <menu>
             <item
-                android:id="@+id/creater_expired_task"
-                android:title="Expired Tasks" />
+                android:id="@+id/creator_task_in_auction"
+                android:title="@string/tasks_in_auction" />
             <item
-                android:id="@+id/creater_posted_task"
-                android:title="Posted Tasks" />
-
+                android:id="@+id/creator_completed_task_auctions"
+                android:title="@string/completed_task_auctions"/>
             <item
-                android:id="@+id/creater_current_task"
-                android:title="Current Tasks" />
+                android:id="@+id/creator_task_in_progress"
+                android:title="@string/task_in_progress" />
+            <item
+                android:id="@+id/creator_task_history"
+                android:title="@string/task_history" />
         </menu>
     </item>
 </menu>

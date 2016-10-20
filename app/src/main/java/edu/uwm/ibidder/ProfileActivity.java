@@ -2,13 +2,8 @@ package edu.uwm.ibidder;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -18,7 +13,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+
+import edu.uwm.ibidder.Fragments.*;
 
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -75,6 +73,10 @@ public class ProfileActivity extends AppCompatActivity
                break;
            case R.id.action_logOut:
                // Log out current User and send it back to login Screen.
+               String Provider = FirebaseAuth.getInstance().getCurrentUser().getProviderId();
+               if(Provider.equals("facebook.com"));
+                LoginManager.getInstance().logOut();
+
                FirebaseAuth.getInstance().signOut();
                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                break;
@@ -92,19 +94,22 @@ public class ProfileActivity extends AppCompatActivity
         Class  fragmentClass = null;
 // Handle Each Item Accordinly.
         // Create Fragment with List Items of Selected Task and Inflate Layout.
-        if (id == R.id.bidder_bidded_task) {
+        if (id == R.id.bidder_current_task) {
             fragmentClass = bidder_current_task.class;
-        } else if (id == R.id.bidder_current_task) {
-
-        } else if (id == R.id.bidder_finished_task) {
-
-        } else if (id == R.id.creater_current_task) {
-
-        } else if (id == R.id.creater_expired_task) {
-
-        } else if (id == R.id.creater_posted_task) {
-
-        } else if(id == R.id.user_profile){
+        } else if (id == R.id.bidder_history_task) {
+            fragmentClass = bidder_bid_history.class;
+        } else if (id == R.id.bidder_won_tasks) {
+            fragmentClass = bidder_won_tasks.class;
+        } else if (id == R.id.creator_task_in_auction) {
+            fragmentClass = creator_task_in_auction.class;
+        } else if (id == R.id.creator_completed_task_auctions) {
+            fragmentClass = creator_completed_task_auctions.class;
+        } else if (id == R.id.creator_task_in_progress) {
+            fragmentClass = creator_task_in_progress.class;
+        }else if(id == R.id.creator_task_history){
+            fragmentClass = creator_task_history.class;
+        }
+        else if(id == R.id.user_profile){
             startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
         }
 
