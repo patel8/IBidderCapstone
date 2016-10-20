@@ -38,7 +38,7 @@ dependencies {
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.google.android.gms:play-services-auth:9.6.1'
     compile 'com.firebase:geofire-android:2.1.0'
-    compile 'com.firebaseui:firebase-ui:0.3.1'
+    compile 'com.firebaseui:firebase-ui:0.6.1'
     testCompile 'junit:junit:4.12'
 }
 
