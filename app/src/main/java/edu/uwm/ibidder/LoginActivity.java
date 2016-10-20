@@ -17,6 +17,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -60,13 +61,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        FacebookSdk.sdkInitialize(LoginActivity.this);
         setContentView(R.layout.activity_login);
         intializeAllWidgets();
         ResiterOnClickListener();
 
-
-        // Check if any user is Logged in. If yes, then Go to Profile Activity
+      // Check if any user is Logged in. If yes, then Go to Profile Activity
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -123,8 +123,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         forgotPassword = (TextView) findViewById(R.id.textForgotPassword);
 
 
-        buttonFacebookLogin = (LoginButton) findViewById(R.id.facebookLogin);
         callbackManager = CallbackManager.Factory.create();
+        buttonFacebookLogin = (LoginButton) findViewById(R.id.facebookLogin);
+
 
         buttonFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -143,8 +144,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-        buttonGoogleSignIn = (SignInButton) findViewById(R.id.googleSignInButton);
         firebaseAuth = FirebaseAuth.getInstance();
+        buttonGoogleSignIn = (SignInButton) findViewById(R.id.googleSignInButton);
 
     }
 

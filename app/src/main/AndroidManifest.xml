@@ -43,7 +43,13 @@
             android:name=".ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ForgotPasswordActivity"></activity>
+        <activity android:name=".ForgotPasswordActivity" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="@string/settings_label"></activity>
+        <activity
+            android:name=".TaskActivity"
+            android:label="@string/taskpage_label"></activity>
     </application>
 
 </manifest>
