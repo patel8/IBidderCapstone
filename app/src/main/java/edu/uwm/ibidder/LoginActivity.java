@@ -17,6 +17,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -65,8 +66,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         intializeAllWidgets();
         ResiterOnClickListener();
 
-
-        // Check if any user is Logged in. If yes, then Go to Profile Activity
+      // Check if any user is Logged in. If yes, then Go to Profile Activity
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
