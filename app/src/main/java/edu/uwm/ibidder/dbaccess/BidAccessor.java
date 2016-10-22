@@ -1,6 +1,7 @@
 package edu.uwm.ibidder.dbaccess;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
 import edu.uwm.ibidder.dbaccess.listeners.BidCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.BidModel;
@@ -18,7 +19,7 @@ public class BidAccessor extends BaseAccessor {
     }
 
     /**
-     * Createa a bid and returns its id
+     * Createa a bid and returns its id.  Automatically sets the bidId property.
      *
      * @param bidToCreate The bid to create
      * @return The new bid's id
@@ -27,6 +28,7 @@ public class BidAccessor extends BaseAccessor {
         DatabaseReference ref = database.getReference("bids");
 
         DatabaseReference pushedRef = ref.push();
+        bidToCreate.setBidId(pushedRef.getKey());
         pushedRef.setValue(bidToCreate);
 
         return pushedRef.getKey();
@@ -77,21 +79,41 @@ public class BidAccessor extends BaseAccessor {
     }
 
     /**
+     * Returns a query for some user's bids
+     *
+     * @param userId The userId to make the query for
+     * @return The query for some user's bids
+     */
+    public Query getUserBidsQuery(String userId) {
+        DatabaseReference ref = database.getReference("bids");
+        return ref.orderByChild("bidderId").equalTo(userId);
+    }
+
+    /**
      * Gets all bids made by the user with the given user id.  Send to the passed-in callback listener once.  The tasks are passed to the callback one-by-one.
      *
      * @param userId the uid to get the bids for
      */
     public void getUserBids(String userId, final BidCallbackListener bidCallbackListener) {
+        getUserBidsQuery(userId).addListenerForSingleValueEvent(bidCallbackListener);
+    }
+
+    /**
+     * Returns the query for bids from some task
+     *
+     * @param taskId The taskId to get the bids for
+     * @return The query to get bids by taskId
+     */
+    public Query getTaskBidsQuery(String taskId) {
         DatabaseReference ref = database.getReference("bids");
-        ref.orderByChild("bidderId").equalTo(userId).addListenerForSingleValueEvent(bidCallbackListener);
+        return ref.orderByChild("taskId").equalTo(taskId);
     }
 
     /**
      * Gets all bids made for a task with the given id.  Send to the passed-in callback listener once.  The tasks are passed to the callback one-by-one.
      */
     public void getTaskBids(String taskId, final BidCallbackListener bidCallbackListener) {
-        DatabaseReference ref = database.getReference("bids");
-        ref.orderByChild("taskId").equalTo(taskId).addListenerForSingleValueEvent(bidCallbackListener);
+        getTaskBidsQuery(taskId).addListenerForSingleValueEvent(bidCallbackListener);
     }
 
 }

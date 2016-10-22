@@ -9,6 +9,7 @@ public class BidModel {
     private String bidderId;
     private String taskId;
     private double bidValue;
+    private String bidId;
 
     /**
      * Default Constructor.  Required for firebase serialization.
@@ -39,5 +40,13 @@ public class BidModel {
 
     public void setTaskId(String taskId) {
         this.taskId = taskId;
+    }
+
+    public String getBidId() {
+        return bidId;
+    }
+
+    public void setBidId(String bidId) {
+        this.bidId = bidId;
     }
 }

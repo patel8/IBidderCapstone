@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.uwm.ibidder.R;
@@ -27,12 +28,16 @@ public class ListAdapter extends BaseAdapter {
     int layout;
 
 
-    public ListAdapter(Context context, List<TaskModel> list, int layout)
-    {
+    public ListAdapter(Context context, int layout) {
         this.context = context;
-        this.list = list;
+        this.list = new ArrayList<>();
         layoutInflater = LayoutInflater.from(context);
         this.layout = layout;
+    }
+
+    public void addTask(TaskModel tm) {
+        list.add(tm);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -64,12 +69,12 @@ public class ListAdapter extends BaseAdapter {
         }
 
         viewHolder.description.setText(list.get(position).getDescription());
-        viewHolder.price.setText(list.get(position).getMaxPrice()+"");
+        viewHolder.price.setText(list.get(position).getMaxPrice() + "");
 
         return v;
     }
 
-    public class ViewHolder{
+    public class ViewHolder {
         public TextView description;
         public TextView price;
     }

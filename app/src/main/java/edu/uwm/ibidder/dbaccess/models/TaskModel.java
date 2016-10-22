@@ -1,8 +1,7 @@
 package edu.uwm.ibidder.dbaccess.models;
 
 
-import java.util.Date;
-import java.util.Dictionary;
+import java.util.HashMap;
 
 /**
  * Represents a task
@@ -12,13 +11,13 @@ public class TaskModel {
     private String description;
     private String status; //The status of this task- use the status enum
     private double maxPrice;
-    private Date expirationTime;
+    private long expirationTime;
     private String ownerId;
     private String title;
     private boolean isTaskItNow;
     private boolean isLocalTask; //True if the task requires someone to be in a physical location.
-    private Dictionary<String, Boolean> tags; //stores the tags in format <Tag, True>
-    private int reportCount;
+    private HashMap<String, Boolean> tags; //stores the tags in format <Tag, True>
+    private int reportCount = 0; //Used by node server, not user editable
     private String taskId;
 
     /**
@@ -36,11 +35,11 @@ public class TaskModel {
         this.taskId = taskId;
     }
 
-    public Dictionary<String, Boolean> getTags() {
+    public HashMap<String, Boolean> getTags() {
         return tags;
     }
 
-    public void setTags(Dictionary<String, Boolean> tags) {
+    public void setTags(HashMap<String, Boolean> tags) {
         this.tags = tags;
     }
 
@@ -72,10 +71,6 @@ public class TaskModel {
         return reportCount;
     }
 
-    public void setReportCount(int reportCount) {
-        this.reportCount = reportCount;
-    }
-
     public double getMaxPrice() {
         return maxPrice;
     }
@@ -84,11 +79,11 @@ public class TaskModel {
         this.maxPrice = maxPrice;
     }
 
-    public Date getExpirationTime() {
+    public long getExpirationTime() {
         return expirationTime;
     }
 
-    public void setExpirationTime(Date expirationTime) {
+    public void setExpirationTime(long expirationTime) {
         this.expirationTime = expirationTime;
     }
 

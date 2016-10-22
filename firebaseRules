@@ -49,83 +49,114 @@
     },
 
     "tasks": {
-      // You must be logged-in to read/write tasks
-      // Anyone signed in can write new tasks.
-      ".read": "auth !== null",
 
-      ".indexOn": ["ownerId", "status"],
+      "ready":{
 
-      "$taskid": {
-        // Anyone can read a task.  Only the owner can write it.
-        ".read": "auth !== null",
+          // You must be logged-in to read/write tasks
+          // Anyone signed in can write new tasks.
+          ".read": "auth !== null",
 
-        // A task's description must not be null and must be a string
-      	"description": {
-          ".validate": "newData.val() !== null && newData.isString()",
-          ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          ".indexOn": ["ownerId", "status", "expirationTime"],
+
+          "$taskid": {
+          // Anyone can read a task.  Only the owner can write it.
+          ".read": "auth !== null",
+
+          // A task's description must not be null and must be a string
+          "description": {
+            ".validate": "newData.val() !== null && newData.isString()",
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // A task's title must not be null and must be a string
+          "title": {
+            ".validate": "newData.val() !== null && newData.isString()",
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // A task's ownerId must not be null and must be a string
+          "ownerId": {
+            ".validate": "newData.val() !== null && newData.isString()",
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // An isTaskItNow field must not be null and must be a boolean
+          "isTaskItNow": {
+            ".validate": "newData.val() !== null && newData.isBoolean()",
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // The expiration time must not be null and must be a number
+          "expirationTime": {
+            ".validate": "newData.val() !== null && newData.isNumber()",
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // The max price must not be null, must be a number, and must be greater than 0
+          "maxPrice": {
+            ".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0",
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // A tasks' status must not be null, and it must be a string
+          "status": {
+            ".validate": "newData.val() != null && newData.isString()",
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // The isLocalTask field must not be null and must be a boolean
+          "isLocalTask": {
+            ".validate": "newData.val() != null && newData.isBoolean()",
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // The taskId field can be anything for now
+          "taskId": {
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // The tags field can be anything for now
+          "tags": {
+            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+          },
+
+          // any user can update report count
+          "reportCount":{
+            ".write": "auth !== null"
+          },
+
+          // No other fields are allowed on a task
+          "$other": { ".validate": false }
+        }
+
+      },
+
+
+      "timed_out":{
+          //tasks in this state can be read but not written to (it's too late in the process)
+          ".read": "auth !== null",
+          ".write": false
         },
 
-        // A task's title must not be null and must be a string
-        "title": {
-          ".validate": "newData.val() !== null && newData.isString()",
-          ".write": "newData.parent().child('ownerId').val() === auth.uid"
+        "accepted":{
+          //tasks in this state can be read but not written to (it's too late in the process)
+          ".read": "auth !== null",
+          ".write": false
         },
 
-        // A task's ownerId must not be null and must be a string
-        "ownerId": {
-          ".validate": "newData.val() !== null && newData.isString()",
-          ".write": "newData.parent().child('ownerId').val() === auth.uid"
+        "finished":{
+          //tasks in this state can be read but not written to (it's too late in the process)
+          ".read": "auth !== null",
+          ".write": false
         },
 
-        // An isTaskItNow field must not be null and must be a boolean
-        "isTaskItNow": {
-          ".validate": "newData.val() !== null && newData.isBoolean()",
-          ".write": "newData.parent().child('ownerId').val() === auth.uid"
-        },
+       "reported":{
+         //nobody can read/write reported tasks
+         ".read": false,
+         ".write": false,
+       }
 
-        // The expiration time must not be null and must be a number
-        "expirationTime": {
-          ".validate": "newData.val() !== null && newData.isNumber()",
-          ".write": "newData.parent().child('ownerId').val() === auth.uid"
-        },
-
-        // The max price must not be null, must be a number, and must be greater than 0
-        "maxPrice": {
-          ".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0",
-          ".write": "newData.parent().child('ownerId').val() === auth.uid"
-        },
-
-        // A tasks' status must not be null, and it must be a string
-        "status": {
-          ".validate": "newData.val() != null && newData.isString()",
-          ".write": "newData.parent().child('ownerId').val() === auth.uid"
-        },
-
-        // The isLocalTask field must not be null and must be a boolean
-        "isLocalTask": {
-          ".validate": "newData.val() != null && newData.isBoolean()",
-          ".write": "newData.parent().child('ownerId').val() === auth.uid"
-        },
-
-        // The taskId field can be anything for now
-        "taskId": {
-          ".write": "newData.parent().child('ownerId').val() === auth.uid"
-        },
-
-        // The tags field can be anything for now
-        "tags": {
-        	".write": "newData.parent().child('ownerId').val() === auth.uid"
-        },
-
-        // any user can update report count
-        "reportCount":{
-          ".write": "auth !== null"
-        },
-
-        // No other fields are allowed on a task
-        "$other": { ".validate": false }
-      }
-    },
+      },
 
     "bids":{
       // You must be logged-in to read/write bids
@@ -153,6 +184,11 @@
           	".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0"
         },
 
+          // The bidId field must be a string
+        "bidId": {
+						".write": "newData.isString()"
+        },
+
         // No other fields are allowed on a bid
         "$other": { ".validate": false }
       }
@@ -163,7 +199,7 @@
       // Anyone signed in can write new reports.
       ".read": "auth !== null",
 
-        ".indexOn": ["reporterId", "taskId"],
+        ".indexOn": ["reporterId", "taskId", "wasRead"],
 
           "$reportId": {
             // only the original reporter can write to this report
@@ -182,6 +218,15 @@
             // description must be a non-null string
             "description": {
               ".validate": "newData.val() !== null && newData.isString()"
+            },
+
+              // The reportId field must be a string
+            "reportId": {
+                ".write": "newData.isString()"
+            },
+
+            "wasRead": {
+              ".write": "newData.isBoolean()"
             },
 
             // No other fields are allowed on a report
