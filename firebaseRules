@@ -53,7 +53,7 @@
       // Anyone signed in can write new tasks.
       ".read": "auth !== null",
 
-      ".indexOn": ["ownerId", "status"],
+      ".indexOn": ["ownerId", "status", "expirationTime"],
 
       "$taskid": {
         // Anyone can read a task.  Only the owner can write it.
@@ -178,7 +178,7 @@
             "reporterId":{
               ".validate": "newData.val() !== null && newData.isString()"
             },
-
+              
             // taskId must be a non-null string
             "taskId": {
               ".validate": "newData.val() !== null && newData.isString()"
