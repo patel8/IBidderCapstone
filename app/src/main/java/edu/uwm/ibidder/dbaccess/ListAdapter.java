@@ -62,8 +62,8 @@ public class ListAdapter extends BaseAdapter {
         if (v == null) {
             v = layoutInflater.inflate(layout, null);
             viewHolder = new ViewHolder();
-            viewHolder.description = (TextView) v.findViewById(R.id.TestTextView);
-            viewHolder.price = (TextView) v.findViewById(R.id.TestTextView2);
+            viewHolder.description = (TextView) v.findViewById(R.id.textViewListTitle);
+            viewHolder.price = (TextView) v.findViewById(R.id.textViewListPrice);
         } else {
             viewHolder = (ViewHolder) v.getTag();
         }

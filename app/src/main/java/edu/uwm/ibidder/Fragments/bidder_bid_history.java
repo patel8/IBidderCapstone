@@ -18,8 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
@@ -39,7 +41,7 @@ public class bidder_bid_history extends Fragment {
 
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
-
+    FirebaseRecyclerAdapter<TaskModel, viewHolder> adapter;
     public bidder_bid_history(){
 
     }
@@ -62,36 +64,27 @@ public class bidder_bid_history extends Fragment {
         swipeRefreshLayout.setColorSchemeColors(Color.GREEN, Color.RED);
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity()));
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        ref = ref.child("tasks");
-        FirebaseRecyclerAdapter<TaskModel, viewHolder> adapter = new FirebaseRecyclerAdapter<TaskModel, viewHolder>(
+        TaskAccessor ta = new TaskAccessor();
+        Query q = ta.getTasksByOwnerIdQuery(FirebaseAuth.getInstance().getCurrentUser().getUid()
+                , "TIMED_OUT");
+        adapter = new FirebaseRecyclerAdapter<TaskModel, viewHolder>(
                 TaskModel.class,
                 R.layout.bidder_current_task_list_template,
                 viewHolder.class,
-                ref
+                q
         ) {
             @Override
             protected void populateViewHolder(viewHolder viewHolder, TaskModel taskModel, int i) {
-                viewHolder.mText.setText(taskModel.getMaxPrice()+"SOME TEXT");
+                viewHolder.title.setText(taskModel.getTitle());
                 viewHolder.description.setText(taskModel.getDescription());
+                viewHolder.DateTime.setText(taskModel.getExpirationTime()+"");
+                viewHolder.Price.setText(taskModel.getMaxPrice()+"");
             }
         };
 
         recyclerView.setAdapter(adapter);
 
 
-
-
-//        final ListAdapter adapter = new ListAdapter(getContext(), R.layout.bidder_current_task_list_template);
-//        listView.setAdapter(adapter);
-//
-//        TaskAccessor ta = new TaskAccessor();
-//        ta.getTasksOnce(new TaskCallbackListener() {
-//            @Override
-//            public void dataUpdate(TaskModel tm) {
-//                adapter.addTask(tm);
-//            }
-//        });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -105,6 +98,7 @@ public class bidder_bid_history extends Fragment {
 
                 //Todo: Whatever we want to do when we refresh the screen.
                 Toast.makeText(getContext(), "ListView has been Refreshed", Toast.LENGTH_SHORT).show();
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -113,13 +107,19 @@ public class bidder_bid_history extends Fragment {
 
     public static class viewHolder extends RecyclerView.ViewHolder{
 
+        public TextView title;
         public TextView description;
-        public TextView mText;
+        public TextView DateTime;
+        public TextView Price;
+
         public viewHolder(View v){
             super(v);
 
-            description = (TextView) v.findViewById(R.id.TestTextView);
-            mText = (TextView) v.findViewById(R.id.TestTextView2);
+            title = (TextView) v.findViewById(R.id.textViewListTitle);
+            description = (TextView) v.findViewById(R.id.textViewListDescription);
+            DateTime = (TextView) v.findViewById(R.id.textViewListDateTime);
+            Price = (TextView) v.findViewById(R.id.textViewListPrice);
+
 
         }
     }

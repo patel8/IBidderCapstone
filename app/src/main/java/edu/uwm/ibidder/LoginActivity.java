@@ -63,23 +63,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(LoginActivity.this);
         setContentView(R.layout.activity_login);
-        intializeAllWidgets();
-        ResiterOnClickListener();
-
-      // Check if any user is Logged in. If yes, then Go to Profile Activity
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                    Toast.makeText(LoginActivity.this, " User ID : "+ user.getUid() + " Name "+ user.getDisplayName()+ " Email: "+ user.getEmail(), Toast.LENGTH_SHORT).show();
-                } else {
-
-                }
-                // ...
-            }
-        };
 
         // [START config_signin]
         // Configure Google Sign In
@@ -92,6 +75,27 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
+
+        intializeAllWidgets();
+        ResiterOnClickListener();
+
+      // Check if any user is Logged in. If yes, then Go to Profile Activity
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                    Log.i("Tagging", "Google Login is from Login");
+                    Toast.makeText(LoginActivity.this, " User ID : "+ user.getUid() + " Name "+ user.getDisplayName()+ " Email: "+ user.getEmail(), Toast.LENGTH_SHORT).show();
+                } else {
+
+                }
+                // ...
+            }
+        };
+
+
     }
 
     @Override
@@ -125,21 +129,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         callbackManager = CallbackManager.Factory.create();
         buttonFacebookLogin = (LoginButton) findViewById(R.id.facebookLogin);
-
+        buttonFacebookLogin.setReadPermissions("email", "public_profile");
 
         buttonFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                Log.i("Tagging", "FACC Login is from Login");
+
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
+                Log.i("Tagging", "fdfsfds Login is from Login");
 
             }
 
             @Override
             public void onError(FacebookException error) {
+                Log.i("Tagging", "fdfsdfds Login is from Login");
 
             }
         });
@@ -259,6 +267,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                             Toast.makeText(LoginActivity.this, "Authentication Successful.",
                                     Toast.LENGTH_SHORT).show();
+
+                            Log.i("TAGGING", "Google Log in succss");
                         }
                         else
                         {
