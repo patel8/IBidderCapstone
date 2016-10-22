@@ -8,6 +8,7 @@ public class ReportModel {
     private String taskId;
     private String description;
     private String reporterId;
+    private String reportId;
 
     /**
      * Default constructor for firebase
@@ -38,5 +39,13 @@ public class ReportModel {
 
     public void setReporterId(String reporterId) {
         this.reporterId = reporterId;
+    }
+
+    public String getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(String reportId) {
+        this.reportId = reportId;
     }
 }

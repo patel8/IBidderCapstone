@@ -20,7 +20,7 @@ public class ReportAccessor extends BaseAccessor {
     }
 
     /**
-     * Creates a report and returns its id.  Also updates the related task's report count.
+     * Creates a report and returns its id.  Also updates the related task's report count.  Automatically sets the reportId field.
      *
      * @param reportToCreate The report to create
      * @return The id of the new report
@@ -29,6 +29,7 @@ public class ReportAccessor extends BaseAccessor {
         DatabaseReference ref = database.getReference("reports");
 
         DatabaseReference pushedRef = ref.push();
+        reportToCreate.setReportId(pushedRef.getKey());
         pushedRef.setValue(reportToCreate);
 
         final String taskId = reportToCreate.getTaskId();

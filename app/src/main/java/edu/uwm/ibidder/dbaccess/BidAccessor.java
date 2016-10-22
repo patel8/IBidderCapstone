@@ -18,7 +18,7 @@ public class BidAccessor extends BaseAccessor {
     }
 
     /**
-     * Createa a bid and returns its id
+     * Createa a bid and returns its id.  Automatically sets the bidId property.
      *
      * @param bidToCreate The bid to create
      * @return The new bid's id
@@ -27,6 +27,7 @@ public class BidAccessor extends BaseAccessor {
         DatabaseReference ref = database.getReference("bids");
 
         DatabaseReference pushedRef = ref.push();
+        bidToCreate.setBidId(pushedRef.getKey());
         pushedRef.setValue(bidToCreate);
 
         return pushedRef.getKey();
