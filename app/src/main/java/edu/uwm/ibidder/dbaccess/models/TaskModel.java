@@ -1,7 +1,6 @@
 package edu.uwm.ibidder.dbaccess.models;
 
 
-import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -12,7 +11,7 @@ public class TaskModel {
     private String description;
     private String status; //The status of this task- use the status enum
     private double maxPrice;
-    private Date expirationTime;
+    private long expirationTime;
     private String ownerId;
     private String title;
     private boolean isTaskItNow;
@@ -84,11 +83,11 @@ public class TaskModel {
         this.maxPrice = maxPrice;
     }
 
-    public Date getExpirationTime() {
+    public long getExpirationTime() {
         return expirationTime;
     }
 
-    public void setExpirationTime(Date expirationTime) {
+    public void setExpirationTime(long expirationTime) {
         this.expirationTime = expirationTime;
     }
 
