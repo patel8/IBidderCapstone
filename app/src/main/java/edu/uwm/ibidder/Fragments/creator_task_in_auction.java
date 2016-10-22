@@ -55,7 +55,7 @@ public class creator_task_in_auction extends Fragment {
         listView.setAdapter(adapter);
 
         TaskAccessor ta = new TaskAccessor();
-        ta.getTasksOnce(new TaskCallbackListener() {
+        ta.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY) {
             @Override
             public void dataUpdate(TaskModel tm) {
                 adapter.addTask(tm);

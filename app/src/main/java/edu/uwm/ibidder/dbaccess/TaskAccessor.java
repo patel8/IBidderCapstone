@@ -32,15 +32,16 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * Takes a task model and puts it in firebase.  Returns the id of the created task.
-     * This also sets the taskId field on the TaskModel automatically.
+     * This also sets the taskId field and status field on the TaskModel automatically.
      *
      * @param taskToCreate the model of the task to create
      */
     public String createTask(TaskModel taskToCreate) {
-        DatabaseReference ref = database.getReference("tasks");
+        DatabaseReference ref = database.getReference("tasks/" + "ready");
 
         DatabaseReference pushedRef = ref.push();
         taskToCreate.setTaskId(pushedRef.getKey());
+        taskToCreate.setStatus(TaskModel.TaskStatusType.READY.toString());
         pushedRef.setValue(taskToCreate);
 
         return pushedRef.getKey();
@@ -48,15 +49,18 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * Takes a task model and puts it in firebase.  Returns the id of the created task.
+     * This also sets the taskId field and status field on the TaskModel automatically.
      *
      * @param taskToCreate the model of the task to create
      * @param latitude     The latitude of where this task is
      * @param longitude    The longitude of where this task is
      */
     public String createTask(TaskModel taskToCreate, double latitude, double longitude) {
-        DatabaseReference ref = database.getReference("tasks");
+        DatabaseReference ref = database.getReference("tasks/" + "ready");
 
         DatabaseReference pushedRef = ref.push();
+        taskToCreate.setTaskId(pushedRef.getKey());
+        taskToCreate.setStatus(TaskModel.TaskStatusType.READY.toString());
         pushedRef.setValue(taskToCreate);
 
         geoFire.setLocation(pushedRef.getKey(), new GeoLocation(latitude, longitude));
@@ -66,12 +70,13 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * Updates a task with the ID of taskKey to be equal to the TaskModel taskToUpdate.  If the task no longer has the status READY, the location is deleted.
+     * This also moves the task to the proper status space in firebase.
      *
      * @param taskKey      The task to update's string key
      * @param taskToUpdate The model to update the task to
      */
     public void updateTask(String taskKey, TaskModel taskToUpdate) {
-        DatabaseReference ref = database.getReference("tasks/" + taskKey);
+        DatabaseReference ref = database.getReference("tasks/" + taskToUpdate.getStatus().toLowerCase() + "/" + taskKey);
         ref.setValue(taskToUpdate);
 
         if (!taskToUpdate.getStatus().equals(TaskModel.TaskStatusType.READY.toString()))
@@ -80,24 +85,25 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * Deletes a task with the ID of taskKey.  This is done asynchronously.
+     * Only tasks in the "READY" status can be deleted.
      *
      * @param taskKey The ID of the task to delete
      */
     public void removeTask(String taskKey) {
-        DatabaseReference ref = database.getReference("tasks/" + taskKey);
+        DatabaseReference ref = database.getReference("tasks/" + "ready/" + taskKey);
         ref.removeValue();
         geoFire.removeLocation(taskKey);
     }
 
     /**
      * Deletes a task asynchronously with the ID of taskKey.  The completion listener is hooked up to the task if you want to do something on completion.
-     * TODO: see if we need completion listeners like this for everything.
+     * Only tasks in the "READY" status can be deleted.
      *
      * @param taskKey            The key of the task to delete
      * @param completionListener The completion listener to hook up to the delete task
      */
     public void removeTask(String taskKey, final DatabaseReference.CompletionListener completionListener) {
-        DatabaseReference ref = database.getReference("tasks/" + taskKey);
+        DatabaseReference ref = database.getReference("tasks/" + "ready/" + taskKey);
         ref.removeValue(completionListener);
     }
 
@@ -108,7 +114,7 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
     public void getTaskOnce(String taskId, final TaskCallbackListener taskCallbackListener) {
-        DatabaseReference ref = database.getReference("tasks/" + taskId);
+        DatabaseReference ref = database.getReference("tasks/" + taskCallbackListener.getStatusRestrictionType() + "/" + taskId);
         ref.addListenerForSingleValueEvent(taskCallbackListener);
     }
 
@@ -119,14 +125,14 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
     public void getTask(String taskId, final TaskCallbackListener taskCallbackListener) {
-        DatabaseReference ref = database.getReference("tasks/" + taskId);
+        DatabaseReference ref = database.getReference("tasks/" + taskCallbackListener.getStatusRestrictionType() + "/" + taskId);
         storedValueEventListeners.push(ref.addValueEventListener(taskCallbackListener));
         storedDatabaseRefs.push(ref);
     }
 
-    //TODO: THIS IS A TEMP METHOD, ONLY USE THIS WHEN TESTING, IT GETS ALL TASKS IN EXISTENCE ONCE!!!
-    public void getTasksOnce(TaskCallbackListener taskCallbackListener){
-        DatabaseReference ref = database.getReference("tasks");
+    //TODO: THIS IS A TEMP METHOD, ONLY USE THIS WHEN TESTING, IT GETS ALL TASKS THAT ARE IN EXISTENCE ONCE!!!
+    public void getTasksOnce(TaskCallbackListener taskCallbackListener) {
+        DatabaseReference ref = database.getReference("tasks/" + taskCallbackListener.getStatusRestrictionType());
         ref.addListenerForSingleValueEvent(taskCallbackListener);
     }
 
@@ -137,13 +143,13 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskCallbackListener The callback listener to pass the tasks to.
      */
     public void getTasksByOwnerId(String ownerId, final TaskCallbackListener taskCallbackListener) {
-        DatabaseReference ref = database.getReference("tasks");
+        DatabaseReference ref = database.getReference("tasks/" + taskCallbackListener.getStatusRestrictionType());
         ref.orderByChild("ownerId").equalTo(ownerId).addListenerForSingleValueEvent(taskCallbackListener);
     }
 
     /**
      * Gets all the tasks that some user has bid on using their userId/bidderId.  The tasks are passed once to the taskCallbackListener one-by-one.
-     *
+     * Only returns tasks of a certain status.
      * @param bidderId             the bidder id to get all the tasks for
      * @param taskCallbackListener the taskCallback that the tasks will be sent to
      */
@@ -157,7 +163,6 @@ public class TaskAccessor extends BaseAccessor {
             }
         });
     }
-
 
 
     /**

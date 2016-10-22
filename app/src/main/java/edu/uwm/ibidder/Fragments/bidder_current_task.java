@@ -50,7 +50,7 @@ public class bidder_current_task extends android.support.v4.app.Fragment {
         listView.setAdapter(adapter);
 
         TaskAccessor ta = new TaskAccessor();
-        ta.getTasksOnce(new TaskCallbackListener() {
+        ta.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY) {
             @Override
             public void dataUpdate(TaskModel tm) {
                 adapter.addTask(tm);

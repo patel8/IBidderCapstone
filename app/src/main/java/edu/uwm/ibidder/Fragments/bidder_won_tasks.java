@@ -55,7 +55,7 @@ public class bidder_won_tasks extends Fragment {
         listView.setAdapter(adapter);
 
         TaskAccessor ta = new TaskAccessor();
-        ta.getTasksOnce(new TaskCallbackListener() {
+        ta.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.ACCEPTED) {
             @Override
             public void dataUpdate(TaskModel tm) {
                 adapter.addTask(tm);

@@ -9,6 +9,7 @@ public class ReportModel {
     private String description;
     private String reporterId;
     private String reportId;
+    private boolean wasRead = false; //used by node server, uneditable field for users
 
     /**
      * Default constructor for firebase
@@ -43,6 +44,10 @@ public class ReportModel {
 
     public String getReportId() {
         return reportId;
+    }
+
+    public boolean isWasRead() {
+        return wasRead;
     }
 
     public void setReportId(String reportId) {

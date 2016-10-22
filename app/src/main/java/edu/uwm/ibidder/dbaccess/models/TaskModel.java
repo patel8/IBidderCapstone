@@ -17,7 +17,7 @@ public class TaskModel {
     private boolean isTaskItNow;
     private boolean isLocalTask; //True if the task requires someone to be in a physical location.
     private HashMap<String, Boolean> tags; //stores the tags in format <Tag, True>
-    private int reportCount;
+    private int reportCount = 0; //Used by node server, not user editable
     private String taskId;
 
     /**
@@ -69,10 +69,6 @@ public class TaskModel {
 
     public int getReportCount() {
         return reportCount;
-    }
-
-    public void setReportCount(int reportCount) {
-        this.reportCount = reportCount;
     }
 
     public double getMaxPrice() {

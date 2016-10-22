@@ -20,7 +20,7 @@ public class ReportAccessor extends BaseAccessor {
     }
 
     /**
-     * Creates a report and returns its id.  Also updates the related task's report count.  Automatically sets the reportId field.
+     * Creates a report and returns its id.  Automatically sets the reportId field.
      *
      * @param reportToCreate The report to create
      * @return The id of the new report
@@ -31,18 +31,6 @@ public class ReportAccessor extends BaseAccessor {
         DatabaseReference pushedRef = ref.push();
         reportToCreate.setReportId(pushedRef.getKey());
         pushedRef.setValue(reportToCreate);
-
-        final String taskId = reportToCreate.getTaskId();
-
-        final TaskAccessor ta = new TaskAccessor();
-        ta.getTaskOnce(taskId, new TaskCallbackListener() {
-            @Override
-            public void dataUpdate(TaskModel tm) {
-                //TODO: see if there is a safer/better way to handle this without a node server
-                tm.setReportCount(tm.getReportCount() + 1);
-                ta.updateTask(taskId, tm);
-            }
-        });
 
         return pushedRef.getKey();
     }
