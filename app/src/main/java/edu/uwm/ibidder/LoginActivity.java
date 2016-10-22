@@ -3,7 +3,9 @@ package edu.uwm.ibidder;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.location.Location;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -23,10 +26,14 @@ import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -35,9 +42,10 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
 
     EditText editTextEmail;
     EditText editTextPassword;
@@ -63,6 +71,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(LoginActivity.this);
         setContentView(R.layout.activity_login);
+        intializeAllWidgets();
+        ResiterOnClickListener();
+
+      // Check if any user is Logged in. If yes, then Go to Profile Activity
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
+                    Toast.makeText(LoginActivity.this, " User ID : " + user.getUid() + " Name " + user.getDisplayName() + " Email: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                } else {
+
+                }
+                // ...
+            }
+        };
 
         // [START config_signin]
         // Configure Google Sign In
@@ -75,28 +100,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
-        intializeAllWidgets();
-        ResiterOnClickListener();
-
-      // Check if any user is Logged in. If yes, then Go to Profile Activity
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                    Log.i("Tagging", "Google Login is from Login");
-                    Toast.makeText(LoginActivity.this, " User ID : "+ user.getUid() + " Name "+ user.getDisplayName()+ " Email: "+ user.getEmail(), Toast.LENGTH_SHORT).show();
-                } else {
-
-                }
-                // ...
-            }
-        };
-
-
     }
+
+
 
     @Override
     protected void onStop() {
@@ -129,25 +135,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         callbackManager = CallbackManager.Factory.create();
         buttonFacebookLogin = (LoginButton) findViewById(R.id.facebookLogin);
-        buttonFacebookLogin.setReadPermissions("email", "public_profile");
+
 
         buttonFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.i("Tagging", "FACC Login is from Login");
-
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
 
             @Override
             public void onCancel() {
-                Log.i("Tagging", "fdfsfds Login is from Login");
 
             }
 
             @Override
             public void onError(FacebookException error) {
-                Log.i("Tagging", "fdfsdfds Login is from Login");
 
             }
         });
@@ -217,6 +219,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                       {
                           //Navigate user to Home Screen
                           Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+
                           progressDialog.dismiss();
                           startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                       }
@@ -267,8 +270,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
                             Toast.makeText(LoginActivity.this, "Authentication Successful.",
                                     Toast.LENGTH_SHORT).show();
-
-                            Log.i("TAGGING", "Google Log in succss");
                         }
                         else
                         {
