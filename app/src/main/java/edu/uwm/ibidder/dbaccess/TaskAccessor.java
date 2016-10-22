@@ -7,6 +7,7 @@ import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -137,19 +138,31 @@ public class TaskAccessor extends BaseAccessor {
     }
 
     /**
+     * Gets a tasks query by ownerId and status.
+     *
+     * @param ownerId               The ownerId for the tasks
+     * @param statusRestrictionType The toString of the TaskStatusTypes status of these tasks
+     * @return The tasks query by ownerId and status
+     */
+    public Query getTasksByOwnerIdQuery(String ownerId, String statusRestrictionType) {
+        DatabaseReference ref = database.getReference("tasks/" + statusRestrictionType.toLowerCase());
+        return ref.orderByChild("ownerId").equalTo(ownerId);
+    }
+
+    /**
      * Gets all the tasks for some owner by their id.  They are passed once to the taskCallbackListener one-by-one.
      *
      * @param ownerId              The id of the owner we are getting the tasks for
      * @param taskCallbackListener The callback listener to pass the tasks to.
      */
     public void getTasksByOwnerId(String ownerId, final TaskCallbackListener taskCallbackListener) {
-        DatabaseReference ref = database.getReference("tasks/" + taskCallbackListener.getStatusRestrictionType());
-        ref.orderByChild("ownerId").equalTo(ownerId).addListenerForSingleValueEvent(taskCallbackListener);
+        getTasksByOwnerIdQuery(ownerId, taskCallbackListener.getStatusRestrictionType()).addListenerForSingleValueEvent(taskCallbackListener);
     }
 
     /**
      * Gets all the tasks that some user has bid on using their userId/bidderId.  The tasks are passed once to the taskCallbackListener one-by-one.
      * Only returns tasks of a certain status.
+     *
      * @param bidderId             the bidder id to get all the tasks for
      * @param taskCallbackListener the taskCallback that the tasks will be sent to
      */
