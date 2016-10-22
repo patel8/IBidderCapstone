@@ -153,6 +153,11 @@
           	".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0"
         },
 
+          // The bidId field must be a string
+        "bidId": {
+						".write": "newData.isString()"
+        },
+
         // No other fields are allowed on a bid
         "$other": { ".validate": false }
       }
@@ -182,6 +187,11 @@
             // description must be a non-null string
             "description": {
               ".validate": "newData.val() !== null && newData.isString()"
+            },
+
+              // The reportId field must be a string
+            "reportId": {
+                ".write": "newData.isString()"
             },
 
             // No other fields are allowed on a report
