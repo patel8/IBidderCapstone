@@ -1,30 +1,49 @@
 package edu.uwm.ibidder;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ListMenuItemView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uwm.ibidder.Fragments.*;
+import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 public class ProfileActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    FloatingActionButton fabuttonTaskCreator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        initializeAllWidgets();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -36,6 +55,11 @@ public class ProfileActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void initializeAllWidgets(){
+        fabuttonTaskCreator = (FloatingActionButton) findViewById(R.id.fabutton_createtask);
+        fabuttonTaskCreator.setOnClickListener(this);
     }
 
     @Override
@@ -115,17 +139,69 @@ public class ProfileActivity extends AppCompatActivity
 
         try{
             fragment = (Fragment) fragmentClass.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }catch (Exception e)
         {
             e.printStackTrace();
-        }
-        if(fragment != null){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private boolean taskCreateValidation(String name, String descr, String price){
+        if(!name.matches("") && !descr.matches("") && !price.matches("")){
+            return true;
+        }
+
+        Toast.makeText(ProfileActivity.this, "Invalid information", Toast.LENGTH_SHORT).show();
+        return false;
+    }
+
+    private AlertDialog createAlertDialog(){
+        final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
+        LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
+        ad.setTitle("Create a task");
+        ad.setMessage("What can a BidButler do for you?");
+        View view = inflater.inflate(R.layout.alertdialog_taskcreator, null);
+        ad.setView(view);
+        final EditText taskname = (EditText)view.findViewById(R.id.editText_taskname);
+        final EditText taskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
+        final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
+
+        ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String tskname = taskname.getText().toString();
+                String tskdesc = taskdescr.getText().toString();
+                String tskprice = taskprice.getText().toString();
+
+                if(taskCreateValidation(tskname, tskdesc, tskprice)){
+                    TaskAccessor ta = new TaskAccessor();
+                    TaskModel tm = new TaskModel();
+                    tm.setTitle(tskname);
+                    tm.setDescription(tskdesc);
+                    tm.setMaxPrice(Float.parseFloat(tskprice));
+                    String tskId = ta.createTask(tm); // doesnt seem to be adding new task to firebase
+                    Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        return ad;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.fabutton_createtask:
+                final AlertDialog taskCreateDialog = createAlertDialog();
+                taskCreateDialog.show();
+                break;
+            default:
+                break;
+        }
     }
 }
