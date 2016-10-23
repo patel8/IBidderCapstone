@@ -7,7 +7,7 @@
     <application
         android:allowBackup="true"
         android:debuggable="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/bidbutler_icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -17,10 +17,9 @@
 
         <activity
             android:name=".LoginActivity"
-            android:label="@string/login_activity_lable">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

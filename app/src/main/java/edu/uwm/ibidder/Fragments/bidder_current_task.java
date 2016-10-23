@@ -80,6 +80,9 @@ public class bidder_current_task extends android.support.v4.app.Fragment {
                 Intent taskIntent = new Intent(getActivity(), TaskActivity.class);
                 taskIntent.putExtra("task_desc", task.getDescription());
                 taskIntent.putExtra("task_own", task.getOwnerId());
+                taskIntent.putExtra("task_name", task.getTitle());
+                taskIntent.putExtra("task_price", Double.toString(task.getMaxPrice()));
+                taskIntent.putExtra("task_end", Long.toString(task.getExpirationTime()));
                 startActivity(taskIntent);
             }
         });
