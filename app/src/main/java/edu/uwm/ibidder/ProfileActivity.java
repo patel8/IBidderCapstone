@@ -1,5 +1,6 @@
 package edu.uwm.ibidder;
 
+//first freaking comment by austin
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
