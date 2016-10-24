@@ -43,14 +43,6 @@ public class TaskModel {
         this.tags = tags;
     }
 
-    public boolean isLocalTask() {
-        return isLocalTask;
-    }
-
-    public void setLocalTask(boolean localTask) {
-        isLocalTask = localTask;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -103,12 +95,20 @@ public class TaskModel {
         this.title = title;
     }
 
-    public boolean isTaskItNow() {
+    public boolean getIsTaskItNow() {
         return isTaskItNow;
     }
 
-    public void setTaskItNow(boolean taskItNow) {
-        isTaskItNow = taskItNow;
+    public void setIsTaskItNow(boolean isTaskItNow) {
+        this.isTaskItNow = isTaskItNow;
+    }
+
+    public boolean getIsLocalTask() {
+        return isLocalTask;
+    }
+
+    public void setIsLocalTask(boolean isLocalTask) {
+        this.isLocalTask = isLocalTask;
     }
 
     public enum TaskStatusType {
