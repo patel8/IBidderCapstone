@@ -9,11 +9,11 @@
         android:layout_height="match_parent"
         android:id="@+id/swipe_bidder_won_tasks"
         >
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:id="@+id/bidder_won_tasks_listView">
-        </ListView>
+            android:id="@+id/bidder_won_tasks_recyclerView">
+        </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 </FrameLayout>

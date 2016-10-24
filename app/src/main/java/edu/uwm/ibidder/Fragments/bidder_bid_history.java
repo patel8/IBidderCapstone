@@ -66,7 +66,7 @@ public class bidder_bid_history extends Fragment {
                 new DividerItemDecoration(getActivity()));
         TaskAccessor ta = new TaskAccessor();
         Query q = ta.getTasksByOwnerIdQuery(FirebaseAuth.getInstance().getCurrentUser().getUid()
-                , "TIMED_OUT");
+                , TaskModel.TaskStatusType.TIMED_OUT.toString());
         adapter = new FirebaseRecyclerAdapter<TaskModel, viewHolder>(
                 TaskModel.class,
                 R.layout.bidder_current_task_list_template,
