@@ -60,8 +60,7 @@
 
           "$taskid": {
           // Anyone can read a task.  Only the owner can write it.
-          ".read": "auth !== null",
-            ".write": "auth.uid === newData.child('ownerId').val()",
+          ".write": "auth.uid === newData.child('ownerId').val()",
 
           // A task's description must not be null and must be a string
           "description": {
@@ -95,17 +94,17 @@
 
           // A tasks' status must not be null, and it must be a string
           "status": {
-            ".validate": "newData.val() != null && newData.isString()"
+            ".validate": "newData.val() !== null && newData.isString()"
           },
 
           // The isLocalTask field must not be null and must be a boolean
           "isLocalTask": {
-            ".validate": "newData.val() != null && newData.isBoolean()"
+            ".validate": "newData.val() !== null && newData.isBoolean()"
           },
 
           // The taskId field must be a string
           "taskId": {
-            ".validate": "newData.val() != null && newData.isString()"
+            ".validate": "newData.val() !== null && newData.isString()"
           },
 
           // The tags field can be anything for now
@@ -114,7 +113,7 @@
 
           // reportCount must be a number
           "reportCount":{
-							".validate": "newData.val() != null && newData.isNumber()"
+							".validate": "newData.val() !== null && newData.isNumber()"
           },
 
           // No other fields are allowed on a task
