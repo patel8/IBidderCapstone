@@ -60,69 +60,60 @@
 
           "$taskid": {
           // Anyone can read a task.  Only the owner can write it.
-          ".read": "auth !== null",
+          ".write": "auth.uid === newData.child('ownerId').val()",
 
           // A task's description must not be null and must be a string
           "description": {
-            ".validate": "newData.val() !== null && newData.isString()",
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+            ".validate": "newData.val() !== null && newData.isString()"
           },
 
           // A task's title must not be null and must be a string
           "title": {
-            ".validate": "newData.val() !== null && newData.isString()",
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+            ".validate": "newData.val() !== null && newData.isString()"
           },
 
           // A task's ownerId must not be null and must be a string
           "ownerId": {
-            ".validate": "newData.val() !== null && newData.isString()",
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+            ".validate": "newData.val() !== null && newData.isString()"
           },
 
           // An isTaskItNow field must not be null and must be a boolean
           "isTaskItNow": {
-            ".validate": "newData.val() !== null && newData.isBoolean()",
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+            ".validate": "newData.val() !== null && newData.isBoolean()"
           },
 
           // The expiration time must not be null and must be a number
           "expirationTime": {
-            ".validate": "newData.val() !== null && newData.isNumber()",
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+            ".validate": "newData.val() !== null && newData.isNumber()"
           },
 
           // The max price must not be null, must be a number, and must be greater than 0
           "maxPrice": {
-            ".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0",
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+            ".validate": "newData.val() !== null && newData.isNumber() && newData.val() > 0"
           },
 
           // A tasks' status must not be null, and it must be a string
           "status": {
-            ".validate": "newData.val() != null && newData.isString()",
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+            ".validate": "newData.val() !== null && newData.isString()"
           },
 
           // The isLocalTask field must not be null and must be a boolean
           "isLocalTask": {
-            ".validate": "newData.val() != null && newData.isBoolean()",
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+            ".validate": "newData.val() !== null && newData.isBoolean()"
           },
 
-          // The taskId field can be anything for now
+          // The taskId field must be a string
           "taskId": {
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
+            ".validate": "newData.val() !== null && newData.isString()"
           },
 
           // The tags field can be anything for now
           "tags": {
-            ".write": "newData.parent().child('ownerId').val() === auth.uid"
           },
 
-          // any user can update report count
+          // reportCount must be a number
           "reportCount":{
-            ".write": "auth !== null"
+							".validate": "newData.val() !== null && newData.isNumber()"
           },
 
           // No other fields are allowed on a task
@@ -222,11 +213,11 @@
 
               // The reportId field must be a string
             "reportId": {
-                ".write": "newData.isString()"
+                ".validate": "newData.isString()"
             },
 
             "wasRead": {
-              ".write": "newData.isBoolean()"
+              ".validate": "newData.isBoolean()"
             },
 
             // No other fields are allowed on a report
