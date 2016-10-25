@@ -1,6 +1,5 @@
 package edu.uwm.ibidder;
 
-//first freaking comment by austin
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,23 +12,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ListMenuItemView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.HashMap;
 
 import edu.uwm.ibidder.Fragments.*;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
@@ -140,11 +137,13 @@ public class ProfileActivity extends AppCompatActivity
 
         try{
             fragment = (Fragment) fragmentClass.newInstance();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }catch (Exception e)
         {
             e.printStackTrace();
+        }
+        if(fragment != null){
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -161,7 +160,7 @@ public class ProfileActivity extends AppCompatActivity
         return false;
     }
 
-    private AlertDialog createAlertDialog(){
+    private AlertDialog createTaskCreationDialog(){
         final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
         LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
         ad.setTitle("Create a task");
@@ -171,6 +170,16 @@ public class ProfileActivity extends AppCompatActivity
         final EditText taskname = (EditText)view.findViewById(R.id.editText_taskname);
         final EditText taskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
         final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
+        final EditText tasktags = (EditText)view.findViewById(R.id.editText_tasktags);
+        final Button setDate = (Button)view.findViewById(R.id.button_setDate);
+
+        setDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog timeSetDialog = createTimeSetDialog();
+                timeSetDialog.show();
+            }
+        });
 
         ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Create", new DialogInterface.OnClickListener() {
             @Override
@@ -178,17 +187,42 @@ public class ProfileActivity extends AppCompatActivity
                 String tskname = taskname.getText().toString();
                 String tskdesc = taskdescr.getText().toString();
                 String tskprice = taskprice.getText().toString();
+                String[] tsktags = tasktags.getText().toString().split(" ");
+                String ownerId = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
+                //long expiration = Long.parseLong(tskexpireDate);
+                //expiration += Long.parseLong(tskexpireTime);
+                long expiration = 0; // TODO:s till gotta do this properly
+                HashMap<String, Boolean> tags = new HashMap<>();
+                for(int i=0; i<tsktags.length; i++){
+                    tags.put(tsktags[i], true);
+                }
 
                 if(taskCreateValidation(tskname, tskdesc, tskprice)){
                     TaskAccessor ta = new TaskAccessor();
-                    TaskModel tm = new TaskModel();
-                    tm.setTitle(tskname);
-                    tm.setDescription(tskdesc);
-                    tm.setMaxPrice(Float.parseFloat(tskprice));
-                    tm.setOwnerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    double maxprice = Double.parseDouble(tskprice);
+                    TaskModel tm = new TaskModel(tskname, tskdesc, maxprice, ownerId, expiration, false, false, tags);
                     String tskId = ta.createTask(tm);
                     Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        return ad;
+    }
+
+    private AlertDialog createTimeSetDialog() {
+        final AlertDialog ad = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        ad.setTitle("Choose a time");
+        ad.setMessage("When should your task expire?");
+        View view = inflater.inflate(R.layout.alertdialog_datesetter, null);
+        ad.setView(view);
+        final TimePicker tp = (TimePicker)view.findViewById(R.id.timePicker);
+
+        ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Choose", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.i("TAG", "onClick: "+tp.getHour() + " " + tp.getMinute());
             }
         });
 
@@ -199,7 +233,7 @@ public class ProfileActivity extends AppCompatActivity
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.fabutton_createtask:
-                final AlertDialog taskCreateDialog = createAlertDialog();
+                final AlertDialog taskCreateDialog = createTaskCreationDialog();
                 taskCreateDialog.show();
                 break;
             default:

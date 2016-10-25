@@ -27,6 +27,17 @@ public class TaskModel {
 
     }
 
+    public TaskModel(String taskName, String taskDescr, double maxPrice, String ownId, long exprTime, boolean isLocal, boolean isTaskNow, HashMap tags){
+        this.title = taskName;
+        this.description = taskDescr;
+        this.maxPrice = maxPrice;
+        this.ownerId = ownId;
+        this.expirationTime = exprTime;
+        this.isLocalTask = isLocal;
+        this.isTaskItNow = isTaskNow;
+        this.tags = tags;
+    }
+
     public String getTaskId() {
         return taskId;
     }
