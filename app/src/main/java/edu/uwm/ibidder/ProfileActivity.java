@@ -185,7 +185,7 @@ public class ProfileActivity extends AppCompatActivity
                     tm.setTitle(tskname);
                     tm.setDescription(tskdesc);
                     tm.setMaxPrice(Float.parseFloat(tskprice));
-                    String tskId = ta.createTask(tm); // doesnt seem to be adding new task to firebase
+                    String tskId = ta.createTask(tm);
                     Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                 }
             }
