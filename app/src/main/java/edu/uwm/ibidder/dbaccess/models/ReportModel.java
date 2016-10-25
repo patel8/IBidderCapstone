@@ -46,7 +46,7 @@ public class ReportModel {
         return reportId;
     }
 
-    public boolean isWasRead() {
+    public boolean getWasRead() {
         return wasRead;
     }
 
