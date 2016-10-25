@@ -115,8 +115,12 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
     public void getTaskOnce(String taskId, final TaskCallbackListener taskCallbackListener) {
-        DatabaseReference ref = database.getReference("tasks/" + taskCallbackListener.getStatusRestrictionType() + "/" + taskId);
+        DatabaseReference ref = getTaskRef(taskId, taskCallbackListener.getStatusRestrictionType());
         ref.addListenerForSingleValueEvent(taskCallbackListener);
+    }
+
+    public DatabaseReference getTaskRef(String taskId, String taskStatus) {
+        return database.getReference("tasks/" + taskStatus.toLowerCase() + "/" + taskId);
     }
 
     /**
@@ -126,7 +130,7 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
     public void getTask(String taskId, final TaskCallbackListener taskCallbackListener) {
-        DatabaseReference ref = database.getReference("tasks/" + taskCallbackListener.getStatusRestrictionType() + "/" + taskId);
+        DatabaseReference ref = getTaskRef(taskId, taskCallbackListener.getStatusRestrictionType());
         storedValueEventListeners.push(ref.addValueEventListener(taskCallbackListener));
         storedDatabaseRefs.push(ref);
     }
