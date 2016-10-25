@@ -119,6 +119,13 @@ public class TaskAccessor extends BaseAccessor {
         ref.addListenerForSingleValueEvent(taskCallbackListener);
     }
 
+    /**
+     * Gets the task ref to a specific task
+     *
+     * @param taskId     The task's id
+     * @param taskStatus The task's current status
+     * @return The task's ref
+     */
     public DatabaseReference getTaskRef(String taskId, String taskStatus) {
         return database.getReference("tasks/" + taskStatus.toLowerCase() + "/" + taskId);
     }
