@@ -19,13 +19,7 @@ public abstract class UserCallbackListener implements ValueEventListener {
 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
-        Iterator<DataSnapshot> it = dataSnapshot.getChildren().iterator();
-
-        while (it.hasNext()) {
-            UserModel userModel = it.next().getValue(UserModel.class);
-            if (userModel != null)
-                dataUpdate(userModel);
-        }
+        dataUpdate(dataSnapshot.getValue(UserModel.class));
     }
 
     /**

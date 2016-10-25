@@ -23,8 +23,7 @@ public abstract class BidCallbackListener implements ValueEventListener {
 
         while (it.hasNext()) {
             BidModel bidModel = it.next().getValue(BidModel.class);
-            if (bidModel != null)
-                dataUpdate(bidModel);
+            dataUpdate(bidModel);
         }
     }
 
