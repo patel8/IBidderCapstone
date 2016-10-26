@@ -1,6 +1,5 @@
 package edu.uwm.ibidder;
 
-//first freaking comment by austin
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,21 +23,30 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.ads.formats.NativeAd;
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uwm.ibidder.Fragments.*;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.dbaccess.UserAccessor;
+import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
+import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     FloatingActionButton fabuttonTaskCreator;
+    TextView userProfileName;
+    TextView userEmailAddress;
+    ImageView userImageURI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +64,47 @@ public class ProfileActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header= navigationView.getHeaderView(0);
+        userProfileName = (TextView)header.findViewById(R.id.ProfileTextViewUserName);
+        userEmailAddress = (TextView) header.findViewById(R.id.ProfileUserEmail);
+        userImageURI = (ImageView) header.findViewById(R.id.imageView);
+        UserAccessor UA = new UserAccessor();
+        UA.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+            @Override
+            public void dataUpdate(UserModel um) {
+                if(um == null) return;
+                userProfileName.setText(um.getFirstName()+" "+ um.getLastName());
+                userEmailAddress.setText(um.getEmail());
+                if(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null)
+                    userImageURI.setImageURI(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
+            }
+        });
     }
 
     private void initializeAllWidgets(){
         fabuttonTaskCreator = (FloatingActionButton) findViewById(R.id.fabutton_createtask);
         fabuttonTaskCreator.setOnClickListener(this);
+        final UserAccessor userAccessor = new UserAccessor();
+
+        userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+            @Override
+            public void dataUpdate(UserModel um) {
+
+                //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
+                if(um == null) {
+
+                    um = new UserModel();
+                    um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    um.setLastName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+
+                }
+                final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
+                taskCreateDialog.show();
+
+            }
+        });
     }
 
     @Override
@@ -82,13 +126,7 @@ public class ProfileActivity extends AppCompatActivity
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-       //Todo - What happens when they click on Setting
-        /**
-         * Todo- User must be able to Turn off services for
-         * Bid Notifications
-         * Should be able to Select their Radius For Bidding and Task Creater
-         *
-         */
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -159,6 +197,39 @@ public class ProfileActivity extends AppCompatActivity
 
         Toast.makeText(ProfileActivity.this, "Invalid information", Toast.LENGTH_SHORT).show();
         return false;
+    }
+
+    private AlertDialog createAlertDialogForUsers(UserModel userModel){
+        final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
+        LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
+        ad.setTitle("User Fields");
+        View view = inflater.inflate(R.layout.alertdialog_userfields, null);
+        ad.setView(view);
+        final EditText FirstName = (EditText)view.findViewById(R.id.alertDialog_EditText_FirstName);
+        final EditText LastName = (EditText)view.findViewById(R.id.alertDialog_EditText_LastName);
+        final EditText PhoneNumber = (EditText)view.findViewById(R.id.alertDialog_EditText_PhoneNumber);
+        final Button Update = (Button)view.findViewById(R.id.alertDialog_Button_Update);
+
+        FirstName.setText(userModel.getFirstName());
+        LastName.setText(userModel.getLastName());
+        PhoneNumber.setText(userModel.getPhoneNumber());
+
+        Update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserModel userModel = new UserModel();
+
+                userModel.setFirstName(FirstName.getText().toString());
+                userModel.setLastName(LastName.getText().toString());
+                userModel.setPhoneNumber(PhoneNumber.getText().toString());
+                UserAccessor userAccessor = new UserAccessor();
+                userAccessor.updateUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), userModel);
+            }
+        });
+
+
+
+        return ad;
     }
 
     private AlertDialog createAlertDialog(){
