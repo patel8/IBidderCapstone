@@ -121,6 +121,16 @@ public class ProfileActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.profile, menu);
+
+        //Set Current User Field to User's Field
+        UserAccessor userAccessor = new UserAccessor();
+       userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+            @Override
+            public void dataUpdate(UserModel um) {
+            }
+        });
+
+
         return true;
     }
     
@@ -217,13 +227,20 @@ public class ProfileActivity extends AppCompatActivity
         Update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserModel userModel = new UserModel();
 
-                userModel.setFirstName(FirstName.getText().toString());
-                userModel.setLastName(LastName.getText().toString());
-                userModel.setPhoneNumber(PhoneNumber.getText().toString());
-                UserAccessor userAccessor = new UserAccessor();
-                userAccessor.updateUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), userModel);
+                final UserAccessor userAccessor = new UserAccessor();
+
+              userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+                    @Override
+                    public void dataUpdate(UserModel um) {
+                        um.setFirstName(FirstName.getText().toString());
+                        um.setLastName(LastName.getText().toString());
+                        um.setPhoneNumber(PhoneNumber.getText().toString());
+                       userAccessor.updateUser(um);
+                    }
+                });
+
+
             }
         });
 
