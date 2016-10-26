@@ -71,4 +71,9 @@ public class UserModel {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
+    public boolean isValid()
+    {
+        return lastName.equals("") || firstName.equals("") || phoneNumber.equals("");
+    }
 }

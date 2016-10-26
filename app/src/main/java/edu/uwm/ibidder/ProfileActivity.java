@@ -105,19 +105,20 @@ public class ProfileActivity extends AppCompatActivity
             @Override
             public void dataUpdate(UserModel um) {
 
-                //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
-                if(um == null) {
+                if(um.isValid()) {
+                    //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
+                    if (um == null) {
 
-                    um = new UserModel();
-                    um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                    um.setLastName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                    um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                        um = new UserModel();
+                        um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                        um.setLastName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                        um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
 
+                    }
+                    final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
+                    taskCreateDialog.show();
                 }
-                final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
-                taskCreateDialog.show();
-
             }
         });
     }
