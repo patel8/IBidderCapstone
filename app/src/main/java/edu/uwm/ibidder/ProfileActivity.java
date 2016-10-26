@@ -22,11 +22,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+import java.util.Date;
 
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -34,6 +38,7 @@ import com.google.android.gms.ads.formats.NativeAd;
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uwm.ibidder.Fragments.*;
+import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
@@ -47,6 +52,7 @@ public class ProfileActivity extends AppCompatActivity
     TextView userProfileName;
     TextView userEmailAddress;
     ImageView userImageURI;
+    TextView dateLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,12 +127,12 @@ public class ProfileActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.profile, menu);
-        final MenuItem item = (MenuItem) findViewById(R.id.user_profile);
+        final MenuItem item = menu.findItem(R.id.user_profile);
         UserAccessor userAccessor = new UserAccessor();
        userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
-                item.setTitle(um.getFirstName());
+                //item.setTitle(um.getFirstName());
             }
         });
 
@@ -165,7 +171,7 @@ public class ProfileActivity extends AppCompatActivity
         int id = item.getItemId();
         Fragment fragment = null;
         Class  fragmentClass = null;
-// Handle Each Item Accordinly.
+        // Handle Each Item Accordinly.
         // Create Fragment with List Items of Selected Task and Inflate Layout.
         if (id == R.id.bidder_current_task) {
             fragmentClass = bidder_current_task.class;
@@ -259,6 +265,17 @@ public class ProfileActivity extends AppCompatActivity
         final EditText taskname = (EditText)view.findViewById(R.id.editText_taskname);
         final EditText taskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
         final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
+        final EditText tasktags = (EditText)view.findViewById(R.id.editText_tasktags);
+        dateLabel = (TextView)view.findViewById(R.id.label_taskEndTime);
+        dateLabel.setText(new Date().toString());
+
+        dateLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog timeSetDialog = createTimeSetDialog();
+                timeSetDialog.show();
+            }
+        });
 
         ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Create", new DialogInterface.OnClickListener() {
             @Override
@@ -276,6 +293,29 @@ public class ProfileActivity extends AppCompatActivity
                     String tskId = ta.createTask(tm); // doesnt seem to be adding new task to firebase
                     Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        return ad;
+    }
+
+    private AlertDialog createTimeSetDialog() {
+        final AlertDialog ad = new AlertDialog.Builder(this).create();
+        final LayoutInflater inflater = this.getLayoutInflater();
+        ad.setTitle("Choose a time");
+        ad.setMessage("When should your task expire?");
+        View view = inflater.inflate(R.layout.alertdialog_datesetter, null);
+        ad.setView(view);
+        final TimePicker tp = (TimePicker)view.findViewById(R.id.timePicker);
+        final CalendarView cv = (CalendarView)view.findViewById(R.id.calendarView);
+
+        ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Choose", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Date d = new Date(cv.getDate());
+                d.setHours(tp.getHour());
+                d.setMinutes(tp.getMinute());
+                dateLabel.setText(d.toString());
             }
         });
 
