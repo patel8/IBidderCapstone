@@ -78,9 +78,6 @@ public class TaskAccessor extends BaseAccessor {
     public void updateTask(String taskKey, TaskModel taskToUpdate) {
         DatabaseReference ref = database.getReference("tasks/" + taskToUpdate.getStatus().toLowerCase() + "/" + taskKey);
         ref.setValue(taskToUpdate);
-
-        if (!taskToUpdate.getStatus().equals(TaskModel.TaskStatusType.READY.toString()))
-            geoFire.removeLocation(taskKey);
     }
 
     /**
