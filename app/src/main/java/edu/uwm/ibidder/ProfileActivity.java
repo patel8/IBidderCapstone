@@ -89,16 +89,12 @@ public class ProfileActivity extends AppCompatActivity
         userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
-
                 //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
                 if(um == null) {
-
                     um = new UserModel();
                     um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     um.setLastName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-
-
                 }
                 final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
                 taskCreateDialog.show();
@@ -106,6 +102,7 @@ public class ProfileActivity extends AppCompatActivity
             }
         });
     }
+
 
     @Override
     public void onBackPressed() {
@@ -119,37 +116,29 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.profile, menu);
-        final MenuItem item = (MenuItem) findViewById(R.id.user_profile);
+        final MenuItem currentProfileMenu = menu.findItem(R.id.action_UserName);
         UserAccessor userAccessor = new UserAccessor();
-       userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+        userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
-                item.setTitle(um.getFirstName());
+                currentProfileMenu.setTitle(um.getFirstName());
             }
         });
 
-
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
        switch(id){
            case R.id.action_settings:
                startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
                break;
            case R.id.action_logOut:
-               // Log out current User and send it back to login Screen.
-               String Provider = FirebaseAuth.getInstance().getCurrentUser().getProviderId();
-               if(Provider.equals("facebook.com"));
-                LoginManager.getInstance().logOut();
-
                FirebaseAuth.getInstance().signOut();
                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                break;
@@ -237,15 +226,11 @@ public class ProfileActivity extends AppCompatActivity
                         um.setLastName(LastName.getText().toString());
                         um.setPhoneNumber(PhoneNumber.getText().toString());
                        userAccessor.updateUser(um);
+                        ad.dismiss();
                     }
                 });
-
-
             }
         });
-
-
-
         return ad;
     }
 
