@@ -277,7 +277,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         // signed in user can be handled in the listener.
                         if (task.isSuccessful()) {
                             startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                            UserAccessor TA = new UserAccessor();
+                            final UserAccessor TA = new UserAccessor();
+                            TA.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+                                @Override
+                                public void dataUpdate(UserModel um) {
+                                    if(um==null)
+                                    {
+                                        um = new UserModel();
+                                        um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                                        um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                                        um.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                        TA.createUser(um);
+
+                                    }
+                                }
+                            });
 
                         }
                         else
