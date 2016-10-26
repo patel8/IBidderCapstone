@@ -37,4 +37,9 @@
     <string name="tasks_in_auction">Tasks in Auction</string>
     <string name="won_tasks">Won Tasks</string>
     <string name="history_tasks">History Tasks</string>
+    <string name="last_name">Last Name</string>
+    <string name="first_name">First Name</string>
+    <string name="missing_information">Missing Information</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="update">Update</string>
 </resources>

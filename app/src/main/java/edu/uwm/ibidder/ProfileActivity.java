@@ -12,30 +12,41 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.ListMenuItemView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TimePicker;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.ads.formats.NativeAd;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.HashMap;
 
 import edu.uwm.ibidder.Fragments.*;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.dbaccess.UserAccessor;
+import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
+import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     FloatingActionButton fabuttonTaskCreator;
+    TextView userProfileName;
+    TextView userEmailAddress;
+    ImageView userImageURI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +64,47 @@ public class ProfileActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View header= navigationView.getHeaderView(0);
+        userProfileName = (TextView)header.findViewById(R.id.ProfileTextViewUserName);
+        userEmailAddress = (TextView) header.findViewById(R.id.ProfileUserEmail);
+        userImageURI = (ImageView) header.findViewById(R.id.imageView);
+        UserAccessor UA = new UserAccessor();
+        UA.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+            @Override
+            public void dataUpdate(UserModel um) {
+                if(um == null) return;
+                userProfileName.setText(um.getFirstName()+" "+ um.getLastName());
+                userEmailAddress.setText(um.getEmail());
+                if(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null)
+                    userImageURI.setImageURI(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
+            }
+        });
     }
 
     private void initializeAllWidgets(){
         fabuttonTaskCreator = (FloatingActionButton) findViewById(R.id.fabutton_createtask);
         fabuttonTaskCreator.setOnClickListener(this);
+        final UserAccessor userAccessor = new UserAccessor();
+
+        userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+            @Override
+            public void dataUpdate(UserModel um) {
+
+                //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
+                if(um == null) {
+
+                    um = new UserModel();
+                    um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    um.setLastName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+
+                }
+                final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
+                taskCreateDialog.show();
+
+            }
+        });
     }
 
     @Override
@@ -79,13 +126,7 @@ public class ProfileActivity extends AppCompatActivity
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-       //Todo - What happens when they click on Setting
-        /**
-         * Todo- User must be able to Turn off services for
-         * Bid Notifications
-         * Should be able to Select their Radius For Bidding and Task Creater
-         *
-         */
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -137,13 +178,11 @@ public class ProfileActivity extends AppCompatActivity
 
         try{
             fragment = (Fragment) fragmentClass.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }catch (Exception e)
         {
             e.printStackTrace();
-        }
-        if(fragment != null){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -160,7 +199,40 @@ public class ProfileActivity extends AppCompatActivity
         return false;
     }
 
-    private AlertDialog createTaskCreationDialog(){
+    private AlertDialog createAlertDialogForUsers(UserModel userModel){
+        final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
+        LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
+        ad.setTitle("User Fields");
+        View view = inflater.inflate(R.layout.alertdialog_userfields, null);
+        ad.setView(view);
+        final EditText FirstName = (EditText)view.findViewById(R.id.alertDialog_EditText_FirstName);
+        final EditText LastName = (EditText)view.findViewById(R.id.alertDialog_EditText_LastName);
+        final EditText PhoneNumber = (EditText)view.findViewById(R.id.alertDialog_EditText_PhoneNumber);
+        final Button Update = (Button)view.findViewById(R.id.alertDialog_Button_Update);
+
+        FirstName.setText(userModel.getFirstName());
+        LastName.setText(userModel.getLastName());
+        PhoneNumber.setText(userModel.getPhoneNumber());
+
+        Update.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserModel userModel = new UserModel();
+
+                userModel.setFirstName(FirstName.getText().toString());
+                userModel.setLastName(LastName.getText().toString());
+                userModel.setPhoneNumber(PhoneNumber.getText().toString());
+                UserAccessor userAccessor = new UserAccessor();
+                userAccessor.updateUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), userModel);
+            }
+        });
+
+
+
+        return ad;
+    }
+
+    private AlertDialog createAlertDialog(){
         final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
         LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
         ad.setTitle("Create a task");
@@ -170,16 +242,6 @@ public class ProfileActivity extends AppCompatActivity
         final EditText taskname = (EditText)view.findViewById(R.id.editText_taskname);
         final EditText taskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
         final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
-        final EditText tasktags = (EditText)view.findViewById(R.id.editText_tasktags);
-        final Button setDate = (Button)view.findViewById(R.id.button_setDate);
-
-        setDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final AlertDialog timeSetDialog = createTimeSetDialog();
-                timeSetDialog.show();
-            }
-        });
 
         ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Create", new DialogInterface.OnClickListener() {
             @Override
@@ -187,42 +249,16 @@ public class ProfileActivity extends AppCompatActivity
                 String tskname = taskname.getText().toString();
                 String tskdesc = taskdescr.getText().toString();
                 String tskprice = taskprice.getText().toString();
-                String[] tsktags = tasktags.getText().toString().split(" ");
-                String ownerId = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
-                //long expiration = Long.parseLong(tskexpireDate);
-                //expiration += Long.parseLong(tskexpireTime);
-                long expiration = 0; // TODO:s till gotta do this properly
-                HashMap<String, Boolean> tags = new HashMap<>();
-                for(int i=0; i<tsktags.length; i++){
-                    tags.put(tsktags[i], true);
-                }
 
                 if(taskCreateValidation(tskname, tskdesc, tskprice)){
                     TaskAccessor ta = new TaskAccessor();
-                    double maxprice = Double.parseDouble(tskprice);
-                    TaskModel tm = new TaskModel(tskname, tskdesc, maxprice, ownerId, expiration, false, false, tags);
-                    String tskId = ta.createTask(tm);
+                    TaskModel tm = new TaskModel();
+                    tm.setTitle(tskname);
+                    tm.setDescription(tskdesc);
+                    tm.setMaxPrice(Float.parseFloat(tskprice));
+                    String tskId = ta.createTask(tm); // doesnt seem to be adding new task to firebase
                     Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                 }
-            }
-        });
-
-        return ad;
-    }
-
-    private AlertDialog createTimeSetDialog() {
-        final AlertDialog ad = new AlertDialog.Builder(this).create();
-        LayoutInflater inflater = this.getLayoutInflater();
-        ad.setTitle("Choose a time");
-        ad.setMessage("When should your task expire?");
-        View view = inflater.inflate(R.layout.alertdialog_datesetter, null);
-        ad.setView(view);
-        final TimePicker tp = (TimePicker)view.findViewById(R.id.timePicker);
-
-        ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Choose", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Log.i("TAG", "onClick: "+tp.getHour() + " " + tp.getMinute());
             }
         });
 
@@ -233,7 +269,7 @@ public class ProfileActivity extends AppCompatActivity
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.fabutton_createtask:
-                final AlertDialog taskCreateDialog = createTaskCreationDialog();
+                final AlertDialog taskCreateDialog = createAlertDialog();
                 taskCreateDialog.show();
                 break;
             default:

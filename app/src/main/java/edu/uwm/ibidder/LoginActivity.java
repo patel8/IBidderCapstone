@@ -1,14 +1,17 @@
 package edu.uwm.ibidder;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +47,12 @@ import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.dbaccess.UserAccessor;
+import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
+import edu.uwm.ibidder.dbaccess.models.TaskModel;
+import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
 
@@ -268,8 +277,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         // signed in user can be handled in the listener.
                         if (task.isSuccessful()) {
                             startActivity(new Intent(LoginActivity.this, ProfileActivity.class));
-                            Toast.makeText(LoginActivity.this, "Authentication Successful.",
-                                    Toast.LENGTH_SHORT).show();
+                            UserAccessor TA = new UserAccessor();
+
                         }
                         else
                         {
@@ -314,4 +323,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onBackPressed() {
         super.onBackPressed();
     }
+
+
 }
