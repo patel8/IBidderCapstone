@@ -8,6 +8,9 @@ firebase.initializeApp({
     databaseURL: "https://ibidder-a1629.firebaseio.com/"
 });
 
+var GeoFire = require('geofire');
+var geoFireRef = new GeoFire(firebase.database().ref("geofire"));
+
 //TODO: do listener stuff
 /*
  Check every minute to update task statuses.
@@ -27,6 +30,9 @@ setInterval(function () {
 
             var itemRemoval = firebase.database().ref("tasks/ready/" + key);
             itemRemoval.remove();
+
+            if (item.isLocalTask)
+                geoFireRef.remove(key);
         }
     });
 
@@ -46,7 +52,7 @@ firebase.database().ref("reports").orderByChild("wasRead").equalTo(false).on("ch
         var task = snapshot.val();
         task.reportCount = task.reportCount + 1;
 
-        if(task.reportCount >= 5){
+        if (task.reportCount >= 5) {
             taskRef.remove();
             firebase.database().ref("tasks/reported/" + report.taskId).set(task);
         } else {

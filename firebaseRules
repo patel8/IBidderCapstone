@@ -124,7 +124,9 @@
 
 
       "timed_out":{
-          //tasks in this state can be read but not written to (it's too late in the process)
+          //tasks in this state can be read but not written to (it's too late in the process
+
+          ".indexOn": ["ownerId", "status", "expirationTime"],
           ".read": "auth !== null",
           ".write": false
         },
@@ -137,12 +139,14 @@
 
         "finished":{
           //tasks in this state can be read but not written to (it's too late in the process)
+          ".indexOn": ["ownerId", "status", "expirationTime"],
           ".read": "auth !== null",
           ".write": false
         },
 
        "reported":{
          //nobody can read/write reported tasks
+         ".indexOn": ["ownerId", "status", "expirationTime"],
          ".read": false,
          ".write": false,
        }
@@ -177,7 +181,7 @@
 
           // The bidId field must be a string
         "bidId": {
-						".write": "newData.isString()"
+						".validate": "newData.isString()"
         },
 
         // No other fields are allowed on a bid
@@ -225,6 +229,31 @@
 
           }
 
+    },
+
+    "taskWinners":{
+       ".indexOn": ["winnerId", "wasNotified", "taskId"],
+
+       "$taskwinnerid":{
+         ".read": "auth !== null",
+         ".write": "auth.uid === newData.child('taskOwnerId').val()",
+
+         "taskOwnerId":{
+           ".validate": "newData.val() !== null && newData.isString()"
+         },
+
+         "wasNotified":{
+           ".validate": "newData.val() !== null && newData.isBoolean()"
+         },
+
+         "winnerId":{
+           ".validate": "newData.val() !== null && newData.isString()"
+         },
+
+         "taskId":{
+           ".validate": "newData.val() !== null && newData.isString()"
+         },
+       }
     }
 
     }

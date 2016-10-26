@@ -70,8 +70,7 @@ public class TaskAccessor extends BaseAccessor {
     }
 
     /**
-     * Updates a task with the ID of taskKey to be equal to the TaskModel taskToUpdate.  If the task no longer has the status READY, the location is deleted.
-     * This also moves the task to the proper status space in firebase.
+     * Updates a task with the ID of taskKey to be equal to the TaskModel taskToUpdate.
      *
      * @param taskKey      The task to update's string key
      * @param taskToUpdate The model to update the task to
@@ -79,9 +78,6 @@ public class TaskAccessor extends BaseAccessor {
     public void updateTask(String taskKey, TaskModel taskToUpdate) {
         DatabaseReference ref = database.getReference("tasks/" + taskToUpdate.getStatus().toLowerCase() + "/" + taskKey);
         ref.setValue(taskToUpdate);
-
-        if (!taskToUpdate.getStatus().equals(TaskModel.TaskStatusType.READY.toString()))
-            geoFire.removeLocation(taskKey);
     }
 
     /**
@@ -115,8 +111,19 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
     public void getTaskOnce(String taskId, final TaskCallbackListener taskCallbackListener) {
-        DatabaseReference ref = database.getReference("tasks/" + taskCallbackListener.getStatusRestrictionType() + "/" + taskId);
+        DatabaseReference ref = getTaskRef(taskId, taskCallbackListener.getStatusRestrictionType());
         ref.addListenerForSingleValueEvent(taskCallbackListener);
+    }
+
+    /**
+     * Gets the task ref to a specific task
+     *
+     * @param taskId     The task's id
+     * @param taskStatus The task's current status
+     * @return The task's ref
+     */
+    public DatabaseReference getTaskRef(String taskId, String taskStatus) {
+        return database.getReference("tasks/" + taskStatus.toLowerCase() + "/" + taskId);
     }
 
     /**
@@ -126,7 +133,7 @@ public class TaskAccessor extends BaseAccessor {
      * @param taskCallbackListener The TaskCallbackListener that will get the TaskModel
      */
     public void getTask(String taskId, final TaskCallbackListener taskCallbackListener) {
-        DatabaseReference ref = database.getReference("tasks/" + taskCallbackListener.getStatusRestrictionType() + "/" + taskId);
+        DatabaseReference ref = getTaskRef(taskId, taskCallbackListener.getStatusRestrictionType());
         storedValueEventListeners.push(ref.addValueEventListener(taskCallbackListener));
         storedDatabaseRefs.push(ref);
     }

@@ -41,8 +41,18 @@ public class BidAccessor extends BaseAccessor {
      * @param bidCallbackListener The BidCallbackListener that will get the BidModel
      */
     public void getBidOnce(String bidId, final BidCallbackListener bidCallbackListener) {
-        DatabaseReference ref = database.getReference("bids/" + bidId);
+        DatabaseReference ref = getBidRef(bidId);
         ref.addListenerForSingleValueEvent(bidCallbackListener);
+    }
+
+    /**
+     * Returns a ref to a specific bid
+     *
+     * @param bidId The bid's id
+     * @return The bid's ref
+     */
+    public DatabaseReference getBidRef(String bidId) {
+        return database.getReference("bids/" + bidId);
     }
 
     /**
@@ -52,7 +62,7 @@ public class BidAccessor extends BaseAccessor {
      * @param bidCallbackListener The bidCallbackListener that will get the bidModel
      */
     public void getBid(String bidId, final BidCallbackListener bidCallbackListener) {
-        DatabaseReference ref = database.getReference("bids/" + bidId);
+        DatabaseReference ref = getBidRef(bidId);
         storedValueEventListeners.push(ref.addValueEventListener(bidCallbackListener));
         storedDatabaseRefs.push(ref);
     }

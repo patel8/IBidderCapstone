@@ -54,7 +54,7 @@ public class creator_completed_task_auctions extends Fragment {
         View v = inflater.inflate(R.layout.fragment_creator_completed_task_auctions, container, false);
 
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_creator_completed_task_auctions);
-        recyclerView = (RecyclerView) v.findViewById(R.id.creator_completed_task_auctions);
+        recyclerView = (RecyclerView) v.findViewById(R.id.creator_completed_task_auctions_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipeRefreshLayout.setColorSchemeColors(Color.GREEN, Color.RED);
