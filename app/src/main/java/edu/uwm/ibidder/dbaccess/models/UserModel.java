@@ -7,7 +7,6 @@ package edu.uwm.ibidder.dbaccess.models;
 
 public class UserModel {
 
-    private String name;
     private String phoneNumber;
     private String email;
     private String firstName;
@@ -17,8 +16,16 @@ public class UserModel {
     public UserModel() {
     }
 
-    public UserModel(String name, String phoneNumber, String email, String firstName, String lastName) {
-        this.name = name;
+    /**
+     * Returns true if there are no missing fields
+     *
+     * @return True if there ar eno missing fields.
+     */
+    public boolean validate() {
+        return phoneNumber != null && email != null && firstName != null && lastName != null && userId != null;
+    }
+
+    public UserModel(String phoneNumber, String email, String firstName, String lastName) {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.firstName = firstName;
@@ -31,14 +38,6 @@ public class UserModel {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPhoneNumber() {

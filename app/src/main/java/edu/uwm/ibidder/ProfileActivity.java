@@ -2,6 +2,7 @@ package edu.uwm.ibidder;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,11 +23,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
+import java.util.Date;
 
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -34,6 +39,8 @@ import com.google.android.gms.ads.formats.NativeAd;
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uwm.ibidder.Fragments.*;
+import edu.uwm.ibidder.dbaccess.DateTools;
+import edu.uwm.ibidder.Location.LocationService;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
@@ -47,6 +54,7 @@ public class ProfileActivity extends AppCompatActivity
     TextView userProfileName;
     TextView userEmailAddress;
     ImageView userImageURI;
+    TextView dateLabel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +69,13 @@ public class ProfileActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        LocationService locSer = new LocationService(getApplicationContext(), this){
+            @Override
+            public Location getCoordinates(double lat, double longi) {
+                return null;
+            }
+        };
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -89,12 +104,16 @@ public class ProfileActivity extends AppCompatActivity
         userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
+
                 //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
                 if(um == null) {
+
                     um = new UserModel();
                     um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     um.setLastName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+
                 }
                 final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
                 taskCreateDialog.show();
@@ -102,7 +121,6 @@ public class ProfileActivity extends AppCompatActivity
             }
         });
     }
-
 
     @Override
     public void onBackPressed() {
@@ -126,14 +144,16 @@ public class ProfileActivity extends AppCompatActivity
             }
         });
 
+
         return true;
     }
-
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
 
+        //noinspection SimplifiableIfStatement
        switch(id){
            case R.id.action_settings:
                startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
@@ -244,6 +264,17 @@ public class ProfileActivity extends AppCompatActivity
         final EditText taskname = (EditText)view.findViewById(R.id.editText_taskname);
         final EditText taskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
         final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
+        final EditText tasktags = (EditText)view.findViewById(R.id.editText_tasktags);
+        dateLabel = (TextView)view.findViewById(R.id.label_taskEndTime);
+        dateLabel.setText(new Date().toString());
+
+        dateLabel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog timeSetDialog = createTimeSetDialog();
+                timeSetDialog.show();
+            }
+        });
 
         ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Create", new DialogInterface.OnClickListener() {
             @Override
@@ -261,6 +292,29 @@ public class ProfileActivity extends AppCompatActivity
                     String tskId = ta.createTask(tm); // doesnt seem to be adding new task to firebase
                     Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+
+        return ad;
+    }
+
+    private AlertDialog createTimeSetDialog() {
+        final AlertDialog ad = new AlertDialog.Builder(this).create();
+        final LayoutInflater inflater = this.getLayoutInflater();
+        ad.setTitle("Choose a time");
+        ad.setMessage("When should your task expire?");
+        View view = inflater.inflate(R.layout.alertdialog_datesetter, null);
+        ad.setView(view);
+        final TimePicker tp = (TimePicker)view.findViewById(R.id.timePicker);
+        final CalendarView cv = (CalendarView)view.findViewById(R.id.calendarView);
+
+        ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Choose", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Date d = new Date(cv.getDate());
+                d.setHours(tp.getHour());
+                d.setMinutes(tp.getMinute());
+                dateLabel.setText(d.toString());
             }
         });
 
