@@ -65,8 +65,8 @@ public class UserAccessor extends BaseAccessor {
      * @param userId      the id aka uid of the user to update
      * @param newUserInfo the new user info
      */
-    public void updateUser(UserModel newUserInfo) {
-        DatabaseReference ref = database.getReference("users/" + newUserInfo.getUserId());
+    public void updateUser(String userId, UserModel newUserInfo) {
+        DatabaseReference ref = database.getReference("users/" + userId);
         ref.setValue(newUserInfo);
     }
 
