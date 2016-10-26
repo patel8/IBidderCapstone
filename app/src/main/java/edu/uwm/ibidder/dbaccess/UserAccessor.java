@@ -62,7 +62,6 @@ public class UserAccessor extends BaseAccessor {
     /**
      * Updates a user's info in firebase.
      *
-     * @param userId      the id aka uid of the user to update
      * @param newUserInfo the new user info
      */
     public void updateUser(UserModel newUserInfo) {
