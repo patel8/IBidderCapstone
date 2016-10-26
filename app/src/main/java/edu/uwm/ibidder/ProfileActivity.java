@@ -121,12 +121,12 @@ public class ProfileActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.profile, menu);
-
-        //Set Current User Field to User's Field
+        final MenuItem item = (MenuItem) findViewById(R.id.user_profile);
         UserAccessor userAccessor = new UserAccessor();
        userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
+                item.setTitle(um.getFirstName());
             }
         });
 
