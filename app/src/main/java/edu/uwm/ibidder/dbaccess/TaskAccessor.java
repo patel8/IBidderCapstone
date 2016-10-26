@@ -70,8 +70,7 @@ public class TaskAccessor extends BaseAccessor {
     }
 
     /**
-     * Updates a task with the ID of taskKey to be equal to the TaskModel taskToUpdate.  If the task no longer has the status READY, the location is deleted.
-     * This also moves the task to the proper status space in firebase.
+     * Updates a task with the ID of taskKey to be equal to the TaskModel taskToUpdate.
      *
      * @param taskKey      The task to update's string key
      * @param taskToUpdate The model to update the task to
