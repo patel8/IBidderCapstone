@@ -9,7 +9,7 @@ firebase.initializeApp({
 });
 
 var GeoFire = require('geofire');
-var geoFireRef = new Geofire(firebase.database().ref("geofire"));
+var geoFireRef = new GeoFire(firebase.database().ref("geofire"));
 
 //TODO: do listener stuff
 /*
