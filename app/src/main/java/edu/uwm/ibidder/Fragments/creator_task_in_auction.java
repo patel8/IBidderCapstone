@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +22,21 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Query;
 
+import java.util.Date;
+
 import edu.uwm.ibidder.DividerItemDecoration;
+import edu.uwm.ibidder.ItemClickSupport;
+import edu.uwm.ibidder.ProfileActivity;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.TaskActivity;
+import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.ListAdapter;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
+import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
+import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,6 +90,18 @@ public class creator_task_in_auction extends Fragment {
         };
 
         recyclerView.setAdapter(adapter);
+
+        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView rv, int position, View v) {
+                TaskModel tm = adapter.getItem(position);
+                Intent intent = new Intent(getActivity(), TaskActivity.class);
+                intent.putExtra("task_id", tm.getTaskId());
+                intent.putExtra("task_status", tm.getStatus().toString());
+                startActivity(intent);
+            }
+        });
+
         return v;
     }
     public static class viewHolder extends RecyclerView.ViewHolder{

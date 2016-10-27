@@ -14,6 +14,10 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
+import edu.uwm.ibidder.dbaccess.models.TaskModel;
+
 public class TaskActivity extends AppCompatActivity {
 
     TextView taskname;
@@ -30,18 +34,33 @@ public class TaskActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task);
         initializeAllWidgets();
         Intent intent = getIntent();
-        String tskDesc = intent.getStringExtra("task_desc");
-        String tskOwn = intent.getStringExtra("task_own");
-        String tskName = intent.getStringExtra("task_name");
-        String tskEnd = intent.getStringExtra("task_end");
-        String tskPrice = intent.getStringExtra("task_price");
-        taskname.setText(tskName);
-        taskdescr.setText(tskDesc);
-        taskowner.setText(tskOwn);
-        taskendtime.setText(tskEnd);
-        Log.i("TAG", "---------------onCreate: endtime: " + tskEnd + " taskprice: " + tskPrice);
+        String taskid = intent.getStringExtra("task_id");
+        String taskstatus = intent.getStringExtra("task_status");
+        TaskModel.TaskStatusType status = getStatus(taskstatus);
 
-        //Toast.makeText(TaskActivity.this, "Task: " + taskDesc + " Owner: " + taskOwn, Toast.LENGTH_SHORT).show();
+        Log.i("TAG", "onCreate: "+status.toString());
+        TaskAccessor ta = new TaskAccessor();
+        ta.getTask(taskid, new TaskCallbackListener(status) {
+            @Override
+            public void dataUpdate(TaskModel tm) {
+                taskname.setText(tm.getTitle());
+            }
+        });
+    }
+
+    private TaskModel.TaskStatusType getStatus(String status){
+        switch(status){
+            case "READY":
+                return TaskModel.TaskStatusType.READY;
+            case "FINISHED":
+                return TaskModel.TaskStatusType.FINISHED;
+            case "ACCEPTED":
+                return TaskModel.TaskStatusType.ACCEPTED;
+            case "TIMED_OUT":
+                return TaskModel.TaskStatusType.TIMED_OUT;
+            default:
+                return null;
+        }
     }
 
     private void initializeAllWidgets(){

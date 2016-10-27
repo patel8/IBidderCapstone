@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/IBidder.iml" filepath="$PROJECT_DIR$/IBidder.iml" />
       <module fileurl="file://$PROJECT_DIR$/IBidderCapstone.iml" filepath="$PROJECT_DIR$/IBidderCapstone.iml" />
-      <module fileurl="file://$PROJECT_DIR$/IBidderCapstone.iml" filepath="$PROJECT_DIR$/IBidderCapstone.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

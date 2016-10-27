@@ -26,11 +26,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.ItemClickSupport;
+import edu.uwm.ibidder.ProfileActivity;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.TaskActivity;
+import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.ListAdapter;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
@@ -71,7 +74,7 @@ public class bidder_bid_history extends Fragment {
                 new DividerItemDecoration(getActivity()));
         TaskAccessor ta = new TaskAccessor();
         Query q = ta.getTasksByOwnerIdQuery(FirebaseAuth.getInstance().getCurrentUser().getUid()
-                , TaskModel.TaskStatusType.TIMED_OUT.toString());
+                , TaskModel.TaskStatusType.FINISHED.toString());
         adapter = new FirebaseRecyclerAdapter<TaskModel, viewHolder>(
                 TaskModel.class,
                 R.layout.bidder_current_task_list_template,
@@ -93,22 +96,9 @@ public class bidder_bid_history extends Fragment {
             @Override
             public void onItemClicked(RecyclerView rv, int position, View v) {
                 TaskModel tm = adapter.getItem(position);
-                /*UserCallbackListener ucl = new UserCallbackListener() {
-                    @Override
-                    public void dataUpdate(UserModel um) {
-                        Log.i("TAG", "------------dataUpdate: "+um.getFirstName());
-                    }
-                };
-                UserAccessor ua = new UserAccessor();
-                ua.getUser(tm.getOwnerId(), ucl);*/
-
-
                 Intent intent = new Intent(getActivity(), TaskActivity.class);
-                intent.putExtra("task_desc", tm.getDescription().toString());
-                intent.putExtra("task_own", tm.getOwnerId().toString());
-                intent.putExtra("task_name", tm.getTitle().toString());
-                intent.putExtra("task_end", Long.toString(tm.getExpirationTime()));
-                intent.putExtra("task_price", Double.toString(tm.getMaxPrice()));
+                intent.putExtra("task_id", tm.getTaskId());
+                intent.putExtra("task_status", tm.getStatus().toString());
                 startActivity(intent);
             }
         });

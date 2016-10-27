@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -58,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity
     TextView userEmailAddress;
     ImageView userImageURI;
     TextView dateLabel;
+    Date expireDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,16 +213,7 @@ public class ProfileActivity extends AppCompatActivity
         return true;
     }
 
-    private boolean taskCreateValidation(String name, String descr, String price) {
-        if (!name.matches("") && !descr.matches("") && !price.matches("")) {
-            return true;
-        }
-
-        Toast.makeText(ProfileActivity.this, "Invalid information", Toast.LENGTH_SHORT).show();
-        return false;
-    }
-
-    private AlertDialog createAlertDialogForUsers(UserModel userModel) {
+    private AlertDialog createAlertDialogForUsers(UserModel userModel){
         final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
         LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
         ad.setTitle("User Fields");
@@ -260,19 +253,66 @@ public class ProfileActivity extends AppCompatActivity
         return ad;
     }
 
-    private AlertDialog createAlertDialog() {
+    private boolean taskCreateValidation(String name, String descr, String price, Date expire){
+        if(!name.matches("") && !descr.matches("") && !price.matches("")){
+            // expire date must be in the future
+            Calendar cal = Calendar.getInstance();
+            Date now = new Date();
+            int future = 5;
+            cal.setTime(now);
+            cal.add(Calendar.MINUTE, future);
+            if(cal.getTimeInMillis() < expire.getTime()){
+                return true;
+            } else{
+                Toast.makeText(ProfileActivity.this, "Expiration time must be at least ["+future+"] hours from the current time", Toast.LENGTH_LONG).show();
+                return false;
+            }
+        } else{
+            Toast.makeText(ProfileActivity.this, "Invalid information", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    /**
+     * Formats a time in the form of Wed Oct 26 21:08:54 CDT 2016
+     * @param unformattedtime in form of Wed Oct 26 21:08:54 CDT 2016
+     * @return "Wed. Oct 26 2016, CDT 9:08 PM"
+     */
+    public static String getFormattedTime(String unformattedtime){
+        String[] items = unformattedtime.split(" ");
+        String[] timesplit = items[3].split(":");
+        int hour = Integer.parseInt(timesplit[0]);
+        int mins = Integer.parseInt(timesplit[1]);
+        String period;
+        if(hour == 12){
+            period = "PM";
+        } else if(hour > 12){
+            hour = hour % 12;
+            period = "PM";
+        } else if (hour == 0){
+            hour = 12;
+            period = "AM";
+        } else{
+            period = "AM";
+        }
+
+        return items[0] + ". " + items[1] + " " + items[2] + " " + items[5] +  ", " + items[4] + " " + hour + ":" + mins + " " + period;
+    }
+
+    private AlertDialog createAlertDialog(){
         final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
         LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
         ad.setTitle("Create a task");
         ad.setMessage("What can a BidButler do for you?");
         View view = inflater.inflate(R.layout.alertdialog_taskcreator, null);
         ad.setView(view);
-        final EditText taskname = (EditText) view.findViewById(R.id.editText_taskname);
-        final EditText taskdescr = (EditText) view.findViewById(R.id.editText_taskdescription);
-        final EditText taskprice = (EditText) view.findViewById(R.id.editText_startprice);
-        final EditText tasktags = (EditText) view.findViewById(R.id.editText_tasktags);
-        dateLabel = (TextView) view.findViewById(R.id.label_taskEndTime);
-        dateLabel.setText(new Date().toString());
+        final EditText taskname = (EditText)view.findViewById(R.id.editText_taskname);
+        final EditText taskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
+        final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
+        final EditText tasktags = (EditText)view.findViewById(R.id.editText_tasktags);
+        dateLabel = (TextView)view.findViewById(R.id.label_taskEndTime);
+        expireDate = new Date();
+        dateLabel.setText(getFormattedTime(expireDate.toString()));
 
         dateLabel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,15 +328,34 @@ public class ProfileActivity extends AppCompatActivity
                 String tskname = taskname.getText().toString();
                 String tskdesc = taskdescr.getText().toString();
                 String tskprice = taskprice.getText().toString();
+                String tsktags = tasktags.getText().toString();
+                String tagitems[] = tsktags.split(" ");
+                HashMap<String, Boolean> tags = new HashMap();
 
-                if (taskCreateValidation(tskname, tskdesc, tskprice)) {
+                if(taskCreateValidation(tskname, tskdesc, tskprice, expireDate)){
                     TaskAccessor ta = new TaskAccessor();
                     TaskModel tm = new TaskModel();
+                    // Title
                     tm.setTitle(tskname);
+                    // Description
                     tm.setDescription(tskdesc);
+                    // Max Price
                     tm.setMaxPrice(Float.parseFloat(tskprice));
+                    // Owner
                     tm.setOwnerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
-                    String tskId = ta.createTask(tm); // doesnt seem to be adding new task to firebase
+                    // Expiration
+                    tm.setExpirationTime(DateTools.dateToEpoch(expireDate));
+                    // isTaskNow
+                    tm.setIsTaskItNow(false);
+                    // isLocalTask
+                    tm.setIsLocalTask(false);
+                    // tags
+                    for(String item : tagitems){
+                        tags.put(item, true);
+                    }
+                    tm.setTags(tags);
+
+                    String tskId = ta.createTask(tm);
                     Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                 }
             }
@@ -321,7 +380,8 @@ public class ProfileActivity extends AppCompatActivity
                 Date d = new Date(cv.getDate());
                 d.setHours(tp.getHour());
                 d.setMinutes(tp.getMinute());
-                dateLabel.setText(d.toString());
+                expireDate = d;
+                dateLabel.setText(getFormattedTime(expireDate.toString()));
             }
         });
 
