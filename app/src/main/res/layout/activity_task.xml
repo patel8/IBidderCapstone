@@ -77,4 +77,13 @@
         android:layout_alignStart="@+id/label_taskActEndtime"
         android:layout_marginTop="35dp"
         android:id="@+id/button_taskActBidSubmit" />
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="edu.uwm.ibidder.Fragments.BidderListFragment"
+        android:id="@+id/Bidder_list_Fragment_Container"
+        android:layout_below="@+id/button_taskActBidSubmit"
+        android:layout_marginTop="9dp"
+         />
 </RelativeLayout>

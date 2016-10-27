@@ -20,6 +20,7 @@ import edu.uwm.ibidder.dbaccess.models.BidModel;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 import static android.content.ContentValues.TAG;
+import static java.security.AccessController.getContext;
 
 /**
  * Handles task data access and manipulation
@@ -66,14 +67,14 @@ public class TaskAccessor extends BaseAccessor {
         taskToCreate.setStatus(TaskModel.TaskStatusType.READY.toString());
         pushedRef.setValue(taskToCreate);
 
-        //Want to add location here - Austin
-       // LocationService locSer = new LocationService(getContext()){
-       //     @Override
-        //    public Location getCoordinates(double lat, double longi) {
-         //       return null;
-         //   }
-        //};
-        geoFire.setLocation(pushedRef.getKey(), new GeoLocation(latitude, longitude));
+       // Want to add location here - Austin
+//        LocationService locSer = new LocationService(){
+//            @Override
+//            public Location getCoordinates(double lat, double longi) {
+//                return null;
+//            }
+//        };
+//        geoFire.setLocation(pushedRef.getKey(), new GeoLocation(latitude, longitude));
 
         return pushedRef.getKey();
     }

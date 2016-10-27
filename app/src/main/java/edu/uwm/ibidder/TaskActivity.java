@@ -1,5 +1,8 @@
 package edu.uwm.ibidder;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
@@ -19,6 +22,7 @@ public class TaskActivity extends AppCompatActivity {
     TextView taskendtime;
     EditText userbid;
     Button submitbid;
+    Fragment fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,4 +60,6 @@ public class TaskActivity extends AppCompatActivity {
         });
         submitbid = (Button)findViewById(R.id.button_taskActBidSubmit);
     }
+
+
 }

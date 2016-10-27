@@ -8,6 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,7 +20,9 @@ import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.BidCallbackListener;
+import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.BidModel;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
@@ -29,44 +34,57 @@ public class BidderListFragment extends Fragment {
 
 
     RecyclerView recyclerView;
-    FirebaseRecyclerAdapter<UserModel, viewHolder> adapter;
+    FirebaseRecyclerAdapter<BidModel, BidderListFragment.viewHolder> adapter;
     public BidderListFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_bidder_list, container, false);
-        recyclerView = (RecyclerView) v.findViewById(R.id.bidder_won_tasks_recyclerView);
+        recyclerView = (RecyclerView) v.findViewById(R.id.bidderListFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        Toast.makeText(getContext(), "IM HERE", Toast.LENGTH_SHORT).show();
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity()));
-        TaskAccessor ta = new TaskAccessor();
-        Query q = ta.getTasksByOwnerIdQuery(FirebaseAuth.getInstance().getCurrentUser().getUid()
-                , TaskModel.TaskStatusType.ACCEPTED.toString());
-        adapter = new FirebaseRecyclerAdapter<UserModel, viewHolder>(
-                UserModel.class,
+        BidAccessor bidAccessor = new BidAccessor();
+        Query q = bidAccessor.getTaskBidsQuery("taskidHere");
+        adapter = new FirebaseRecyclerAdapter<BidModel, BidderListFragment.viewHolder>(
+                BidModel.class,
                 R.layout.bidder_current_task_list_template,
-               viewHolder.class,
+                BidderListFragment.viewHolder.class,
                 q
         ) {
             @Override
-            protected void populateViewHolder(viewHolder viewHolder, UserModel model, int position) {
-                viewHolder.title.setText(model.getFirstName());
-                viewHolder.description.setText(model.getLastName());
-                viewHolder.DateTime.setText(model.getEmail() + "");
-                viewHolder.Price.setText(model.getPhoneNumber() + "");
+            protected void populateViewHolder(final BidderListFragment.viewHolder viewHolder, BidModel model, int position) {
+                UserAccessor userAccessor = new UserAccessor();
+                userAccessor.getUser(model.getBidderId(), new UserCallbackListener() {
+                    @Override
+                    public void dataUpdate(UserModel um) {
+                        viewHolder.userName.setText(um.getFirstName());
+                    }
+                });
+                viewHolder.userBid.setText(model.getBidValue()+"");
             }
-
         };
-
-
         return v;
+    }
+
+    public static class viewHolder extends RecyclerView.ViewHolder{
+        public TextView userName;
+        public TextView userBid;
+        public RatingBar userRating;
+
+        public viewHolder(View v){
+            super(v);
+            userName = (TextView) v.findViewById(R.id.bidder_list_bidder_name);
+            userBid = (TextView) v.findViewById(R.id.bidder_list_bid_amount);
+            userRating = (RatingBar) v.findViewById(R.id.bidder_list_bidder_rating);
+        }
+
     }
 
 }
