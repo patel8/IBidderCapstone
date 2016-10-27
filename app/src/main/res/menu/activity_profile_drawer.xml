@@ -3,6 +3,9 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/user_timeline"
+            android:title="Timeline"/>
+        <item
             android:id="@+id/user_profile"
             android:icon="@drawable/ic_menu_manage"
             android:title="@string/user_profile"/>
@@ -12,14 +15,14 @@
     <item android:title="As Bidder">
         <menu>
             <item
-                android:id="@+id/bidder_current_task"
-                android:title="@string/task_in_progress" />
-            <item
-                android:id="@+id/bidder_history_task"
-                android:title="@string/history_tasks" />
+                android:id="@+id/bidder_active_bids"
+                android:title="@string/asbidder_active" />
             <item
                 android:id="@+id/bidder_won_tasks"
-                android:title="@string/won_tasks"/>
+                android:title="@string/asbidder_current"/>
+            <item
+                android:id="@+id/bidder_history_task"
+                android:title="@string/asbidder_history" />
 
         </menu>
     </item>
@@ -27,16 +30,16 @@
         <menu>
             <item
                 android:id="@+id/creator_task_in_auction"
-                android:title="@string/tasks_in_auction" />
+                android:title="@string/ascreator_active" />
             <item
                 android:id="@+id/creator_completed_task_auctions"
-                android:title="@string/completed_task_auctions"/>
+                android:title="@string/ascreator_pickwin"/>
             <item
                 android:id="@+id/creator_task_in_progress"
-                android:title="@string/task_in_progress" />
+                android:title="@string/ascreator_current" />
             <item
                 android:id="@+id/creator_task_history"
-                android:title="@string/task_history" />
+                android:title="@string/ascreator_history" />
         </menu>
     </item>
 </menu>

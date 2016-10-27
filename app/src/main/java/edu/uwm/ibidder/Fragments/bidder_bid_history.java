@@ -57,7 +57,7 @@ public class bidder_bid_history extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.history_tasks);
+        getActivity().setTitle(R.string.asbidder_history);
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

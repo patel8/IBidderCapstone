@@ -14,9 +14,17 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Date;
+
+import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
+import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
+import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class TaskActivity extends AppCompatActivity {
 
@@ -26,6 +34,7 @@ public class TaskActivity extends AppCompatActivity {
     TextView taskendtime;
     EditText userbid;
     Button submitbid;
+    Button edit;
     Fragment fragment;
 
     @Override
@@ -43,9 +52,24 @@ public class TaskActivity extends AppCompatActivity {
         ta.getTask(taskid, new TaskCallbackListener(status) {
             @Override
             public void dataUpdate(TaskModel tm) {
-                taskname.setText(tm.getTitle());
+                taskname.setText("Task: " + tm.getTitle());
+                taskdescr.setText("Description: " + tm.getDescription());
+                Date d = DateTools.epochToDate(tm.getExpirationTime());
+                taskendtime.setText("Expires on: " + ProfileActivity.getFormattedTime(d.toString()));
+                UserAccessor ua = new UserAccessor();
+                ua.getUser(tm.getOwnerId(), new UserCallbackListener() {
+                    @Override
+                    public void dataUpdate(UserModel um) {
+                        taskowner.setText(um.getFirstName());
+                    }
+                });
+
+                if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(tm.getOwnerId())){
+                    edit.setVisibility(View.VISIBLE);
+                }
             }
         });
+
     }
 
     private TaskModel.TaskStatusType getStatus(String status){
@@ -78,6 +102,9 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
         submitbid = (Button)findViewById(R.id.button_taskActBidSubmit);
+        edit = (Button) findViewById(R.id.button_taskActEdit);
+        // TODO: edit.onclick
+
     }
 
 

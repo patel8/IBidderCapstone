@@ -54,7 +54,7 @@ public class creator_task_in_auction extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.tasks_in_auction);
+        getActivity().setTitle(R.string.ascreator_active);
     }
 
     @Override

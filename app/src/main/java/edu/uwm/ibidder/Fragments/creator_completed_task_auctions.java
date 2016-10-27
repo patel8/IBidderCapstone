@@ -52,7 +52,7 @@ public class creator_completed_task_auctions extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.completed_task_auctions);
+        getActivity().setTitle(R.string.ascreator_pickwin);
 
     }
     @Override

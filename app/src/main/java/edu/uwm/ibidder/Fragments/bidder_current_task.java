@@ -50,7 +50,7 @@ public class bidder_current_task extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.task_in_progress);
+        getActivity().setTitle(R.string.asbidder_active);
     }
 
     @Override

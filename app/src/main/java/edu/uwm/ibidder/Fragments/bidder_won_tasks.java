@@ -55,7 +55,7 @@ public class bidder_won_tasks extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.won_tasks);
+        getActivity().setTitle(R.string.asbidder_current);
     }
 
     @Override

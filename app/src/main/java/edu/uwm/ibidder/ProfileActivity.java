@@ -95,6 +95,17 @@ public class ProfileActivity extends AppCompatActivity
         ActivityCompat.requestPermissions(this,
                 new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION},
                 3);
+
+        Fragment fragment = null;
+        Class fragmentClass = null;
+        fragmentClass = all_available_task.class;
+        try{
+            fragment = (Fragment) fragmentClass.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void initializeAllWidgets() {
@@ -171,19 +182,6 @@ public class ProfileActivity extends AppCompatActivity
         ActivityCompat.requestPermissions(this,
                 new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION},
                 3);
-        Fragment fragment = null;
-        Class fragmentClass = null;
-        fragmentClass = all_available_task.class;
-        try{
-            fragment = (Fragment) fragmentClass.newInstance();
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -195,7 +193,7 @@ public class ProfileActivity extends AppCompatActivity
         Class fragmentClass = null;
 // Handle Each Item Accordinly.
         // Create Fragment with List Items of Selected Task and Inflate Layout.
-        if (id == R.id.bidder_current_task) {
+        if (id == R.id.bidder_active_bids) {
             fragmentClass = bidder_current_task.class;
         } else if (id == R.id.bidder_history_task) {
             fragmentClass = bidder_bid_history.class;
@@ -211,6 +209,8 @@ public class ProfileActivity extends AppCompatActivity
             fragmentClass = creator_task_history.class;
         } else if (id == R.id.user_profile) {
             startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+        } else if(id == R.id.user_timeline){
+            startActivity(new Intent(ProfileActivity.this, ProfileActivity.class));
         }
 
         try {
@@ -277,7 +277,7 @@ public class ProfileActivity extends AppCompatActivity
             if(cal.getTimeInMillis() < expire.getTime()){
                 return true;
             } else{
-                Toast.makeText(ProfileActivity.this, "Expiration time must be at least ["+future+"] hours from the current time", Toast.LENGTH_LONG).show();
+                Toast.makeText(ProfileActivity.this, "Expiration time must be at least ["+future+"] min. from the current time", Toast.LENGTH_LONG).show();
                 return false;
             }
         } else{

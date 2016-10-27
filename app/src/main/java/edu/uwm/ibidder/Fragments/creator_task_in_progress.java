@@ -54,7 +54,7 @@ public class creator_task_in_progress extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.task_in_progress);
+        getActivity().setTitle(R.string.ascreator_current);
     }
 
     @Override

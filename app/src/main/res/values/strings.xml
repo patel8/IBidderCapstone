@@ -31,15 +31,19 @@
     <!-- All String in Following Block are related to ForgotPassWord -->
     <string name="password_reset_instruction">Please Enter your Email Address. Password Reset Instruction will be sent to your email</string>
     <string name="forgot_your_password">Forgot Password?</string>
-    <string name="task_history">Task History</string>
-    <string name="task_in_progress">Task In Progress</string>
-    <string name="completed_task_auctions">Completed Task Auctions</string>
-    <string name="tasks_in_auction">Tasks in Auction</string>
-    <string name="won_tasks">Won Tasks</string>
-    <string name="history_tasks">History Tasks</string>
     <string name="last_name">Last Name</string>
     <string name="first_name">First Name</string>
     <string name="missing_information">Missing Information</string>
     <string name="phone_number">Phone Number</string>
     <string name="update">Update</string>
+
+    <string name="asbidder_active">Your Bids (live)</string>
+    <string name="asbidder_current">Current Tasks</string>
+    <string name="asbidder_history">Bid History</string>
+
+    <string name="ascreator_active">Your Tasks (live)</string>
+    <string name="ascreator_pickwin">Pick Task Winner</string>
+    <string name="ascreator_current">Current Tasks</string>
+    <string name="ascreator_history">Task History</string>
+
 </resources>
