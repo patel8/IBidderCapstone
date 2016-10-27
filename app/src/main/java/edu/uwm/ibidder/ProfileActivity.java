@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import java.util.Date;
 
 import com.facebook.Profile;
@@ -73,18 +74,18 @@ public class ProfileActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        View header= navigationView.getHeaderView(0);
-        userProfileName = (TextView)header.findViewById(R.id.ProfileTextViewUserName);
+        View header = navigationView.getHeaderView(0);
+        userProfileName = (TextView) header.findViewById(R.id.ProfileTextViewUserName);
         userEmailAddress = (TextView) header.findViewById(R.id.ProfileUserEmail);
         userImageURI = (ImageView) header.findViewById(R.id.imageView);
         UserAccessor UA = new UserAccessor();
         UA.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
-                if(um == null) return;
-                userProfileName.setText(um.getFirstName()+" "+ um.getLastName());
+                if (um == null) return;
+                userProfileName.setText(um.getFirstName() + " " + um.getLastName());
                 userEmailAddress.setText(um.getEmail());
-                if(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null)
+                if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl() != null)
                     userImageURI.setImageURI(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
             }
         });
@@ -93,7 +94,7 @@ public class ProfileActivity extends AppCompatActivity
                 3);
     }
 
-    private void initializeAllWidgets(){
+    private void initializeAllWidgets() {
         fabuttonTaskCreator = (FloatingActionButton) findViewById(R.id.fabutton_createtask);
         fabuttonTaskCreator.setOnClickListener(this);
         final UserAccessor userAccessor = new UserAccessor();
@@ -101,21 +102,18 @@ public class ProfileActivity extends AppCompatActivity
         userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
+                //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
+                if (um == null || !um.isValid()) {
 
-                if(um.isValid()) {
-                    //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
-                    if (um == null) {
-
-                        um = new UserModel();
-                        um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                        um.setLastName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-                        um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                    um = new UserModel();
+                    um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    um.setLastName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                    um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
 
-                    }
-                    final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
-                    taskCreateDialog.show();
                 }
+                final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
+                taskCreateDialog.show();
             }
         });
     }
@@ -145,22 +143,22 @@ public class ProfileActivity extends AppCompatActivity
 
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-       switch(id){
-           case R.id.action_settings:
-               startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
-               break;
-           case R.id.action_logOut:
-               FirebaseAuth.getInstance().signOut();
-               startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
-               break;
-       }
+        switch (id) {
+            case R.id.action_settings:
+                startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+                break;
+            case R.id.action_logOut:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
+                break;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -179,7 +177,7 @@ public class ProfileActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         Fragment fragment = null;
-        Class  fragmentClass = null;
+        Class fragmentClass = null;
 // Handle Each Item Accordinly.
         // Create Fragment with List Items of Selected Task and Inflate Layout.
         if (id == R.id.bidder_current_task) {
@@ -194,19 +192,17 @@ public class ProfileActivity extends AppCompatActivity
             fragmentClass = creator_completed_task_auctions.class;
         } else if (id == R.id.creator_task_in_progress) {
             fragmentClass = creator_task_in_progress.class;
-        }else if(id == R.id.creator_task_history){
+        } else if (id == R.id.creator_task_history) {
             fragmentClass = creator_task_history.class;
-        }
-        else if(id == R.id.user_profile){
+        } else if (id == R.id.user_profile) {
             startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
         }
 
-        try{
+        try {
             fragment = (Fragment) fragmentClass.newInstance();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -215,8 +211,8 @@ public class ProfileActivity extends AppCompatActivity
         return true;
     }
 
-    private boolean taskCreateValidation(String name, String descr, String price){
-        if(!name.matches("") && !descr.matches("") && !price.matches("")){
+    private boolean taskCreateValidation(String name, String descr, String price) {
+        if (!name.matches("") && !descr.matches("") && !price.matches("")) {
             return true;
         }
 
@@ -224,16 +220,16 @@ public class ProfileActivity extends AppCompatActivity
         return false;
     }
 
-    private AlertDialog createAlertDialogForUsers(UserModel userModel){
+    private AlertDialog createAlertDialogForUsers(UserModel userModel) {
         final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
         LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
         ad.setTitle("User Fields");
         View view = inflater.inflate(R.layout.alertdialog_userfields, null);
         ad.setView(view);
-        final EditText FirstName = (EditText)view.findViewById(R.id.alertDialog_EditText_FirstName);
-        final EditText LastName = (EditText)view.findViewById(R.id.alertDialog_EditText_LastName);
-        final EditText PhoneNumber = (EditText)view.findViewById(R.id.alertDialog_EditText_PhoneNumber);
-        final Button Update = (Button)view.findViewById(R.id.alertDialog_Button_Update);
+        final EditText FirstName = (EditText) view.findViewById(R.id.alertDialog_EditText_FirstName);
+        final EditText LastName = (EditText) view.findViewById(R.id.alertDialog_EditText_LastName);
+        final EditText PhoneNumber = (EditText) view.findViewById(R.id.alertDialog_EditText_PhoneNumber);
+        final Button Update = (Button) view.findViewById(R.id.alertDialog_Button_Update);
 
         FirstName.setText(userModel.getFirstName());
         LastName.setText(userModel.getLastName());
@@ -245,13 +241,13 @@ public class ProfileActivity extends AppCompatActivity
 
                 final UserAccessor userAccessor = new UserAccessor();
 
-              userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+                userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
                     @Override
                     public void dataUpdate(UserModel um) {
                         um.setFirstName(FirstName.getText().toString());
                         um.setLastName(LastName.getText().toString());
                         um.setPhoneNumber(PhoneNumber.getText().toString());
-                       userAccessor.updateUser(um);
+                        userAccessor.updateUser(um);
                         ad.dismiss();
                     }
                 });
@@ -260,18 +256,18 @@ public class ProfileActivity extends AppCompatActivity
         return ad;
     }
 
-    private AlertDialog createAlertDialog(){
+    private AlertDialog createAlertDialog() {
         final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
         LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
         ad.setTitle("Create a task");
         ad.setMessage("What can a BidButler do for you?");
         View view = inflater.inflate(R.layout.alertdialog_taskcreator, null);
         ad.setView(view);
-        final EditText taskname = (EditText)view.findViewById(R.id.editText_taskname);
-        final EditText taskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
-        final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
-        final EditText tasktags = (EditText)view.findViewById(R.id.editText_tasktags);
-        dateLabel = (TextView)view.findViewById(R.id.label_taskEndTime);
+        final EditText taskname = (EditText) view.findViewById(R.id.editText_taskname);
+        final EditText taskdescr = (EditText) view.findViewById(R.id.editText_taskdescription);
+        final EditText taskprice = (EditText) view.findViewById(R.id.editText_startprice);
+        final EditText tasktags = (EditText) view.findViewById(R.id.editText_tasktags);
+        dateLabel = (TextView) view.findViewById(R.id.label_taskEndTime);
         dateLabel.setText(new Date().toString());
 
         dateLabel.setOnClickListener(new View.OnClickListener() {
@@ -289,7 +285,7 @@ public class ProfileActivity extends AppCompatActivity
                 String tskdesc = taskdescr.getText().toString();
                 String tskprice = taskprice.getText().toString();
 
-                if(taskCreateValidation(tskname, tskdesc, tskprice)){
+                if (taskCreateValidation(tskname, tskdesc, tskprice)) {
                     TaskAccessor ta = new TaskAccessor();
                     TaskModel tm = new TaskModel();
                     tm.setTitle(tskname);
@@ -311,8 +307,8 @@ public class ProfileActivity extends AppCompatActivity
         ad.setMessage("When should your task expire?");
         View view = inflater.inflate(R.layout.alertdialog_datesetter, null);
         ad.setView(view);
-        final TimePicker tp = (TimePicker)view.findViewById(R.id.timePicker);
-        final CalendarView cv = (CalendarView)view.findViewById(R.id.calendarView);
+        final TimePicker tp = (TimePicker) view.findViewById(R.id.timePicker);
+        final CalendarView cv = (CalendarView) view.findViewById(R.id.calendarView);
 
         ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Choose", new DialogInterface.OnClickListener() {
             @Override
@@ -329,7 +325,7 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.fabutton_createtask:
                 final AlertDialog taskCreateDialog = createAlertDialog();
                 taskCreateDialog.show();
