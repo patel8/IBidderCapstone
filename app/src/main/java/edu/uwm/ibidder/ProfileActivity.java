@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
@@ -70,13 +71,6 @@ public class ProfileActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        LocationService locSer = new LocationService(getApplicationContext(), this){
-            @Override
-            public Location getCoordinates(double lat, double longi) {
-                return null;
-            }
-        };
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View header= navigationView.getHeaderView(0);
@@ -94,6 +88,9 @@ public class ProfileActivity extends AppCompatActivity
                     userImageURI.setImageURI(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
             }
         });
+        ActivityCompat.requestPermissions(this,
+                new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION},
+                3);
     }
 
     private void initializeAllWidgets(){
@@ -166,6 +163,14 @@ public class ProfileActivity extends AppCompatActivity
        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ActivityCompat.requestPermissions(this,
+                new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION},
+                3);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

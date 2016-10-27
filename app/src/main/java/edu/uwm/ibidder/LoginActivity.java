@@ -126,6 +126,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onStart() {
         super.onStart();
         intializeAllWidgets();
+        ActivityCompat.requestPermissions(this,
+                new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION},
+                3);
         firebaseAuth.addAuthStateListener(mAuthListener);
     }
 

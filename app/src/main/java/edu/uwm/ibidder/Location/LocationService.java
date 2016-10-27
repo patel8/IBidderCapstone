@@ -30,7 +30,7 @@ public abstract class LocationService implements LocationListener {
 
     LocationManager lm = null;
 
-    public LocationService(Context context, Activity activity) {
+    public LocationService(Context context) {
         lm = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -41,16 +41,9 @@ public abstract class LocationService implements LocationListener {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    3);
-            ActivityCompat.requestPermissions(activity,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    3);
             return;
         }
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 10F, (LocationListener) this);
-         //lm.requestLocationUpdates();
     }
 
     public abstract Location getCoordinates(double lat, double longi);

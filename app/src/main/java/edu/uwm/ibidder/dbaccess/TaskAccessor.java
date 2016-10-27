@@ -1,5 +1,6 @@
 package edu.uwm.ibidder.dbaccess;
 
+import android.location.Location;
 import android.util.Log;
 
 import com.firebase.geofire.GeoLocation;
@@ -12,6 +13,7 @@ import com.google.firebase.database.Query;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.uwm.ibidder.Location.LocationService;
 import edu.uwm.ibidder.dbaccess.listeners.BidCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.BidModel;
@@ -64,6 +66,13 @@ public class TaskAccessor extends BaseAccessor {
         taskToCreate.setStatus(TaskModel.TaskStatusType.READY.toString());
         pushedRef.setValue(taskToCreate);
 
+        //Want to add location here - Austin
+       // LocationService locSer = new LocationService(getContext()){
+       //     @Override
+        //    public Location getCoordinates(double lat, double longi) {
+         //       return null;
+         //   }
+        //};
         geoFire.setLocation(pushedRef.getKey(), new GeoLocation(latitude, longitude));
 
         return pushedRef.getKey();
