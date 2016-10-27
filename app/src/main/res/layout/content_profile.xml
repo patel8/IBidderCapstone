@@ -11,6 +11,13 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="edu.uwm.ibidder.ProfileActivity"
     tools:showIn="@layout/app_bar_profile">
+
+    <fragment
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="edu.uwm.ibidder.Fragments.all_available_task"
+        android:id="@+id/fragment" />
+
     <android.support.design.widget.FloatingActionButton
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -20,5 +27,7 @@
         android:clickable="true"
         android:src="@drawable/add_task_icon"
         app:layout_anchorGravity="bottom|right|end"/>
+
+
 
 </RelativeLayout>
