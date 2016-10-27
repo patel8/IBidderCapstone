@@ -62,3 +62,20 @@ firebase.database().ref("reports").orderByChild("wasRead").equalTo(false).on("ch
     });
 
 });
+
+/*
+ As winners are chosen, we want to move the tasks to the accepted queue.
+ */
+firebase.database().ref("taskWinners").orderByChild("wasNotified").equalTo(false).on("child_added", function (snapshot) {
+    var taskWinner = snapshot.val();
+    taskWinner.wasNotified = true;
+    firebase.database().ref("taskWinners/" + snapshot.key).set(taskWinner);
+
+    var taskRef = firebase.database().ref("tasks/timed_out/" + taskWinner.taskId);
+    taskRef.once("value", function (snapshot) {
+        var task = snapshot.val();
+        task.status = "ACCEPTED";
+        taskRef.remove();
+        firebase.database().ref("tasks/accepted/" + taskWinner.taskId).set(task);
+    });
+});
