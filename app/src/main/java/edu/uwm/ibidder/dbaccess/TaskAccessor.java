@@ -68,15 +68,6 @@ public class TaskAccessor extends BaseAccessor {
         taskToCreate.setStatus(TaskModel.TaskStatusType.READY.toString());
         pushedRef.setValue(taskToCreate);
 
-       // Want to add location here - Austin
-//        LocationService locSer = new LocationService(){
-//            @Override
-//            public Location getCoordinates(double lat, double longi) {
-//                return null;
-//            }
-//        };
-//        geoFire.setLocation(pushedRef.getKey(), new GeoLocation(latitude, longitude));
-
         return pushedRef.getKey();
     }
 
@@ -151,9 +142,10 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * TODO: THIS IS A TEST METHOD, ONLY USE TEMPORARILY!!! GETS ALL READY TASKS!!!
+     *
      * @return the database reference
      */
-    public DatabaseReference getTasksRef(){
+    public DatabaseReference getTasksRef() {
         return database.getReference("tasks/" + TaskModel.TaskStatusType.READY.toString().toLowerCase());
     }
 
