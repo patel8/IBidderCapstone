@@ -51,7 +51,7 @@ public class BidderListFragment extends Fragment {
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity()));
         BidAccessor bidAccessor = new BidAccessor();
-        Query q = bidAccessor.getTaskBidsQuery("taskidHere");
+        Query q = bidAccessor.getTaskBidsQuery("taskidHere"); //TODO: need actual taskId here
         adapter = new FirebaseRecyclerAdapter<BidModel, BidderListFragment.viewHolder>(
                 BidModel.class,
                 R.layout.bidder_current_task_list_template,

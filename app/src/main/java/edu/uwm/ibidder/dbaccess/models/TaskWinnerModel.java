@@ -6,7 +6,7 @@ package edu.uwm.ibidder.dbaccess.models;
 public class TaskWinnerModel {
 
     private String winnerId;
-    private boolean wasNotified;
+    private boolean wasNotified = false; //used by node backend
     private String taskOwnerId;
     private String taskId;
 
@@ -20,10 +20,6 @@ public class TaskWinnerModel {
 
     public boolean getWasNotified() {
         return wasNotified;
-    }
-
-    public void setWasNotified(boolean wasNotified) {
-        this.wasNotified = wasNotified;
     }
 
     public String getTaskOwnerId() {
