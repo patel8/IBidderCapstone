@@ -11,18 +11,6 @@
     tools:context="edu.uwm.ibidder.TaskActivity">
 
     <TextView
-        android:text="Task Name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="145dp"
-        android:layout_marginStart="145dp"
-        android:layout_marginTop="25dp"
-        android:id="@+id/label_taskActName" />
-
-    <TextView
         android:text="Task Poster"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,44 +34,56 @@
         android:layout_marginTop="33dp"
         android:id="@+id/label_taskActDescr" />
 
-    <TextView
-        android:text="End time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/label_taskActDescr"
-        android:layout_alignLeft="@+id/label_taskActName"
-        android:layout_alignStart="@+id/label_taskActName"
-        android:layout_marginTop="75dp"
-        android:id="@+id/label_taskActEndtime" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
         android:focusable="false"
-        android:layout_below="@+id/label_taskActEndtime"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="86dp"
+        android:layout_marginTop="29dp"
         android:id="@+id/editText_taskActUserBid"
-        android:background="@color/lightgray"/>
+        android:background="@color/lightgray"
+        android:layout_below="@+id/label_taskActEndtime"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:text="Submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:id="@+id/button_taskActBidSubmit"
         android:layout_below="@+id/editText_taskActUserBid"
-        android:layout_alignLeft="@+id/label_taskActEndtime"
-        android:layout_alignStart="@+id/label_taskActEndtime"
-        android:layout_marginTop="35dp"
-        android:id="@+id/button_taskActBidSubmit" />
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text="End time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="54dp"
+        android:id="@+id/label_taskActEndtime"
+        android:layout_below="@+id/label_taskActDescr"
+        android:layout_alignRight="@+id/label_taskActPoster"
+        android:layout_alignEnd="@+id/label_taskActPoster" />
+
+    <TextView
+        android:text="Task Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        android:id="@+id/label_taskActName"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/label_taskActPoster"
+        android:layout_alignEnd="@+id/label_taskActPoster" />
 
     <fragment
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:name="edu.uwm.ibidder.Fragments.BidderListFragment"
         android:id="@+id/Bidder_list_Fragment_Container"
-        android:layout_below="@+id/button_taskActBidSubmit"
-        android:layout_marginTop="9dp"
-         />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="7dp"
+        android:layout_marginStart="7dp"
+        android:layout_below="@+id/button_taskActBidSubmit" />
 </RelativeLayout>

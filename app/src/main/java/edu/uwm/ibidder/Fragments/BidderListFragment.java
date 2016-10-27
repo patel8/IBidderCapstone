@@ -54,7 +54,7 @@ public class BidderListFragment extends Fragment {
         Query q = bidAccessor.getTaskBidsQuery("taskidHere"); //TODO: need actual taskId here
         adapter = new FirebaseRecyclerAdapter<BidModel, BidderListFragment.viewHolder>(
                 BidModel.class,
-                R.layout.bidder_current_task_list_template,
+                R.layout.bidder_list_template,
                 BidderListFragment.viewHolder.class,
                 q
         ) {
@@ -67,6 +67,7 @@ public class BidderListFragment extends Fragment {
                         viewHolder.userName.setText(um.getFirstName());
                     }
                 });
+                Toast.makeText(getContext(), "HERE HERE", Toast.LENGTH_SHORT).show();
                 viewHolder.userBid.setText(model.getBidValue()+"");
             }
         };

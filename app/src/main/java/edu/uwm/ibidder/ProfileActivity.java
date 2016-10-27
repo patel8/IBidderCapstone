@@ -110,11 +110,9 @@ public class ProfileActivity extends AppCompatActivity
                     um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     um.setLastName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
                     um.setEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
-
-
+                    final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
+                    taskCreateDialog.show();
                 }
-                final AlertDialog taskCreateDialog = createAlertDialogForUsers(um);
-                taskCreateDialog.show();
             }
         });
     }
