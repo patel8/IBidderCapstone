@@ -103,7 +103,7 @@ public class ProfileActivity extends AppCompatActivity
             @Override
             public void dataUpdate(UserModel um) {
                 //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
-                if (um == null || !um.isValid()) {
+                if (um == null || !um.validate()) {
 
                     um = new UserModel();
                     um.setFirstName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
@@ -136,7 +136,8 @@ public class ProfileActivity extends AppCompatActivity
         userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
-                currentProfileMenu.setTitle(um.getFirstName());
+                if (um != null)
+                    currentProfileMenu.setTitle(um.getFirstName());
             }
         });
 
@@ -244,6 +245,10 @@ public class ProfileActivity extends AppCompatActivity
                 userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
                     @Override
                     public void dataUpdate(UserModel um) {
+                        if (um == null) {
+                            um = new UserModel();
+                            um.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        }
                         um.setFirstName(FirstName.getText().toString());
                         um.setLastName(LastName.getText().toString());
                         um.setPhoneNumber(PhoneNumber.getText().toString());
