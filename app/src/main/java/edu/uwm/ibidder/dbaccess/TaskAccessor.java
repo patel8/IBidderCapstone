@@ -1,6 +1,7 @@
 package edu.uwm.ibidder.dbaccess;
 
 import android.location.Location;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.firebase.geofire.GeoLocation;
@@ -146,6 +147,14 @@ public class TaskAccessor extends BaseAccessor {
         DatabaseReference ref = getTaskRef(taskId, taskCallbackListener.getStatusRestrictionType());
         storedValueEventListeners.push(ref.addValueEventListener(taskCallbackListener));
         storedDatabaseRefs.push(ref);
+    }
+
+    /**
+     * TODO: THIS IS A TEST METHOD, ONLY USE TEMPORARILY!!! GETS ALL READY TASKS!!!
+     * @return the database reference
+     */
+    public DatabaseReference getTasksRef(){
+        return database.getReference("tasks/" + TaskModel.TaskStatusType.READY.toString().toLowerCase());
     }
 
     //TODO: THIS IS A TEMP METHOD, ONLY USE THIS WHEN TESTING, IT GETS ALL TASKS THAT ARE IN EXISTENCE ONCE!!!
