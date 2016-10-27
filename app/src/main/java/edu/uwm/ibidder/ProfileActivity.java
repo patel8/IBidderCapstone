@@ -34,6 +34,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -296,6 +297,7 @@ public class ProfileActivity extends AppCompatActivity
                     tm.setTitle(tskname);
                     tm.setDescription(tskdesc);
                     tm.setMaxPrice(Float.parseFloat(tskprice));
+                    tm.setOwnerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
                     String tskId = ta.createTask(tm); // doesnt seem to be adding new task to firebase
                     Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                 }

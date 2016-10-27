@@ -133,6 +133,7 @@
 
         "accepted":{
           //tasks in this state can be read but not written to (it's too late in the process)
+          ".indexOn": ["ownerId", "status", "expirationTime"],
           ".read": "auth !== null",
           ".write": false
         },
