@@ -46,6 +46,17 @@ public abstract class TaskCallbackListener implements ValueEventListener {
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
 
+        try {
+            //TODO: handle single tasks in a better way
+            TaskModel singleTask = dataSnapshot.getValue(TaskModel.class);
+            if (singleTask != null) {
+                dataUpdate(singleTask);
+                return;
+            }
+        } catch (Exception e) {
+            //continue for now
+        }
+
         Iterator<DataSnapshot> it = dataSnapshot.getChildren().iterator();
         while (it.hasNext()) {
 
