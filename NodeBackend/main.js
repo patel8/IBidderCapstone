@@ -11,6 +11,38 @@ firebase.initializeApp({
 var GeoFire = require('geofire');
 var geoFireRef = new GeoFire(firebase.database().ref("geofire"));
 
+function sendNotificationToUser(userKey, message, onSuccess) {
+    /* firebase.database().ref("users/" + userKey).once("child_added", function (snapshot) {
+     var user = snapshot.val();
+     var messageId = user.messageId;*/
+
+    request({
+        url: 'https://fcm.googleapis.com/fcm/send',
+        method: 'POST',
+        headers: {
+            'Content-Type': ' application/json',
+            'Authorization': 'key=' + API_KEY
+        },
+        body: JSON.stringify({
+            notification: {
+                title: message
+            },
+            to: userKey
+        })
+    }, function (error, response, body) {
+        if (error) {
+            console.error(error);
+        }
+        else if (response.statusCode >= 400) {
+            console.error('HTTP Error: ' + response.statusCode + ' - ' + response.statusMessage);
+        }
+        else {
+            onSuccess();
+        }
+    });
+    //});
+}
+
 //TODO: do listener stuff
 /*
  Check every minute to update task statuses.
@@ -33,6 +65,9 @@ setInterval(function () {
 
             if (item.isLocalTask)
                 geoFireRef.remove(key);
+
+            sendNotificationToUser(key, "Your auction has finished.", function () {
+            });
         }
     });
 
