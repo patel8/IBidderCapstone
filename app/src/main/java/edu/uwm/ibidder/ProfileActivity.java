@@ -171,6 +171,19 @@ public class ProfileActivity extends AppCompatActivity
         ActivityCompat.requestPermissions(this,
                 new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION},
                 3);
+        Fragment fragment = null;
+        Class fragmentClass = null;
+        fragmentClass = all_available_task.class;
+        try{
+            fragment = (Fragment) fragmentClass.newInstance();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
