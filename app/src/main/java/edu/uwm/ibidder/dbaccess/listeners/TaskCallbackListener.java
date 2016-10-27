@@ -47,38 +47,33 @@ public abstract class TaskCallbackListener implements ValueEventListener {
     public void onDataChange(DataSnapshot dataSnapshot) {
 
         try {
-            //TODO: handle single tasks in a better way
-            TaskModel singleTask = dataSnapshot.getValue(TaskModel.class);
-            if (singleTask != null) {
-                dataUpdate(singleTask);
-                return;
-            }
-        } catch (Exception e) {
-            //continue for now
-        }
+            Iterator<DataSnapshot> it = dataSnapshot.getChildren().iterator();
+            while (it.hasNext()) {
 
-        Iterator<DataSnapshot> it = dataSnapshot.getChildren().iterator();
-        while (it.hasNext()) {
+                TaskModel taskModel = it.next().getValue(TaskModel.class);
+                boolean canUpdateData = true;
 
-            TaskModel taskModel = it.next().getValue(TaskModel.class);
-            boolean canUpdateData = true;
+                //check that at least one tag matches when needed
+                if (isTagRestricted) {
+                    canUpdateData = false;
 
-            //check that at least one tag matches when needed
-            if (isTagRestricted) {
-                canUpdateData = false;
-
-                for (String key : taskModel.getTags().keySet()) {
-                    if (tagRestrictions.contains(key)) {
-                        canUpdateData = true;
-                        break;
+                    for (String key : taskModel.getTags().keySet()) {
+                        if (tagRestrictions.contains(key)) {
+                            canUpdateData = true;
+                            break;
+                        }
                     }
                 }
+
+                if (canUpdateData)
+                    dataUpdate(taskModel);
+
             }
-
-            if (canUpdateData)
-                dataUpdate(taskModel);
-
+        } catch (Exception e) {
+            TaskModel singleTask = dataSnapshot.getValue(TaskModel.class);
+            dataUpdate(singleTask);
         }
+
     }
 
 
