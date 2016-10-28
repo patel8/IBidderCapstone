@@ -18,7 +18,7 @@
             android:layout_weight="4" />
 
         <TextView
-            android:text="Date"
+            android:text="Time Left: "
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textViewDateTimeLabel"
@@ -30,8 +30,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/textViewListDateTime"
             android:layout_weight="1" />
-
-
 
     </LinearLayout>
 
