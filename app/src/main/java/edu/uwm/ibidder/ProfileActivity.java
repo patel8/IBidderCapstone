@@ -50,6 +50,7 @@ import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
+import edu.uwm.ibidder.notifications.MyFirebaseInstanceIDService;
 
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -179,6 +180,7 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        MyFirebaseInstanceIDService.updateTokenOnServer();
         ActivityCompat.requestPermissions(this,
                 new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION, android.Manifest.permission.ACCESS_FINE_LOCATION},
                 3);

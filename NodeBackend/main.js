@@ -12,7 +12,7 @@ var GeoFire = require('geofire');
 var geoFireRef = new GeoFire(firebase.database().ref("geofire"));
 
 function sendNotificationToUser(userKey, message, onSuccess) {
-    firebase.database().ref("users/" + userKey).once("child_added", function (snapshot) {
+    firebase.database().ref("users/" + userKey).once("value", function (snapshot) {
         var user = snapshot.val();
         var messengerId = user.messengerId;
 
@@ -24,7 +24,7 @@ function sendNotificationToUser(userKey, message, onSuccess) {
                 'Authorization': 'key=' + API_KEY
             },
             body: JSON.stringify({
-                notification: {
+                data: {
                     title: message
                 },
                 to: messengerId
@@ -66,7 +66,7 @@ setInterval(function () {
             if (item.isLocalTask)
                 geoFireRef.remove(key);
 
-            sendNotificationToUser(key, "Your auction has finished.", function () {
+            sendNotificationToUser(item.ownerId, "Your auction has finished.", function () {
                 console.log("Sent message successfully.  ")
             });
         }

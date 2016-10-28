@@ -12,6 +12,7 @@ public class UserModel {
     private String firstName;
     private String lastName;
     private String userId;
+    private String messengerId; //field used by messenger- you don't have to set this yourself.
 
     public UserModel() {
     }
@@ -70,5 +71,13 @@ public class UserModel {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getMessengerId() {
+        return messengerId;
+    }
+
+    public void setMessengerId(String messengerId) {
+        this.messengerId = messengerId;
     }
 }
