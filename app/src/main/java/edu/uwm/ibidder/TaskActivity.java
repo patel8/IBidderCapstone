@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -34,8 +36,7 @@ public class TaskActivity extends AppCompatActivity {
     TextView taskendtime;
     EditText userbid;
     Button submitbid;
-    Button edit;
-    Fragment fragment;
+    Boolean editTask = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,10 @@ public class TaskActivity extends AppCompatActivity {
                 });
 
                 if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(tm.getOwnerId())){
-                    edit.setVisibility(View.VISIBLE);
+                    editTask = true;
+                }else
+                {
+                    editTask = false;
                 }
             }
         });
@@ -102,10 +106,30 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
         submitbid = (Button)findViewById(R.id.button_taskActBidSubmit);
-        edit = (Button) findViewById(R.id.button_taskActEdit);
         // TODO: edit.onclick
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.task_menu, menu);
+        MenuItem item = menu.findItem(R.id.edit_task_menu);
+        item.setVisible(editTask);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.edit_task_menu:
+                //Todo - Do whatever we want when user clicks on Edit Task Button
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

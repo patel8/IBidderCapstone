@@ -45,5 +45,6 @@
     <string name="ascreator_pickwin">Pick Task Winner</string>
     <string name="ascreator_current">Current Tasks</string>
     <string name="ascreator_history">Task History</string>
+    <string name="list_of_bidder">List Of Bidder</string>
 
 </resources>

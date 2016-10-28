@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.uwm.ibidder.Fragments.BidderListFragment">
+    tools:context="edu.uwm.ibidder.Fragments.BidderListFragment"
+    android:background="@color/com_facebook_button_login_silver_background_color_pressed">
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView

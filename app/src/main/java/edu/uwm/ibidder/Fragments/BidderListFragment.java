@@ -43,7 +43,6 @@ public class BidderListFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.bidderListFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        Toast.makeText(getContext(), "IM HERE", Toast.LENGTH_SHORT).show();
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity()));
         BidAccessor bidAccessor = new BidAccessor();
@@ -63,8 +62,7 @@ public class BidderListFragment extends Fragment {
                         viewHolder.userName.setText(um.getFirstName());
                     }
                 });
-                Toast.makeText(getContext(), "HERE HERE", Toast.LENGTH_SHORT).show();
-                viewHolder.userBid.setText(model.getBidValue()+"");
+                viewHolder.userBid.setText("$ "+model.getBidValue()+"");
             }
         };
 
