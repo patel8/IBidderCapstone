@@ -12,35 +12,35 @@ var GeoFire = require('geofire');
 var geoFireRef = new GeoFire(firebase.database().ref("geofire"));
 
 function sendNotificationToUser(userKey, message, onSuccess) {
-    /* firebase.database().ref("users/" + userKey).once("child_added", function (snapshot) {
-     var user = snapshot.val();
-     var messageId = user.messageId;*/
+    firebase.database().ref("users/" + userKey).once("child_added", function (snapshot) {
+        var user = snapshot.val();
+        var messengerId = user.messengerId;
 
-    request({
-        url: 'https://fcm.googleapis.com/fcm/send',
-        method: 'POST',
-        headers: {
-            'Content-Type': ' application/json',
-            'Authorization': 'key=' + API_KEY
-        },
-        body: JSON.stringify({
-            notification: {
-                title: message
+        request({
+            url: 'https://fcm.googleapis.com/fcm/send',
+            method: 'POST',
+            headers: {
+                'Content-Type': ' application/json',
+                'Authorization': 'key=' + API_KEY
             },
-            to: userKey
-        })
-    }, function (error, response, body) {
-        if (error) {
-            console.error(error);
-        }
-        else if (response.statusCode >= 400) {
-            console.error('HTTP Error: ' + response.statusCode + ' - ' + response.statusMessage);
-        }
-        else {
-            onSuccess();
-        }
+            body: JSON.stringify({
+                notification: {
+                    title: message
+                },
+                to: messengerId
+            })
+        }, function (error, response, body) {
+            if (error) {
+                console.error(error);
+            }
+            else if (response.statusCode >= 400) {
+                console.error('HTTP Error: ' + response.statusCode + ' - ' + response.statusMessage);
+            }
+            else {
+                onSuccess();
+            }
+        });
     });
-    //});
 }
 
 //TODO: do listener stuff
