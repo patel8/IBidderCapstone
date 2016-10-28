@@ -67,6 +67,7 @@ setInterval(function () {
                 geoFireRef.remove(key);
 
             sendNotificationToUser(key, "Your auction has finished.", function () {
+                console.log("Sent message successfully.  ")
             });
         }
     });
