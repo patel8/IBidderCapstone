@@ -10,26 +10,17 @@
         android:layout_margin="5dp">
 
         <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:text="jis  jfwioj fiw dfjiwdj fwijf iw fjiwjdf iw fjiwjf widjfwijf wifjwfj wi"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:id="@+id/textViewListTitle"
-            android:textSize="20sp"
-            android:layout_weight="4" />
-
-        <TextView
-            android:text="Time Left: "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewDateTimeLabel"
-            android:layout_weight="1" />
-
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewListDateTime"
-            android:layout_weight="1" />
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_weight="4"
+            android:maxEms="10"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="false" />
 
     </LinearLayout>
 
@@ -40,26 +31,45 @@
         android:layout_margin="5dp">
 
         <TextView
+            android:text="Exp time:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            android:layout_weight="1" />
+
+        <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewListDescription"
+            android:id="@+id/textViewListDateTime"
             android:layout_weight="4" />
 
         <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/textViewListDescription"
+            android:layout_weight="4"
+            android:visibility="gone" />
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/textViewListPriceLabel"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textColor="@color/authui_colorPrimary"
+            android:visibility="gone" />
 
         <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textViewListPrice"
-            android:textSize="15sp"
-            android:layout_weight="1" />
+            android:textSize="17sp"
+            android:layout_weight="1"
+            android:textColor="@color/authui_colorPrimary" />
     </LinearLayout>
 
 </LinearLayout>

@@ -51,7 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         TaskModel model = list.get(position);
         holder.title.setText(model.getTitle());
         holder.description.setText(model.getDescription());
-        holder.Price.setText(model.getMaxPrice()+"");
+        holder.Price.setText("$ "+model.getMaxPrice()+"");
 
         Date d1 = DateTools.epochToDate(model.getExpirationTime());
         Date d2 = new Date();
@@ -62,6 +62,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.countDownTimer = new CountDownTimer(seconds*1000,1000) {
             @Override
             public void onTick(long l) {
+                if(l <= 3600) holder.CountDown.setTextColor(Color.RED);
                 holder.CountDown.setText(timeConversion((int)l/1000));
             }
 
@@ -82,7 +83,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
         int hours = totalMinutes / MINUTES_IN_AN_HOUR;
 
-        return hours + ":" + minutes + ":" + seconds;
+        String result ="";
+        result += (hours < 10) ? "0":"";
+        result += hours+":";
+
+        result += (minutes < 10) ? "0":"";
+        result += minutes+":";
+
+        result += (seconds < 10) ? "0":"";
+        result += seconds;
+
+        return result;
+
+
+
     }
 
     public static class ViewHolderForAvailTasks extends RecyclerView.ViewHolder{
