@@ -60,7 +60,7 @@
 
           "$taskid": {
           // Anyone can read a task.  Only the owner can write it.
-          ".write": "auth.uid === newData.child('ownerId').val()",
+          ".write": "auth.uid === newData.child('ownerId').val() || auth.uid === data.child('ownerId').val()",
 
           // A task's description must not be null and must be a string
           "description": {
@@ -163,7 +163,7 @@
 
       "$bidid":{
         //Only the original bidder can modify their bid
-        ".write": "newData.child('bidderId').val() === auth.uid",
+        ".write": "newData.child('bidderId').val() === auth.uid || auth.uid === data.child('bidderId').val()",
 
         //bidderId must be a non null string
         "bidderId":{

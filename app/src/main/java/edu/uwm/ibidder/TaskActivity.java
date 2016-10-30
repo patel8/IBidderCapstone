@@ -245,8 +245,7 @@ public class TaskActivity extends AppCompatActivity {
                             final TaskAccessor ta = new TaskAccessor();
                             TaskModel newTM = new TaskModel(savedName, savedDescr, savedPrice, currentUser.getUserId(), DateTools.dateToEpoch(savedDate), false, false, savedTags);
                             ta.createTask(newTM);
-                            //TODO: remove old task from firebase
-                            //ta.removeTask(currentTask.getTaskId());//doesnt seem to be removing
+                            ta.removeTask(currentTask.getTaskId());//doesnt seem to be removing
                             Intent intent = new Intent(TaskActivity.this, TaskActivity.class);
                             intent.putExtra("task_id", newTM.getTaskId());
                             intent.putExtra("task_status", newTM.getStatus().toString());
