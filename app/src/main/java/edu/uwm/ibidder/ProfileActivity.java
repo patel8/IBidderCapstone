@@ -1,5 +1,6 @@
 package edu.uwm.ibidder;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
@@ -268,7 +269,7 @@ public class ProfileActivity extends AppCompatActivity
         return ad;
     }
 
-    private boolean taskCreateValidation(String name, String descr, String price, Date expire){
+    public static boolean taskCreateValidation(String name, String descr, String price, Date expire, Activity activity){
         if(!name.matches("") && !descr.matches("") && !price.matches("")){
             // expire date must be in the future
             Calendar cal = Calendar.getInstance();
@@ -279,17 +280,17 @@ public class ProfileActivity extends AppCompatActivity
             if(cal.getTimeInMillis() < expire.getTime()){
                 return true;
             } else{
-                Toast.makeText(ProfileActivity.this, "Expiration time must be at least ["+future+"] min. from the current time", Toast.LENGTH_LONG).show();
+                Toast.makeText(activity, "Expiration time must be at least ["+future+"] min. from the current time", Toast.LENGTH_LONG).show();
                 return false;
             }
         } else{
-            Toast.makeText(ProfileActivity.this, "Invalid information", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "Invalid information", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
 
     /**
-     * Formats a time in the form of Wed Oct 26 21:08:54 CDT 2016
+     * Formats a time in the form of Wed Oct 26 21:08:54 CDT 2016 (default java Time.getTime().toString())
      * @param unformattedtime in form of Wed Oct 26 21:08:54 CDT 2016
      * @return "Wed. Oct 26 2016, CDT 9:08 PM"
      */
@@ -347,7 +348,7 @@ public class ProfileActivity extends AppCompatActivity
                 String tagitems[] = tsktags.split(" ");
                 HashMap<String, Boolean> tags = new HashMap();
 
-                if(taskCreateValidation(tskname, tskdesc, tskprice, expireDate)){
+                if(ProfileActivity.taskCreateValidation(tskname, tskdesc, tskprice, expireDate, ProfileActivity.this)){
                     TaskAccessor ta = new TaskAccessor();
                     TaskModel tm = new TaskModel();
                     // Title

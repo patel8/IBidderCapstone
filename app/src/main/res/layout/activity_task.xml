@@ -144,5 +144,4 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/button_taskActBidSubmit" />
     </LinearLayout>
-
-1</LinearLayout>
+</LinearLayout>

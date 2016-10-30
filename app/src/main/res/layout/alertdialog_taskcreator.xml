@@ -4,122 +4,115 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:id="@+id/alertdialog_taskcreator">
+    android:id="@+id/alertdialog_taskcreator"
+        android:orientation="vertical">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/label_taskActName"
-        android:layout_toEndOf="@+id/label_taskActName"
-        android:layout_marginLeft="43dp"
-        android:layout_marginStart="43dp"
-        android:layout_marginTop="26dp"
-        android:id="@+id/editText_taskname"
-        android:background="@color/lightgray"/>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/editText_taskdescription"
-        android:gravity="top"
-        android:background="@color/lightgray"
-        android:layout_height="100dp"
-        android:layout_alignTop="@+id/label_taskActDescr"
-        android:layout_alignLeft="@+id/editText_tasktags"
-        android:layout_alignStart="@+id/editText_tasktags" />
+            <TextView
+                android:text="Task Name:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/label_taskActName"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:id="@+id/editText_tasktags"
-        android:background="@color/lightgray"
-        android:layout_alignBaseline="@+id/label_tasktags"
-        android:layout_alignBottom="@+id/label_tasktags"
-        android:layout_alignLeft="@+id/editText_taskname"
-        android:layout_alignStart="@+id/editText_taskname" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/editText_taskname"
+                android:background="@color/lightgray"/>
 
-    <TextView
-        android:text="Tags:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText_taskname"
-        android:layout_alignLeft="@+id/label_taskActName"
-        android:layout_alignStart="@+id/label_taskActName"
-        android:layout_marginTop="48dp"
-        android:id="@+id/label_tasktags" />
+        </LinearLayout>
 
-    <TextView
-        android:text="Task Name:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="34dp"
-        android:layout_marginStart="34dp"
-        android:id="@+id/label_taskActName"
-        android:layout_alignBaseline="@+id/editText_taskname"
-        android:layout_alignBottom="@+id/editText_taskname"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    <TextView
-        android:text="Description:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/label_tasktags"
-        android:layout_alignLeft="@+id/label_tasktags"
-        android:layout_alignStart="@+id/label_tasktags"
-        android:layout_marginTop="62dp"
-        android:id="@+id/label_taskActDescr" />
+            <TextView
+                android:text="Tags:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/label_tasktags" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:layout_alignTop="@+id/label_maxprice"
-        android:layout_alignLeft="@+id/editText_taskdescription"
-        android:layout_alignStart="@+id/editText_taskdescription"
-        android:id="@+id/editText_startprice"
-        android:background="@color/lightgray"
-        />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:ems="10"
+                android:id="@+id/editText_tasktags"
+                android:background="@color/lightgray"
+                />
+        </LinearLayout>
 
-    <TextView
-        android:text="Max Price:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:id="@+id/label_maxprice"
-        android:layout_below="@+id/editText_taskdescription"
-        android:layout_alignLeft="@+id/label_taskActDescr"
-        android:layout_alignStart="@+id/label_taskActDescr" />
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/label_taskEndTime"
-        android:layout_marginTop="65dp"
-        android:layout_below="@+id/editText_startprice"
-        android:layout_alignRight="@+id/editText_startprice"
-        android:layout_alignEnd="@+id/editText_startprice" />
+            <TextView
+                android:text="Description:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/label_taskActDescr" />
 
-    <TextView
-        android:text="Expiration:"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:layout_alignBaseline="@+id/label_taskEndTime"
-        android:layout_alignBottom="@+id/label_taskEndTime"
-        android:layout_alignLeft="@+id/label_maxprice"
-        android:layout_alignStart="@+id/label_maxprice" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/editText_taskdescription"
+                android:gravity="top"
+                android:background="@color/lightgray"
+                android:layout_height="100dp" />
+        </LinearLayout>
 
-</RelativeLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
+            <TextView
+                android:text="Max Price:"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/label_maxprice" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:ems="10"
+                android:id="@+id/editText_startprice"
+                android:background="@color/lightgray"
+                />
+        </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:text="Expiration:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_taskEndTime" />
+
+    </LinearLayout>
+
+
+
+    </LinearLayout>
 
 </ScrollView>
