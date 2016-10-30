@@ -201,8 +201,10 @@ public class TaskActivity extends AppCompatActivity {
         tskname.setText(savedName);
         tskdescr.setText(savedDescr);
         tsktags.setText(tagbuilder);
-        tskprice.setText(Double.toString(savedPrice));
-
+        if (savedPrice < 0.0)
+            tskprice.setText("");
+        else
+            tskprice.setText(Double.toString(savedPrice));
         tskdate.setText(ProfileActivity.getFormattedTime(savedDate.toString()));
 
         tskdate.setOnClickListener(new View.OnClickListener() {
@@ -227,7 +229,11 @@ public class TaskActivity extends AppCompatActivity {
                 for(String item : items){
                     savedTags.put(item, true);
                 }
-                savedPrice = Double.parseDouble(tskprice.getText().toString());
+                if(!tskprice.getText().toString().equals("")){
+                    savedPrice = Double.parseDouble(tskprice.getText().toString());
+                } else{
+                    savedPrice = -1;
+                }
 
                 /* Confirmation alert */
                 new AlertDialog.Builder(TaskActivity.this).setMessage("Are you sure?"+'\n'+"Your old task will be replaced by this new task, and you will lose all your bidders.")

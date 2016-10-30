@@ -271,6 +271,9 @@ public class ProfileActivity extends AppCompatActivity
 
     public static boolean taskCreateValidation(String name, String descr, String price, Date expire, Activity activity){
         if(!name.matches("") && !descr.matches("") && !price.matches("")){
+            if(Double.parseDouble(price) < 0){
+                return false;
+            }
             // expire date must be in the future
             Calendar cal = Calendar.getInstance();
             Date now = new Date();
