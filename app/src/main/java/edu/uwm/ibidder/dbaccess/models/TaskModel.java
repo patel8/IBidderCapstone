@@ -19,6 +19,8 @@ public class TaskModel {
     private HashMap<String, Boolean> tags; //stores the tags in format <Tag, True>
     private int reportCount = 0; //Used by node server, not user editable
     private String taskId;
+    private double latitude;
+    private double longitude;
 
     /**
      * Default constructor.  Needed for firebase serialization.
@@ -120,6 +122,20 @@ public class TaskModel {
 
     public void setIsLocalTask(boolean isLocalTask) {
         this.isLocalTask = isLocalTask;
+    }
+
+    public double getLatitude(){
+        return latitude;
+    }
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude(){
+        return longitude;
+    }
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
     public enum TaskStatusType {
