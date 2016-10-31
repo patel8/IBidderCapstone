@@ -66,10 +66,10 @@ public class TaskAccessor extends BaseAccessor {
         DatabaseReference pushedRef = ref.push();
         taskToCreate.setTaskId(pushedRef.getKey());
         taskToCreate.setStatus(TaskModel.TaskStatusType.READY.toString());
-        taskToCreate.setLatitude(latitude);
-        taskToCreate.setLongitude(longitude);
 
         pushedRef.setValue(taskToCreate);
+
+        geoFire.setLocation(pushedRef.getKey(), new GeoLocation(latitude, longitude));
 
         return pushedRef.getKey();
     }
