@@ -27,7 +27,7 @@ public class TaskModel {
 
     }
 
-    public TaskModel(String taskName, String taskDescr, double maxPrice, String ownId, long exprTime, boolean isLocal, boolean isTaskNow, HashMap tags){
+    public TaskModel(String taskName, String taskDescr, double maxPrice, String ownId, long exprTime, boolean isLocal, boolean isTaskNow, HashMap tags) {
         this.title = taskName;
         this.description = taskDescr;
         this.maxPrice = maxPrice;

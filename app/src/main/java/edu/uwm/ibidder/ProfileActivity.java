@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -350,6 +351,16 @@ public class ProfileActivity extends AppCompatActivity
                 String tsktags = tasktags.getText().toString();
                 String tagitems[] = tsktags.split(" ");
                 HashMap<String, Boolean> tags = new HashMap();
+                //LocationService lc = new LocationService(getApplicationContext()){
+                 //   @Override
+                //    public Location getCoordinates(double lat, double longi) {
+                //        String provider = LocationProvider.getName(this);
+                //        Location locy = new Location();
+                //        locy.setLongitude(longi);
+                //        locy.setLatitude(lat);
+                //        return locy;
+                //    }
+                //};
 
                 if(ProfileActivity.taskCreateValidation(tskname, tskdesc, tskprice, expireDate, ProfileActivity.this)){
                     TaskAccessor ta = new TaskAccessor();
@@ -368,6 +379,10 @@ public class ProfileActivity extends AppCompatActivity
                     tm.setIsTaskItNow(false);
                     // isLocalTask
                     tm.setIsLocalTask(false);
+                    // latitude
+                    // tm.setLatitude(lat);
+                    // longitude
+                    // tm.setLongitude(long);
                     // tags
                     for(String item : tagitems){
                         tags.put(item, true);
