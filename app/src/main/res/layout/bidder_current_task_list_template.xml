@@ -10,7 +10,6 @@
         android:layout_margin="5dp">
 
         <TextView
-            android:text="jis  jfwioj fiw dfjiwdj fwijf iw fjiwjdf iw fjiwjf widjfwijf wifjwfj wi"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/textViewListTitle"
@@ -20,7 +19,8 @@
             android:maxEms="10"
             android:ellipsize="end"
             android:maxLines="1"
-            android:singleLine="false" />
+            android:singleLine="false"
+            android:text="Title" />
 
     </LinearLayout>
 
