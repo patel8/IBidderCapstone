@@ -25,8 +25,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/viewPager"
 
-        android:layout_below="@+id/taskTabLayout"></android.support.v4.view.ViewPager>
+        android:layout_below="@+id/taskTabLayout">
 
-
-
+    </android.support.v4.view.ViewPager>
 </RelativeLayout>
