@@ -17,6 +17,7 @@ import com.google.firebase.database.Query;
 
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.R;
+import edu.uwm.ibidder.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
@@ -46,7 +47,7 @@ public class BidderListFragment extends Fragment {
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity()));
         BidAccessor bidAccessor = new BidAccessor();
-        Query q = bidAccessor.getTaskBidsQuery("taskidHere"); //TODO: need actual taskId here
+        Query q = bidAccessor.getTaskBidsQuery(((TaskActivityII)getActivity()).getTaskID()); //TODO: need actual taskId here
         adapter = new FirebaseRecyclerAdapter<BidModel, BidderListHolder>(
                 BidModel.class,
                 R.layout.bidder_list_template,
