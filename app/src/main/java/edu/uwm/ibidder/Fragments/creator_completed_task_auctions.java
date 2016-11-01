@@ -71,7 +71,7 @@ public class creator_completed_task_auctions extends Fragment {
                 new DividerItemDecoration(getActivity()));
         TaskAccessor ta = new TaskAccessor();
         Query q = ta.getTasksByOwnerIdQuery(FirebaseAuth.getInstance().getCurrentUser().getUid()
-                , TaskModel.TaskStatusType.FINISHED.toString());
+                , TaskModel.TaskStatusType.TIMED_OUT.toString());
         adapter = new FirebaseRecyclerAdapter<TaskModel, bidder_bid_history.viewHolder>(
                 TaskModel.class,
                 R.layout.bidder_current_task_list_template,
