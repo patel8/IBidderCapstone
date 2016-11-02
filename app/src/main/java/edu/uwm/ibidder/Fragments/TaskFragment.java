@@ -132,16 +132,16 @@ public class TaskFragment extends Fragment {
         taskdescr = (TextView)v.findViewById(R.id.label_taskActDescr);
         taskowner = (TextView)v.findViewById(R.id.label_taskActPoster);
         taskendtime = (TextView)v.findViewById(R.id.label_taskActEndtime);
-        userbid = (EditText)v.findViewById(R.id.editText_taskActUserBid);
-        userbid.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event){
-                v.setFocusable(true);
-                v.setFocusableInTouchMode(true);
-                return false;
-            }
-        });
-        submitbid = (Button)v.findViewById(R.id.button_taskActBidSubmit);
+      //  userbid = (EditText)v.findViewById(R.id.editText_taskActUserBid);
+//        userbid.setOnTouchListener(new View.OnTouchListener(){
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event){
+//                v.setFocusable(true);
+//                v.setFocusableInTouchMode(true);
+//                return false;
+//            }
+//        });
+//        submitbid = (Button)v.findViewById(R.id.button_taskActBidSubmit);
     }
 
 

@@ -115,16 +115,16 @@ public class TaskActivity extends AppCompatActivity {
         taskdescr = (TextView)findViewById(R.id.label_taskActDescr);
         taskowner = (TextView)findViewById(R.id.label_taskActPoster);
         taskendtime = (TextView)findViewById(R.id.label_taskActEndtime);
-        userbid = (EditText)findViewById(R.id.editText_taskActUserBid);
-        userbid.setOnTouchListener(new View.OnTouchListener(){
-            @Override
-            public boolean onTouch(View v, MotionEvent event){
-                v.setFocusable(true);
-                v.setFocusableInTouchMode(true);
-                return false;
-            }
-        });
-        submitbid = (Button)findViewById(R.id.button_taskActBidSubmit);
+//        userbid = (EditText)findViewById(R.id.editText_taskActUserBid);
+//        userbid.setOnTouchListener(new View.OnTouchListener(){
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event){
+//                v.setFocusable(true);
+//                v.setFocusableInTouchMode(true);
+//                return false;
+//            }
+//        });
+//        submitbid = (Button)findViewById(R.id.button_taskActBidSubmit);
     }
 
     @Override

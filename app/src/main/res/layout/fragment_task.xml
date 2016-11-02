@@ -14,125 +14,155 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="#ffffff">
-
-        <LinearLayout
-            android:id="@+id/activity_task_layout_name_owner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:text="Task Name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/label_taskActName"
-                android:layout_weight="1" />
-
-            <TextView
-                android:text="by."
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_weight="1"
-                android:elevation="1dp" />
-
-
-            <TextView
-                android:text="Task Owner"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/label_taskActPoster"
-                android:layout_weight="1"
-                android:elevation="1dp" />
-
-        </LinearLayout>
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
 
         <TextView
-            android:text="Task Description"
+            android:text="Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/label_taskActDescr" />
+            android:id="@+id/textView3" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
+
 
         <TextView
-            android:text="Expire time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/label_taskActEndtime"
-            android:layout_marginBottom="50dp"/>
+            android:text=""
+            android:id="@+id/label_taskActName"
+            />
 
-        <LinearLayout
-            android:id="@+id/activity_task_layout_lowest_bidder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:text="$ Lowest Bid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/label_taskActLowestBid"/>
-
-            <TextView
-                android:text="by."
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                />
+    </LinearLayout>
 
 
-            <TextView
-                android:text="Lowest Bidder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/label_taskActLowestBidder" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
+        <TextView
+            android:text="Description"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            />
 
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="numberDecimal"
-                android:ems="10"
-                android:focusable="false"
-                android:id="@+id/editText_taskActUserBid"
-                android:background="@color/lightgray"
-                android:hint="$ Place a bid"
-                android:layout_weight="1" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
 
-            <Button
-                android:text="Bid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/button_taskActBidSubmit"
-                android:layout_weight="1" />
-        </LinearLayout>
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_taskActDescr"
+            />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="#ffffff">
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:text="Task Owner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:text="@string/list_of_bidder" />
+            android:id="@+id/label_taskActPoster"/>
+
 
     </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:text="Expired Time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_taskActEndtime"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:text="Lowest Bid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_taskActLowestBid"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:text="TextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+             />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#000000" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            />
+    </LinearLayout>
+
 </LinearLayout>
