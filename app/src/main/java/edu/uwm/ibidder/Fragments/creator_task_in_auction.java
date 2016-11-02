@@ -47,7 +47,7 @@ public class creator_task_in_auction extends Fragment {
 
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
-    FirebaseRecyclerAdapter<TaskModel, bidder_bid_history.viewHolder> adapter;
+    FirebaseRecyclerAdapter<TaskModel, viewHolder> adapter;
 
     public creator_task_in_auction(){
 
@@ -75,14 +75,14 @@ public class creator_task_in_auction extends Fragment {
         TaskAccessor ta = new TaskAccessor();
         Query q = ta.getTasksByOwnerIdQuery(FirebaseAuth.getInstance().getCurrentUser().getUid()
                 , TaskModel.TaskStatusType.READY.toString());
-        adapter = new FirebaseRecyclerAdapter<TaskModel, bidder_bid_history.viewHolder>(
+        adapter = new FirebaseRecyclerAdapter<TaskModel, viewHolder>(
                 TaskModel.class,
                 R.layout.bidder_current_task_list_template,
-                bidder_bid_history.viewHolder.class,
+                viewHolder.class,
                 q
         ) {
             @Override
-            protected void populateViewHolder(bidder_bid_history.viewHolder viewHolder, TaskModel taskModel, int i) {
+            protected void populateViewHolder(viewHolder viewHolder, TaskModel taskModel, int i) {
                 viewHolder.title.setText(taskModel.getTitle());
                 viewHolder.description.setText(taskModel.getDescription());
                 viewHolder.DateTime.setText(taskModel.getExpirationTime() + "");
