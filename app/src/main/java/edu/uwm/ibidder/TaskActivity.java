@@ -46,7 +46,7 @@ public class TaskActivity extends AppCompatActivity {
     String savedName, savedDescr, savedDateLabel;
     Date savedDate;
     HashMap<String, Boolean> savedTags;
-    double savedPrice;
+    float savedPrice;
     UserModel currentUser;
     TaskModel currentTask;
     boolean resetSave = false;
@@ -204,7 +204,7 @@ public class TaskActivity extends AppCompatActivity {
         if (savedPrice < 0.0)
             tskprice.setText("");
         else
-            tskprice.setText(Double.toString(savedPrice));
+            tskprice.setText(Float.toString(savedPrice));
         tskdate.setText(ProfileActivity.getFormattedTime(savedDate.toString()));
 
         tskdate.setOnClickListener(new View.OnClickListener() {
@@ -230,7 +230,7 @@ public class TaskActivity extends AppCompatActivity {
                     savedTags.put(item, true);
                 }
                 if(!tskprice.getText().toString().equals("")){
-                    savedPrice = Double.parseDouble(tskprice.getText().toString());
+                    savedPrice = Float.parseFloat(tskprice.getText().toString());
                 } else{
                     savedPrice = -1;
                 }
@@ -241,7 +241,7 @@ public class TaskActivity extends AppCompatActivity {
                     // Delete old task, go back to new task page for the updated task
                     public void onClick(DialogInterface dialog, int id){
                         //TODO: perform Firebase password validation to replace the task with a new one
-                        if(ProfileActivity.taskCreateValidation(savedName, savedDescr, Double.toString(savedPrice), savedDate, TaskActivity.this)){
+                        if(ProfileActivity.taskCreateValidation(savedName, savedDescr, Float.toString(savedPrice), savedDate, TaskActivity.this)){
                             final TaskAccessor ta = new TaskAccessor();
                             TaskModel newTM = new TaskModel(savedName, savedDescr, savedPrice, currentUser.getUserId(), DateTools.dateToEpoch(savedDate), false, false, savedTags);
                             ta.createTask(newTM);
