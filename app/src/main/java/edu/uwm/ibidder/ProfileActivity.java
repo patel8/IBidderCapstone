@@ -351,20 +351,13 @@ public class ProfileActivity extends AppCompatActivity
                 String tsktags = tasktags.getText().toString();
                 String tagitems[] = tsktags.split(" ");
                 HashMap<String, Boolean> tags = new HashMap();
-                //LocationService lc = new LocationService(getApplicationContext()){
-                 //   @Override
-                //    public Location getCoordinates(double lat, double longi) {
-                //        String provider = LocationProvider.getName(this);
-                //        Location locy = new Location();
-                //        locy.setLongitude(longi);
-                //        locy.setLatitude(lat);
-                //        return locy;
-                //    }
-                //};
+
+
+
 
                 if(ProfileActivity.taskCreateValidation(tskname, tskdesc, tskprice, expireDate, ProfileActivity.this)){
-                    TaskAccessor ta = new TaskAccessor();
-                    TaskModel tm = new TaskModel();
+                    final TaskAccessor ta = new TaskAccessor();
+                    final TaskModel tm = new TaskModel();
                     // Title
                     tm.setTitle(tskname);
                     // Description
@@ -378,19 +371,27 @@ public class ProfileActivity extends AppCompatActivity
                     // isTaskNow
                     tm.setIsTaskItNow(false);
                     // isLocalTask
-                    tm.setIsLocalTask(false);
-                    // latitude
-                    // tm.setLatitude(lat);
-                    // longitude
-                    // tm.setLongitude(long);
+                    tm.setIsLocalTask(true);
                     // tags
+
                     for(String item : tagitems){
                         tags.put(item, true);
                     }
                     tm.setTags(tags);
+                    if (tm.getIsLocalTask() == true) {
+                        LocationService locy = new LocationService(getApplicationContext()) {
 
-                    String tskId = ta.createTask(tm);
-                    Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
+                            @Override
+                            public void getCoordinates(double lat, double longi) {
+                                final String tskId = ta.createTask(tm, lat, longi);
+                                Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
+                            }
+                        };
+                    }
+                    else{
+                        String tskId = ta.createTask(tm);
+                        Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
