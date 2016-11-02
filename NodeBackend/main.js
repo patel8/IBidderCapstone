@@ -138,4 +138,7 @@ firebase.database().ref("reviews").orderByChild("wasRead").equalTo(false).on("ch
             aggRef.set(aggregatedReview);
         }
     });
+
+    review.wasRead = true;
+    firebase.database().ref("reviews/" + snapshot.key).set(review);
 });
