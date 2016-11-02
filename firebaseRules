@@ -3,7 +3,7 @@
     "users": {
       "$uid": {
         // only the user themself can read/write their own data
-        ".read": "$uid === auth.uid",
+        ".read": "auth !== null",
         ".write": "$uid === auth.uid"
       }
     },

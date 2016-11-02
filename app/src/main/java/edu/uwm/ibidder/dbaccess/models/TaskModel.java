@@ -10,7 +10,7 @@ public class TaskModel {
 
     private String description;
     private String status; //The status of this task- use the status enum
-    private double maxPrice;
+    private float maxPrice;
     private long expirationTime;
     private String ownerId;
     private String title;
@@ -27,7 +27,7 @@ public class TaskModel {
 
     }
 
-    public TaskModel(String taskName, String taskDescr, double maxPrice, String ownId, long exprTime, boolean isLocal, boolean isTaskNow, HashMap tags) {
+    public TaskModel(String taskName, String taskDescr, float maxPrice, String ownId, long exprTime, boolean isLocal, boolean isTaskNow, HashMap tags) {
         this.title = taskName;
         this.description = taskDescr;
         this.maxPrice = maxPrice;
@@ -74,11 +74,11 @@ public class TaskModel {
         return reportCount;
     }
 
-    public double getMaxPrice() {
+    public float getMaxPrice() {
         return maxPrice;
     }
 
-    public void setMaxPrice(double maxPrice) {
+    public void setMaxPrice(float maxPrice) {
         this.maxPrice = maxPrice;
     }
 
