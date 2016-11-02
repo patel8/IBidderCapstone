@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import edu.uwm.ibidder.ProfileActivity;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.TaskActivity;
 import edu.uwm.ibidder.TaskActivityII;
+import edu.uwm.ibidder.dbaccess.BidAccessor;
 import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
@@ -158,12 +160,41 @@ public class TaskFragment extends Fragment {
                 AlertDialog editDialog = editAlertDialog();
                 editDialog.show();
                 return true;
+            case R.id.place_bid_menu:
+                AlertDialog bidDialog = bidAlertDialog();
+                bidDialog.show();
+                return true;
             default:
                 break;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private AlertDialog bidAlertDialog() {
+        Toast.makeText(getContext(), "IN THIS SHIT", Toast.LENGTH_SHORT).show();
+        final AlertDialog ad = new AlertDialog.Builder(getContext()).create();
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        ad.setTitle("Place BID");
+        View view = inflater.inflate(R.layout.alert_dialog_place_bid, null);
+        ad.setView(view);
+
+        TextView BidTitle = (TextView) view.findViewById(R.id.bid_title_alert);
+        final EditText BidAmount = (EditText) view.findViewById(R.id.bid_amount_alert);
+        Button BidSubmit = (Button) view.findViewById(R.id.bid_submit_alert);
+
+        BidTitle.setText("PLease Enter BID (MAX BID PRICE) $"+savedPrice);
+        BidSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                bidAlertDialog().dismiss();
+            }
+        });
+
+        return ad;
+
+    }
+
     private void setTimePickerAndCalendarDate(TimePicker tp, CalendarView cv){
         // gross hack
         // format: "Wed. Oct 26 2016, CDT 9:08 PM"

@@ -2,10 +2,10 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="LabelColor">#d32b11</color>
+    <color name="colorAccent">#DCC6C6</color>
+    <color name="LabelColor">#DCC6C6</color>
     <color name="buttonLogin">#f4ad32</color>
-    <color name="TopBarColor">#af1b0b</color>
+    <color name="TopBarColor">#b48382</color>
     <color name="white">#ffffff</color>
     <color name="lightgray">#c0c0c0</color>
 </resources>

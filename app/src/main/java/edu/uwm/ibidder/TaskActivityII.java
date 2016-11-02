@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -131,31 +132,12 @@ public class TaskActivityII extends AppCompatActivity {
             case R.id.edit_task_menu:
                 return false;
             case R.id.place_bid_menu:
-                //Make AlertDialog to get Input.
-                AlertDialog dialog = BidPlaceDialog();
-                dialog.show();
-                return true;
+                return false;
             default:
                 break;
         }
         return false;
     }
 
-    private AlertDialog BidPlaceDialog() {
-        final AlertDialog ad = new AlertDialog.Builder(TaskActivityII.this).create();
-        LayoutInflater inflater = TaskActivityII.this.getLayoutInflater();
-        ad.setTitle("Place BID");
-        View view = inflater.inflate(R.layout.alert_dialog_place_bid, null);
-        EditText bidAmt = (EditText) view.findViewById(R.id.editText_alert_dialog_place_bid);
-        Button button = (Button) view.findViewById(R.id.button_alert_dialog_place_bid);
-        ad.setView(view);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //Place a bid on Task
-            }
-        });
 
-        return ad;
-    }
 }

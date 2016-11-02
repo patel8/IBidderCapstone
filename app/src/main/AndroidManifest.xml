@@ -79,7 +79,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".TaskActivityII"></activity>
+        <activity android:name=".TaskActivityII" android:label="TASK"></activity>
     </application>
 
 </manifest>
