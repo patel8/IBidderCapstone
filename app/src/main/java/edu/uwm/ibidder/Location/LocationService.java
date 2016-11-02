@@ -46,7 +46,7 @@ public abstract class LocationService implements LocationListener {
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 10F, (LocationListener) this);
     }
 
-    public abstract Location getCoordinates(double lat, double longi);
+    public abstract void getCoordinates(double lat, double longi);
 
     @Override
     public void onLocationChanged(Location location) {

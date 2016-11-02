@@ -20,13 +20,16 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayList;
 import java.util.Date;
 
+import edu.uwm.ibidder.Adapters.RecyclerAdapter;
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.ItemClickSupport;
 import edu.uwm.ibidder.ProfileActivity;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.TaskActivity;
+import edu.uwm.ibidder.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.ListAdapter;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
@@ -41,7 +44,7 @@ public class bidder_current_task extends android.support.v4.app.Fragment {
 
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
-    FirebaseRecyclerAdapter<TaskModel, bidder_bid_history.viewHolder> adapter;
+    RecyclerAdapter recyclerAdapter;
 
     public bidder_current_task() {
 
@@ -67,56 +70,48 @@ public class bidder_current_task extends android.support.v4.app.Fragment {
         swipeRefreshLayout.setColorSchemeColors(Color.GREEN, Color.RED);
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity()));
-        TaskAccessor ta = new TaskAccessor();
-        Query q = ta.getTasksByOwnerIdQuery(FirebaseAuth.getInstance().getCurrentUser().getUid()
-                , TaskModel.TaskStatusType.ACCEPTED.toString());
-        adapter = new FirebaseRecyclerAdapter<TaskModel, bidder_bid_history.viewHolder>(
-                TaskModel.class,
-                R.layout.bidder_current_task_list_template,
-                bidder_bid_history.viewHolder.class,
-                q
-        ) {
-            @Override
-            protected void populateViewHolder(bidder_bid_history.viewHolder viewHolder, TaskModel taskModel, int i) {
-                viewHolder.title.setText(taskModel.getTitle());
-                viewHolder.description.setText(taskModel.getDescription());
-                viewHolder.DateTime.setText(taskModel.getExpirationTime() + "");
-                viewHolder.Price.setText(taskModel.getMaxPrice() + "");
-            }
-        };
+        final ArrayList<TaskModel> list = new ArrayList<TaskModel>();
 
-        recyclerView.setAdapter(adapter);
+        TaskAccessor taskAccessor = new TaskAccessor();
+        taskAccessor.getTasksByBidderId(FirebaseAuth.getInstance().getCurrentUser().getUid(), new TaskCallbackListener(TaskModel.TaskStatusType.READY) {
+            @Override
+            public void dataUpdate(TaskModel tm) {
+                list.add(tm);
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+        recyclerAdapter = new RecyclerAdapter(list);
+        recyclerView.setAdapter(recyclerAdapter);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 3000);
+                recyclerAdapter.notifyDataSetChanged();
+            }
+        });
 
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView rv, int position, View v) {
-                TaskModel tm = adapter.getItem(position);
-                Intent intent = new Intent(getActivity(), TaskActivity.class);
+                TaskModel tm = list.get(position);
+                Intent intent = new Intent(getActivity(), TaskActivityII.class);
                 intent.putExtra("task_id", tm.getTaskId());
                 intent.putExtra("task_status", tm.getStatus().toString());
                 startActivity(intent);
             }
         });
 
+        recyclerView.setAdapter(recyclerAdapter);
+
         return v;
-    }
-    public static class viewHolder extends RecyclerView.ViewHolder{
-
-        public TextView title;
-        public TextView description;
-        public TextView DateTime;
-        public TextView Price;
-
-        public viewHolder(View v){
-            super(v);
-
-            title = (TextView) v.findViewById(R.id.textViewListTitle);
-            description = (TextView) v.findViewById(R.id.textViewListDescription);
-            DateTime = (TextView) v.findViewById(R.id.textViewListDateTime);
-            Price = (TextView) v.findViewById(R.id.textViewListPrice);
-
-
-        }
     }
 
 }

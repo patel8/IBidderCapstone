@@ -8,7 +8,7 @@ public class BidModel {
 
     private String bidderId;
     private String taskId;
-    private double bidValue;
+    private float bidValue;
     private String bidId;
 
     /**
@@ -26,11 +26,11 @@ public class BidModel {
         this.bidderId = bidderId;
     }
 
-    public double getBidValue() {
+    public float getBidValue() {
         return bidValue;
     }
 
-    public void setBidValue(double bidValue) {
+    public void setBidValue(float bidValue) {
         this.bidValue = bidValue;
     }
 

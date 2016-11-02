@@ -3,7 +3,7 @@
     "users": {
       "$uid": {
         // only the user themself can read/write their own data
-        ".read": "$uid === auth.uid",
+        ".read": "auth !== null",
         ".write": "$uid === auth.uid"
       }
     },
@@ -255,6 +255,16 @@
            ".validate": "newData.val() !== null && newData.isString()"
          },
        }
+    },
+
+    "reviews":{
+      ".indexOn":["wasRead","reviewWriterId", "userReviewedId"]
+
+      //TODO: full ruleset
+    },
+
+    "aggregatedReviews":{
+      //TODO: full ruleset
     }
 
     }
