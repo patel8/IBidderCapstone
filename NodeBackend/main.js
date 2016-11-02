@@ -115,3 +115,27 @@ firebase.database().ref("taskWinners").orderByChild("wasNotified").equalTo(false
         firebase.database().ref("tasks/accepted/" + taskWinner.taskId).set(task);
     });
 });
+
+/*
+ As review come in, we want to continue aggregating the reviews for a user.
+ */
+firebase.database().ref("reviews").orderByChild("wasRead").equalTo(false).on("child_added", function (snapshot) {
+    var review = snapshot.val();
+
+    var aggRef = firebase.database().ref("aggregatedReviews/" + review.userReviewedId);
+    aggRef.on("value", function (snapshot) {
+        var aggregatedReview = snapshot.val();
+        if (aggregatedReview == null) {
+            // make a new aggregated review
+            aggregatedReview.reviewScore = review.reviewScore;
+            aggregatedReview.totalReviews = 1;
+            aggregatedReview.userId = review.userReviewedId;
+            aggRef.set(aggregatedReview);
+        } else {
+            aggregatedReview.reviewScore = (aggregatedReview.reviewScore * aggregatedReview.totalReviews) + review.reviewScore;
+            aggregatedReview.totalReviews += 1;
+            aggregatedReview.reviewScore /= aggregatedReview.totalReviews;
+            aggRef.set(aggregatedReview);
+        }
+    });
+});
