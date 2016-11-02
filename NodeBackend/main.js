@@ -123,7 +123,7 @@ firebase.database().ref("reviews").orderByChild("wasRead").equalTo(false).on("ch
     var review = snapshot.val();
 
     var aggRef = firebase.database().ref("aggregatedReviews/" + review.userReviewedId);
-    aggRef.on("value", function (snapshot) {
+    aggRef.once("value", function (snapshot) {
         var aggregatedReview = snapshot.val();
         if (aggregatedReview == null) {
             // make a new aggregated review
