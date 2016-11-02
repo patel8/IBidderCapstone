@@ -127,6 +127,7 @@ firebase.database().ref("reviews").orderByChild("wasRead").equalTo(false).on("ch
         var aggregatedReview = snapshot.val();
         if (aggregatedReview == null) {
             // make a new aggregated review
+            aggregatedReview = {};
             aggregatedReview.reviewScore = review.reviewScore;
             aggregatedReview.totalReviews = 1;
             aggregatedReview.userId = review.userReviewedId;
