@@ -296,6 +296,23 @@
           ".validate": false
         }
       }
+    },
+    "tasksCompleted": {
+      ".indexOn": [
+        "wasRead"
+      ],
+      "$taskscompletedid": {
+        "taskId": {
+          ".validate": "newData.val() !== null && newData.isString()"
+        },
+        "wasRead": {
+          ".validate": "newData.val() !== null && newData.isBoolean()"
+        },
+        // No other fields are allowed on a tasksCompleted
+        "$other": {
+          ".validate": false
+        }
+      }
     }
   }
 }
