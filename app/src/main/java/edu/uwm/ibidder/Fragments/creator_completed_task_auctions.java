@@ -29,6 +29,7 @@ import edu.uwm.ibidder.ItemClickSupport;
 import edu.uwm.ibidder.ProfileActivity;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.TaskActivity;
+import edu.uwm.ibidder.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.ListAdapter;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
@@ -93,7 +94,7 @@ public class creator_completed_task_auctions extends Fragment {
             @Override
             public void onItemClicked(RecyclerView rv, int position, View v) {
                 TaskModel tm = adapter.getItem(position);
-                Intent intent = new Intent(getActivity(), TaskActivity.class);
+                Intent intent = new Intent(getActivity(), TaskActivityII.class);
                 intent.putExtra("task_id", tm.getTaskId());
                 intent.putExtra("task_status", tm.getStatus().toString());
                 startActivity(intent);

@@ -59,6 +59,7 @@ public class TaskFragment extends Fragment {
     TaskModel currentTask;
     boolean resetSave = false;
     TextView tskdate;
+    boolean flag = false;
 
 
     public TaskFragment() {
@@ -101,16 +102,18 @@ public class TaskFragment extends Fragment {
                     }
                 });
 
-                if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(tm.getOwnerId())){
-                    ((TaskActivityII)getActivity()).EditMenuVisible(true);
-                }else
-                {
-                    ((TaskActivityII)getActivity()).EditMenuVisible(false);
-                }
+
             }
         });
         return v;
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+           }
+
     private TaskModel.TaskStatusType getStatus(String status){
         switch(status){
             case "READY":
@@ -172,7 +175,6 @@ public class TaskFragment extends Fragment {
     }
 
     private AlertDialog bidAlertDialog() {
-        Toast.makeText(getContext(), "IN THIS SHIT", Toast.LENGTH_SHORT).show();
         final AlertDialog ad = new AlertDialog.Builder(getContext()).create();
         LayoutInflater inflater = getActivity().getLayoutInflater();
         ad.setTitle("Place BID");
@@ -187,6 +189,7 @@ public class TaskFragment extends Fragment {
         BidSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                BidAccessor bidAccessor = new BidAccessor();
                 bidAlertDialog().dismiss();
             }
         });

@@ -13,15 +13,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Query;
+
+import java.util.HashMap;
 
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
+import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
+import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.BidModel;
+import edu.uwm.ibidder.dbaccess.models.TaskModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 /**
@@ -68,6 +74,8 @@ public class BidderListFragment extends Fragment {
         };
 
         recyclerView.setAdapter(adapter);
+
+
         return v;
     }
 

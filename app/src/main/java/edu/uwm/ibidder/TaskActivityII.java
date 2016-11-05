@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Date;
 import java.util.HashMap;
 
@@ -43,6 +45,7 @@ public class TaskActivityII extends AppCompatActivity {
     MenuItem item;
     String TaskID;
     String TaskStatus;
+    boolean enableEditMenu = false;
 
     public String getTaskID()
     {
@@ -82,11 +85,22 @@ public class TaskActivityII extends AppCompatActivity {
             }
         });
 
+        TaskAccessor taskAccessor = new TaskAccessor();
+        taskAccessor.getTaskOnce(TaskID, new TaskCallbackListener(getStatus(TaskStatus)) {
+            @Override
+            public void dataUpdate(TaskModel tm) {
+                if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(tm.getOwnerId())){
+                    enableEditMenu = true;
+                }else
+                {
+                    enableEditMenu = false;
+                }
 
-    }
 
-    public void EditMenuVisible(boolean b) {
-        item.setVisible(b);
+            }
+        });
+
+
     }
 
     private class CustomAdapter extends FragmentPagerAdapter {
@@ -124,6 +138,7 @@ public class TaskActivityII extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.task_menu, menu);
         item = menu.findItem(R.id.edit_task_menu);
+        item.setVisible(enableEditMenu);
         return true;
     }
     @Override
@@ -137,6 +152,20 @@ public class TaskActivityII extends AppCompatActivity {
                 break;
         }
         return false;
+    }
+    private TaskModel.TaskStatusType getStatus(String status){
+        switch(status){
+            case "READY":
+                return TaskModel.TaskStatusType.READY;
+            case "FINISHED":
+                return TaskModel.TaskStatusType.FINISHED;
+            case "ACCEPTED":
+                return TaskModel.TaskStatusType.ACCEPTED;
+            case "TIMED_OUT":
+                return TaskModel.TaskStatusType.TIMED_OUT;
+            default:
+                return null;
+        }
     }
 
 

@@ -22,12 +22,9 @@
             android:text="Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textView3" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#000000" />
+            android:id="@+id/textView3"
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
 
 
         <TextView
@@ -51,12 +48,10 @@
             android:text="Description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#000000" />
+
 
         <TextView
             android:layout_width="match_parent"
@@ -76,12 +71,8 @@
             android:text="Task Owner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-           />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#000000" />
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -101,12 +92,9 @@
             android:text="Expired Time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             />
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#000000" />
 
         <TextView
             android:layout_width="match_parent"
@@ -126,12 +114,9 @@
             android:text="Lowest Bid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             />
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#000000" />
 
         <TextView
             android:layout_width="match_parent"
@@ -151,12 +136,10 @@
             android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-             />
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#000000" />
+
 
         <TextView
             android:layout_width="match_parent"
