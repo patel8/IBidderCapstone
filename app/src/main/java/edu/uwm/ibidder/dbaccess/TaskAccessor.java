@@ -167,6 +167,15 @@ public class TaskAccessor extends BaseAccessor {
     }
 
     /**
+     * This returns all non local (tasks not tied to a location) tasks one time to the passed-in callback.
+     * @param taskCallbackListener The callbackListener to pass the tasks to.
+     */
+    public void getNonLocalTasksOnce(TaskCallbackListener taskCallbackListener){
+        DatabaseReference ref = database.getReference("tasks/ready");
+        database.orderByChild("isLocalTask").equalTo(false).addListenerForSingleValueEvent(taskCallbackListener);
+    }
+
+    /**
      * Gets a tasks query by ownerId and status.
      *
      * @param ownerId               The ownerId for the tasks

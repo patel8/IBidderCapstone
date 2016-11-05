@@ -7,7 +7,7 @@ public class AggregatedReviewModel {
 
     private float reviewScore;
     private String userId;
-    private long totalReviews;
+    private float totalReviews;
 
     public float getReviewScore() {
         return reviewScore;
@@ -17,7 +17,7 @@ public class AggregatedReviewModel {
         return userId;
     }
 
-    public long getTotalReviews() {
+    public float getTotalReviews() {
         return totalReviews;
     }
 }
