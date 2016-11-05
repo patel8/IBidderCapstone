@@ -20,9 +20,8 @@ public class TaskWinnerAccessor extends BaseAccessor {
      * @param taskWinnerModel The model for the task winner
      */
     public void CreateTaskWinner(TaskWinnerModel taskWinnerModel) {
-        DatabaseReference ref = database.getReference("taskWinners/");
-        DatabaseReference pushedRef = ref.push();
-        pushedRef.setValue(taskWinnerModel);
+        DatabaseReference ref = database.getReference("taskWinners/" + taskWinnerModel.getTaskId());
+        ref.setValue(taskWinnerModel);
     }
 
     /**

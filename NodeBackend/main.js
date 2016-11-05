@@ -177,3 +177,30 @@ firebase.database().ref("tasks/ready").orderByChild("wasDeleted").equalTo(true).
 
     deleteAllBidsOnTask(snapshot.key, "A task you have bid on has been deleted.");
 });
+
+/*
+ If a task is marked completed, we want to move it to the completed queue and notify the task doer.
+ */
+firebase.database().ref("tasksCompleted").orderByChild("wasRead").equalTo(false).on("child_added", function (snapshot) {
+    var completed = snapshot.val();
+    completed.wasRead = true;
+    firebase.database().ref("tasksCompleted/" + snapshot.key).set(completed);
+
+    var taskRef = firebase.database().ref("tasks/accepted/" + snapshot.key);
+    taskRef.once("value", function (snapshot) {
+        var task = snapshot.val();
+        task.status = "FINISHED";
+
+        taskRef.remove();
+
+        firebase.database().ref("tasks/finished/" + snapshot.key).set(task);
+
+        firebase.database().ref("taskWinners/" + snapshot.key).once("value", function (snapshot) {
+            var taskWinner = snapshot.val();
+
+            sendNotificationToUser(taskWinner.winnerId, "A task you were assigned has been marked finished.  ");
+        })
+
+    });
+
+});
