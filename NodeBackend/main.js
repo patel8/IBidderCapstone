@@ -43,9 +43,22 @@ function sendNotificationToUser(userKey, message, onSuccess) {
     });
 }
 
+function deleteAllBidsOnTask(taskId, message) {
+    firebase.database().ref("bids").orderByChild("taskId").equalTo(taskId).once("child_added", function (snapshot) {
+        var bid = snapshot.val();
+
+        firebase.database().ref("bids/" + snapshot.key).remove();
+
+        sendNotificationToUser(bid.bidderId, message, function () {
+            console.log("Send bid removal message successfully");
+        });
+
+    });
+}
+
 //TODO: do listener stuff
 /*
- Check every minute to update task statuses.
+ Check every minute to update task statuses.  This also notifies users when an auction finishes.
  */
 setInterval(function () {
 
@@ -67,7 +80,7 @@ setInterval(function () {
                 geoFireRef.remove(key);
 
             sendNotificationToUser(item.ownerId, "Your auction has finished.", function () {
-                console.log("Sent message successfully.  ")
+                console.log("Sent auction completion message successfully.  ")
             });
         }
     });
@@ -75,7 +88,7 @@ setInterval(function () {
 }, 60 * 1000);
 
 /*
- Monitor reports and update tasks as necessary
+ Monitor reports and update tasks and bids as necessary.
  */
 firebase.database().ref("reports").orderByChild("wasRead").equalTo(false).on("child_added", function (snapshot) {
 
@@ -91,6 +104,7 @@ firebase.database().ref("reports").orderByChild("wasRead").equalTo(false).on("ch
         if (task.reportCount >= 5) {
             taskRef.remove();
             firebase.database().ref("tasks/reported/" + report.taskId).set(task);
+            deleteAllBidsOnTask(snapshot.key, "A task you have bid on has been removed due to excessive reports.");
         } else {
             taskRef.set(task);
         }
@@ -100,7 +114,7 @@ firebase.database().ref("reports").orderByChild("wasRead").equalTo(false).on("ch
 });
 
 /*
- As winners are chosen, we want to move the tasks to the accepted queue.
+ As winners are chosen, we want to move the tasks to the accepted queue.  This also deletes the non-winner bids.
  */
 firebase.database().ref("taskWinners").orderByChild("wasNotified").equalTo(false).on("child_added", function (snapshot) {
     var taskWinner = snapshot.val();
@@ -113,6 +127,14 @@ firebase.database().ref("taskWinners").orderByChild("wasNotified").equalTo(false
         task.status = "ACCEPTED";
         taskRef.remove();
         firebase.database().ref("tasks/accepted/" + taskWinner.taskId).set(task);
+
+        firebase.database().ref("bids").orderByChild("taskId").equalTo(snapshot.key).once("child_added", function (snapshot) {
+            var bid = snapshot.val();
+
+            if (bid.bidderId != taskWinner.winnerId) {
+                firebase.database().ref("bids/" + snapshot.key).remove();
+            }
+        });
     });
 });
 
@@ -144,4 +166,14 @@ firebase.database().ref("reviews").orderByChild("wasRead").equalTo(false).on("ch
 
     review.wasRead = true;
     firebase.database().ref("reviews/" + snapshot.key).set(review);
+});
+
+/*
+ If a task is deleted, we want to remove it and all of its bids.  This also sends notifications to bidders.
+ */
+firebase.database().ref("tasks/ready").orderByChild("wasDeleted").equalTo(true).on("child_added", function (snapshot) {
+    var task = snapshot.val();
+    firebase.database().ref("tasks/ready/" + snapshot.key).remove();
+
+    deleteAllBidsOnTask(snapshot.key, "A task you have bid on has been deleted.");
 });

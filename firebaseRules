@@ -56,7 +56,7 @@
           // Anyone signed in can write new tasks.
           ".read": "auth !== null",
 
-          ".indexOn": ["ownerId", "status", "expirationTime"],
+          ".indexOn": ["ownerId", "status", "expirationTime", "wasDeleted"],
 
           "$taskid": {
           // Anyone can read a task.  Only the owner can write it.
@@ -114,6 +114,11 @@
           // reportCount must be a number
           "reportCount":{
 							".validate": "newData.val() !== null && newData.isNumber()"
+          },
+
+          // wasDeleted must be a boolean
+          "wasDeleted":{
+            ".validate": "newData.val() !== null && newData.isBoolean()"
           },
 
           // No other fields are allowed on a task

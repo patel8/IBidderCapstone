@@ -87,13 +87,21 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * Deletes a task with the ID of taskKey.  This is done asynchronously.
-     * Only tasks in the "READY" status can be deleted.
+     * Only tasks in the "READY" status can be deleted.  This also removes all bids for the task.
      *
      * @param taskKey The ID of the task to delete
      */
     public void removeTask(String taskKey) {
-        DatabaseReference ref = database.getReference("tasks/" + "ready/" + taskKey);
-        ref.removeValue();
+        final DatabaseReference ref = database.getReference("tasks/" + "ready/" + taskKey);
+
+        getTaskOnce(taskKey, new TaskCallbackListener() {
+            @Override
+            public void dataUpdate(TaskModel tm) {
+                tm.setWasDeleted(true);
+                ref.setValue(tm);
+            }
+        });
+
         geoFire.removeLocation(taskKey);
     }
 
