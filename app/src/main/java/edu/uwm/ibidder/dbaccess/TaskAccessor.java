@@ -94,7 +94,7 @@ public class TaskAccessor extends BaseAccessor {
     public void removeTask(String taskKey) {
         final DatabaseReference ref = database.getReference("tasks/" + "ready/" + taskKey);
 
-        getTaskOnce(taskKey, new TaskCallbackListener() {
+        getTaskOnce(taskKey, new TaskCallbackListener(TaskModel.TaskStatusType.READY) {
             @Override
             public void dataUpdate(TaskModel tm) {
                 tm.setWasDeleted(true);
@@ -172,7 +172,7 @@ public class TaskAccessor extends BaseAccessor {
      */
     public void getNonLocalTasksOnce(TaskCallbackListener taskCallbackListener){
         DatabaseReference ref = database.getReference("tasks/ready");
-        database.orderByChild("isLocalTask").equalTo(false).addListenerForSingleValueEvent(taskCallbackListener);
+        ref.orderByChild("isLocalTask").equalTo(false).addListenerForSingleValueEvent(taskCallbackListener);
     }
 
     /**
