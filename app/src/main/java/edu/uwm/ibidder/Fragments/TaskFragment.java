@@ -25,13 +25,16 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
-import edu.uwm.ibidder.ProfileActivity;
+import edu.uwm.ibidder.Activities.ProfileActivity;
+import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.R;
-import edu.uwm.ibidder.TaskActivity;
-import edu.uwm.ibidder.TaskActivityII;
+import edu.uwm.ibidder.Activities.TaskActivity;
+import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
 import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
@@ -43,29 +46,20 @@ import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class TaskFragment extends Fragment {
 
-    TextView taskname;
-    TextView taskdescr;
-    TextView taskowner;
-    TextView taskendtime;
-    EditText userbid;
-    Button submitbid;
+    private TextView taskname;
+    private TextView taskdescr;
+    private TextView taskowner;
+    private TextView taskendtime;
+    private TextView tskdate;
+    private String savedName, savedDescr;
+    private Date savedDate;
+    private HashMap<String, Boolean> savedTags;
+    private float savedPrice;
+    private boolean resetSave = false;
+    private UserModel currentUser;
+    private TaskModel currentTask;
 
-    Boolean isOwner = false;
-    String savedName, savedDescr, savedDateLabel;
-    Date savedDate;
-    HashMap<String, Boolean> savedTags;
-    float savedPrice;
-    UserModel currentUser;
-    TaskModel currentTask;
-    boolean resetSave = false;
-    TextView tskdate;
-    boolean flag = false;
-
-
-    public TaskFragment() {
-
-    }
-
+    public TaskFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,7 +71,7 @@ public class TaskFragment extends Fragment {
 
         String taskid = ((TaskActivityII)getActivity()).getTaskID();
         String taskstatus = ((TaskActivityII)getActivity()).getTaskStatus();
-        TaskModel.TaskStatusType status = getStatus(taskstatus);
+        TaskModel.TaskStatusType status = FrontEndSupport.getStatus(taskstatus);
 
         Log.i("TAG", "onCreate: "+status.toString());
         TaskAccessor ta = new TaskAccessor();
@@ -87,12 +81,13 @@ public class TaskFragment extends Fragment {
                 savedName = tm.getTitle();
                 savedDescr = tm.getDescription();
                 savedTags = tm.getTags();
-                taskname.setText("Task: " + savedName);
-                taskdescr.setText("Description: " + savedDescr);
+                taskname.setText(savedName);
+                taskdescr.setText(savedDescr);
                 currentTask = tm;
 
                 Date d = DateTools.epochToDate(tm.getExpirationTime());
-                taskendtime.setText("Expires on: " + ProfileActivity.getFormattedTime(d.toString()));
+                savedDate = d;
+                taskendtime.setText(FrontEndSupport.getFormattedTime(d.toString()));
                 UserAccessor ua = new UserAccessor();
                 ua.getUser(tm.getOwnerId(), new UserCallbackListener() {
                     @Override
@@ -101,52 +96,17 @@ public class TaskFragment extends Fragment {
                         currentUser = um;
                     }
                 });
-
-
             }
         });
         return v;
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-           }
-
-    private TaskModel.TaskStatusType getStatus(String status){
-        switch(status){
-            case "READY":
-                return TaskModel.TaskStatusType.READY;
-            case "FINISHED":
-                return TaskModel.TaskStatusType.FINISHED;
-            case "ACCEPTED":
-                return TaskModel.TaskStatusType.ACCEPTED;
-            case "TIMED_OUT":
-                return TaskModel.TaskStatusType.TIMED_OUT;
-            default:
-                return null;
-        }
-    }
-
 
     private void initializeAllWidgets(View v){
         taskname = (TextView)v.findViewById(R.id.label_taskActName);
         taskdescr = (TextView)v.findViewById(R.id.label_taskActDescr);
         taskowner = (TextView)v.findViewById(R.id.label_taskActPoster);
         taskendtime = (TextView)v.findViewById(R.id.label_taskActEndtime);
-      //  userbid = (EditText)v.findViewById(R.id.editText_taskActUserBid);
-//        userbid.setOnTouchListener(new View.OnTouchListener(){
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event){
-//                v.setFocusable(true);
-//                v.setFocusableInTouchMode(true);
-//                return false;
-//            }
-//        });
-//        submitbid = (Button)v.findViewById(R.id.button_taskActBidSubmit);
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -160,6 +120,7 @@ public class TaskFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.edit_task_menu:
+                resetSave = true;
                 AlertDialog editDialog = editAlertDialog();
                 editDialog.show();
                 return true;
@@ -198,10 +159,25 @@ public class TaskFragment extends Fragment {
 
     }
 
+    private Calendar fillCalendar(Date d, int addHour, int addMin){
+        String items[] = d.toString().split(" "); // Fri Nov 18 14:00:51 CST 2016
+        int year = Integer.parseInt(items[5]);
+        int month = FrontEndSupport.convertMonth(items[1]);
+        int day = Integer.parseInt(items[2]);
+        String times[] = items[3].split(":");
+        int hour = Integer.parseInt(times[0]);
+        int min = Integer.parseInt(times[1]);
+        int sec = Integer.parseInt(times[2]);
+
+        hour = hour + addHour;
+        min = min + addMin;
+
+        return new GregorianCalendar(year, month, day, hour, min, sec);
+    }
+
     private void setTimePickerAndCalendarDate(TimePicker tp, CalendarView cv){
-        // gross hack
         // format: "Wed. Oct 26 2016, CDT 9:08 PM"
-        String formattedDate = ProfileActivity.getFormattedTime(savedDate.toString());
+        String formattedDate = FrontEndSupport.getFormattedTime(savedDate.toString());
         String[] items = formattedDate.split(" ");
         String time = items[5];
         items = time.split(":");
@@ -224,10 +200,9 @@ public class TaskFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Date d = new Date(cv.getDate());
-                d.setHours(tp.getHour());
-                d.setMinutes(tp.getMinute());
-                savedDate = d;
-                tskdate.setText(ProfileActivity.getFormattedTime(savedDate.toString()));
+                Calendar cal = fillCalendar(d, tp.getHour(), tp.getMinute());
+                savedDate = cal.getTime();
+                tskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
             }
         });
 
@@ -236,7 +211,7 @@ public class TaskFragment extends Fragment {
     }
 
     private AlertDialog editAlertDialog(){
-      //  if(resetSave){
+        if(resetSave){
             savedName = currentTask.getTitle();
             savedDescr = currentTask.getDescription();
             savedTags = currentTask.getTags();
@@ -244,7 +219,7 @@ public class TaskFragment extends Fragment {
             Date d = DateTools.epochToDate(currentTask.getExpirationTime());
             savedDate = d;
             resetSave = false;
-        //}
+        }
         final AlertDialog ad = new AlertDialog.Builder(getActivity()).create();
         LayoutInflater inflater = getActivity().getLayoutInflater();
         ad.setTitle("Edit your task");
@@ -267,7 +242,7 @@ public class TaskFragment extends Fragment {
             tskprice.setText("");
         else
             tskprice.setText(Float.toString(savedPrice));
-        tskdate.setText(ProfileActivity.getFormattedTime(savedDate.toString()));
+        tskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
 
         tskdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,8 +251,6 @@ public class TaskFragment extends Fragment {
                 ad.show();
             }
         });
-
-
 
         ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Finished", new DialogInterface.OnClickListener() {
             @Override
@@ -303,12 +276,12 @@ public class TaskFragment extends Fragment {
                             // Delete old task, go back to new task page for the updated task
                             public void onClick(DialogInterface dialog, int id){
                                 //TODO: perform Firebase password validation to replace the task with a new one
-                                if(ProfileActivity.taskCreateValidation(savedName, savedDescr, Float.toString(savedPrice), savedDate, getActivity())){
+                                if(FrontEndSupport.taskCreateValidation(savedName, savedDescr, Float.toString(savedPrice), savedDate, getActivity())){
                                     final TaskAccessor ta = new TaskAccessor();
                                     TaskModel newTM = new TaskModel(savedName, savedDescr, savedPrice, currentUser.getUserId(), DateTools.dateToEpoch(savedDate), false, false, savedTags);
                                     ta.createTask(newTM);
                                     ta.removeTask(currentTask.getTaskId());//doesnt seem to be removing
-                                    Intent intent = new Intent(getActivity(), TaskActivity.class);
+                                    Intent intent = new Intent(getActivity(), TaskActivityII.class);
                                     intent.putExtra("task_id", newTM.getTaskId());
                                     intent.putExtra("task_status", newTM.getStatus().toString());
                                     startActivity(intent);

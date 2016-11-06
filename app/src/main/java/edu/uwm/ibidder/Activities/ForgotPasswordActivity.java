@@ -1,4 +1,4 @@
-package edu.uwm.ibidder;
+package edu.uwm.ibidder.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,11 +14,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import edu.uwm.ibidder.R;
+
 public class ForgotPasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText editTextForgotPassword;
-    Button buttonForgotPassword;
-    ProgressDialog progressBar;
+    private EditText editTextForgotPassword;
+    private Button buttonForgotPassword;
+    private ProgressDialog progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,4 +1,4 @@
-package edu.uwm.ibidder;
+package edu.uwm.ibidder.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,21 +15,22 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class SignUpActivity extends AppCompatActivity{
 
-    EditText userName;
-    EditText firstName;
-    EditText lastName;
-    EditText email;
-    EditText password;
-    EditText confirmPassword;
-    EditText phoneNumber;
-    Button signUp;
-    FirebaseAuth firebaseAuth;
-    ProgressDialog progressDialog;
+    private EditText userName;
+    private EditText firstName;
+    private EditText lastName;
+    private EditText email;
+    private EditText password;
+    private EditText confirmPassword;
+    private EditText phoneNumber;
+    private Button signUp;
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
 
 
     @Override

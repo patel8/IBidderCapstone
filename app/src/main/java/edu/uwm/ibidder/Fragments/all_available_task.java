@@ -9,11 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,8 +19,7 @@ import edu.uwm.ibidder.Adapters.RecyclerAdapter;
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.ItemClickSupport;
 import edu.uwm.ibidder.R;
-import edu.uwm.ibidder.TaskActivity;
-import edu.uwm.ibidder.TaskActivityII;
+import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;

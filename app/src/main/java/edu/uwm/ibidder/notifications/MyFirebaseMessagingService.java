@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import edu.uwm.ibidder.ProfileActivity;
+import edu.uwm.ibidder.Activities.ProfileActivity;
 import edu.uwm.ibidder.R;
 
 /**

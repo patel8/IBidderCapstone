@@ -1,4 +1,4 @@
-package edu.uwm.ibidder;
+package edu.uwm.ibidder.Activities;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -19,12 +18,12 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 
 import java.util.Date;
 import java.util.HashMap;
 
+import edu.uwm.ibidder.FrontEndSupport;
+import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
@@ -75,7 +74,7 @@ public class TaskActivity extends AppCompatActivity {
                 currentTask = tm;
 
                 Date d = DateTools.epochToDate(tm.getExpirationTime());
-                taskendtime.setText("Expires on: " + ProfileActivity.getFormattedTime(d.toString()));
+                taskendtime.setText("Expires on: " + FrontEndSupport.getFormattedTime(d.toString()));
                 UserAccessor ua = new UserAccessor();
                 ua.getUser(tm.getOwnerId(), new UserCallbackListener() {
                     @Override
@@ -139,7 +138,7 @@ public class TaskActivity extends AppCompatActivity {
     private void setTimePickerAndCalendarDate(TimePicker tp, CalendarView cv){
         // gross hack
         // format: "Wed. Oct 26 2016, CDT 9:08 PM"
-        String formattedDate = ProfileActivity.getFormattedTime(savedDate.toString());
+        String formattedDate = FrontEndSupport.getFormattedTime(savedDate.toString());
         String[] items = formattedDate.split(" ");
         String time = items[5];
         items = time.split(":");
@@ -165,7 +164,7 @@ public class TaskActivity extends AppCompatActivity {
                 d.setHours(tp.getHour());
                 d.setMinutes(tp.getMinute());
                 savedDate = d;
-                tskdate.setText(ProfileActivity.getFormattedTime(savedDate.toString()));
+                tskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
             }
         });
 
@@ -205,7 +204,7 @@ public class TaskActivity extends AppCompatActivity {
             tskprice.setText("");
         else
             tskprice.setText(Float.toString(savedPrice));
-        tskdate.setText(ProfileActivity.getFormattedTime(savedDate.toString()));
+        tskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
 
         tskdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,7 +240,7 @@ public class TaskActivity extends AppCompatActivity {
                     // Delete old task, go back to new task page for the updated task
                     public void onClick(DialogInterface dialog, int id){
                         //TODO: perform Firebase password validation to replace the task with a new one
-                        if(ProfileActivity.taskCreateValidation(savedName, savedDescr, Float.toString(savedPrice), savedDate, TaskActivity.this)){
+                        if(FrontEndSupport.taskCreateValidation(savedName, savedDescr, Float.toString(savedPrice), savedDate, TaskActivity.this)){
                             final TaskAccessor ta = new TaskAccessor();
                             TaskModel newTM = new TaskModel(savedName, savedDescr, savedPrice, currentUser.getUserId(), DateTools.dateToEpoch(savedDate), false, false, savedTags);
                             ta.createTask(newTM);

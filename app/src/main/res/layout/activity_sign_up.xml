@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.uwm.ibidder.SignUpActivity"
+    tools:context="edu.uwm.ibidder.Activities.SignUpActivity"
     android:background="@color/LabelColor"
     android:orientation="vertical">
 

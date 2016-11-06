@@ -13,31 +13,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Query;
 
-import java.util.Date;
-
+import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.ItemClickSupport;
-import edu.uwm.ibidder.ProfileActivity;
 import edu.uwm.ibidder.R;
-import edu.uwm.ibidder.TaskActivity;
-import edu.uwm.ibidder.TaskActivityII;
+import edu.uwm.ibidder.Activities.TaskActivity;
+import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.ListAdapter;
+import edu.uwm.ibidder.Activities.TaskActivity;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
-import edu.uwm.ibidder.dbaccess.UserAccessor;
-import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
-import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
-import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 /**
  * A simple {@link Fragment} subclass.

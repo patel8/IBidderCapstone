@@ -1,42 +1,31 @@
-package edu.uwm.ibidder;
+package edu.uwm.ibidder.Activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.location.Location;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -45,29 +34,27 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.facebook.FacebookSdk;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
-import edu.uwm.ibidder.dbaccess.models.TaskModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener{
 
-    EditText editTextEmail;
-    EditText editTextPassword;
-    Button buttonLogin;
-    TextView textViewSignUp;
-    FirebaseAuth firebaseAuth;
-    ProgressDialog progressDialog;
-    TextView forgotPassword;
+    private EditText editTextEmail;
+    private EditText editTextPassword;
+    private Button buttonLogin;
+    private TextView textViewSignUp;
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressDialog;
+    private TextView forgotPassword;
 
     //Facebook Login Widgets and Variables
-    LoginButton buttonFacebookLogin;
-    CallbackManager callbackManager;
-    SignInButton buttonGoogleSignIn;
+    private LoginButton buttonFacebookLogin;
+    private CallbackManager callbackManager;
+    private SignInButton buttonGoogleSignIn;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private GoogleApiClient mGoogleApiClient;
     private static final int RC_SIGN_IN = 9001;

@@ -76,7 +76,7 @@
                 android:text="Description:"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/label_taskActDescr"
+                android:id="@+id/label_taskdescr"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
@@ -150,6 +150,31 @@
             android:layout_marginBottom="10dp"/>
 
     </LinearLayout>
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <TextView
+                android:text="Location required: "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/label_taskLocal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"/>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkbox_taskLocal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

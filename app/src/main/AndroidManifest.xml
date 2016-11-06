@@ -18,13 +18,17 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/app_name">
+            android:name=".Activities.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:label="@string/app_name">
         </activity>
         <activity
             android:name="com.facebook.CustomTabActivity"
@@ -39,18 +43,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SignUpActivity"
+            android:name=".Activities.SignUpActivity"
             android:label="@string/sign_up_activity_lable" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".Activities.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ForgotPasswordActivity" />
+        <activity android:name=".Activities.ForgotPasswordActivity" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".Activities.SettingsActivity"
             android:label="@string/settings_label" />
         <activity
-            android:name=".TaskActivity"
+            android:name=".Activities.TaskActivity"
             android:label="@string/taskpage_label" />
 
         <service android:name=".notifications.MyFirebaseInstanceIDService">
@@ -79,7 +83,7 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".TaskActivityII" android:label="TASK"></activity>
+        <activity android:name=".Activities.TaskActivityII" android:label="TASK"></activity>
     </application>
 
 </manifest>

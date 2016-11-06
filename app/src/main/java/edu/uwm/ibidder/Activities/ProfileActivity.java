@@ -1,10 +1,10 @@
-package edu.uwm.ibidder;
+package edu.uwm.ibidder.Activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationProvider;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -16,21 +16,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.ListMenuItemView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -39,12 +34,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.facebook.Profile;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.ads.formats.NativeAd;
 import com.google.firebase.auth.FirebaseAuth;
 
 import edu.uwm.ibidder.Fragments.*;
+import edu.uwm.ibidder.FrontEndSupport;
+import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.Location.LocationService;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
@@ -57,12 +51,12 @@ import edu.uwm.ibidder.notifications.MyFirebaseInstanceIDService;
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    FloatingActionButton fabuttonTaskCreator;
-    TextView userProfileName;
-    TextView userEmailAddress;
-    ImageView userImageURI;
-    TextView dateLabel;
-    Date expireDate;
+    private FloatingActionButton fabuttonTaskCreator;
+    private TextView userProfileName;
+    private TextView userEmailAddress;
+    private ImageView userImageURI;
+    private TextView dateLabel;
+    private Date expireDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,55 +264,6 @@ public class ProfileActivity extends AppCompatActivity
         return ad;
     }
 
-    public static boolean taskCreateValidation(String name, String descr, String price, Date expire, Activity activity){
-        if(!name.matches("") && !descr.matches("") && !price.matches("")){
-            if(Double.parseDouble(price) < 0){
-                return false;
-            }
-            // expire date must be in the future
-            Calendar cal = Calendar.getInstance();
-            Date now = new Date();
-            int future = 5;
-            cal.setTime(now);
-            cal.add(Calendar.MINUTE, future);
-            if(cal.getTimeInMillis() < expire.getTime()){
-                return true;
-            } else{
-                Toast.makeText(activity, "Expiration time must be at least ["+future+"] min. from the current time", Toast.LENGTH_LONG).show();
-                return false;
-            }
-        } else{
-            Toast.makeText(activity, "Invalid information", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-    }
-
-    /**
-     * Formats a time in the form of Wed Oct 26 21:08:54 CDT 2016 (default java Time.getTime().toString())
-     * @param unformattedtime in form of Wed Oct 26 21:08:54 CDT 2016
-     * @return "Wed. Oct 26 2016, CDT 9:08 PM"
-     */
-    public static String getFormattedTime(String unformattedtime){
-        String[] items = unformattedtime.split(" ");
-        String[] timesplit = items[3].split(":");
-        int hour = Integer.parseInt(timesplit[0]);
-        int mins = Integer.parseInt(timesplit[1]);
-        String period;
-        if(hour == 12){
-            period = "PM";
-        } else if(hour > 12){
-            hour = hour % 12;
-            period = "PM";
-        } else if (hour == 0){
-            hour = 12;
-            period = "AM";
-        } else{
-            period = "AM";
-        }
-
-        return items[0] + ". " + items[1] + " " + items[2] + " " + items[5] +  ", " + items[4] + " " + hour + ":" + mins + " " + period;
-    }
-
     private AlertDialog createAlertDialog(){
         final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
         LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
@@ -330,9 +275,10 @@ public class ProfileActivity extends AppCompatActivity
         final EditText taskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
         final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
         final EditText tasktags = (EditText)view.findViewById(R.id.editText_tasktags);
+        final CheckBox isTaskLocal = (CheckBox)view.findViewById(R.id.checkbox_taskLocal);
         dateLabel = (TextView)view.findViewById(R.id.label_taskEndTime);
         expireDate = new Date();
-        dateLabel.setText(getFormattedTime(expireDate.toString()));
+        dateLabel.setText(FrontEndSupport.getFormattedTime(expireDate.toString()));
 
         dateLabel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -352,10 +298,7 @@ public class ProfileActivity extends AppCompatActivity
                 String tagitems[] = tsktags.split(" ");
                 HashMap<String, Boolean> tags = new HashMap();
 
-
-
-
-                if(ProfileActivity.taskCreateValidation(tskname, tskdesc, tskprice, expireDate, ProfileActivity.this)){
+                if(FrontEndSupport.taskCreateValidation(tskname, tskdesc, tskprice, expireDate, ProfileActivity.this)){
                     final TaskAccessor ta = new TaskAccessor();
                     final TaskModel tm = new TaskModel();
                     // Title
@@ -371,24 +314,28 @@ public class ProfileActivity extends AppCompatActivity
                     // isTaskNow
                     tm.setIsTaskItNow(false);
                     // isLocalTask
-                    tm.setIsLocalTask(true);
+                    if(isTaskLocal.isChecked()) {
+                        tm.setIsLocalTask(true);
+                    } else {
+                        tm.setIsLocalTask(false);
+                    }
                     // tags
-
                     for(String item : tagitems){
                         tags.put(item, true);
                     }
                     tm.setTags(tags);
-                    if (tm.getIsLocalTask() == true) {
-                        LocationService locy = new LocationService(getApplicationContext()) {
 
+                    if (tm.getIsLocalTask() == true) {
+                        final LocationService locy = new LocationService(getApplicationContext()) {
                             @Override
                             public void getCoordinates(double lat, double longi) {
                                 final String tskId = ta.createTask(tm, lat, longi);
                                 Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                             }
                         };
+                        //locy.onLocationChanged(Locat);
                     }
-                    else{
+                    else {
                         String tskId = ta.createTask(tm);
                         Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                     }
@@ -416,7 +363,7 @@ public class ProfileActivity extends AppCompatActivity
                 d.setHours(tp.getHour());
                 d.setMinutes(tp.getMinute());
                 expireDate = d;
-                dateLabel.setText(getFormattedTime(expireDate.toString()));
+                dateLabel.setText(FrontEndSupport.getFormattedTime(expireDate.toString()));
             }
         });
 

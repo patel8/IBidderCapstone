@@ -1,4 +1,4 @@
-package edu.uwm.ibidder;
+package edu.uwm.ibidder.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,17 +8,18 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
+import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    TextView labelname;
-    TextView labelloc;
-    TextView labelphone;
-    TextView labelreview;
-    TextView labelaward;
+    private TextView labelname;
+    private TextView labelloc;
+    private TextView labelphone;
+    private TextView labelreview;
+    private TextView labelaward;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

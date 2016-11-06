@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,7 +19,7 @@ import java.util.HashMap;
 
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.R;
-import edu.uwm.ibidder.TaskActivityII;
+import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
@@ -35,9 +34,9 @@ import edu.uwm.ibidder.dbaccess.models.UserModel;
  */
 public class BidderListFragment extends Fragment {
 
+    private RecyclerView recyclerView;
+    private FirebaseRecyclerAdapter<BidModel, BidderListHolder> adapter;
 
-    RecyclerView recyclerView;
-    FirebaseRecyclerAdapter<BidModel, BidderListHolder> adapter;
     public BidderListFragment() {
         // Required empty public constructor
     }
@@ -53,7 +52,7 @@ public class BidderListFragment extends Fragment {
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity()));
         BidAccessor bidAccessor = new BidAccessor();
-        Query q = bidAccessor.getTaskBidsQuery(((TaskActivityII)getActivity()).getTaskID()); //TODO: need actual taskId here
+        Query q = bidAccessor.getTaskBidsQuery(((TaskActivityII)getActivity()).getTaskID());
         adapter = new FirebaseRecyclerAdapter<BidModel, BidderListHolder>(
                 BidModel.class,
                 R.layout.bidder_list_template,
@@ -74,7 +73,6 @@ public class BidderListFragment extends Fragment {
         };
 
         recyclerView.setAdapter(adapter);
-
 
         return v;
     }
