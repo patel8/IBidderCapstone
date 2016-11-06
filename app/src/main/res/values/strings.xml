@@ -37,6 +37,7 @@
     <string name="phone_number">Phone Number</string>
     <string name="update">Update</string>
 
+    <!-- Nav bar -->
     <string name="asbidder_active">Your Bids (live)</string>
     <string name="asbidder_current">Current Tasks</string>
     <string name="asbidder_history">Bid History</string>
@@ -46,5 +47,7 @@
     <string name="ascreator_current">Current Tasks</string>
     <string name="ascreator_history">Task History</string>
     <string name="list_of_bidder">List Of Bidder</string>
+    <string name="nav_timeline">Timeline</string>
+
 
 </resources>

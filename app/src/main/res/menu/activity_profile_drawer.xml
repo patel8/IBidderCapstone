@@ -4,7 +4,8 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/user_timeline"
-            android:title="Timeline"/>
+            android:icon="@drawable/ic_action_globe"
+            android:title="@string/nav_timeline"/>
         <item
             android:id="@+id/user_profile"
             android:icon="@drawable/ic_menu_manage"
