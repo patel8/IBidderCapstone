@@ -325,15 +325,15 @@ public class ProfileActivity extends AppCompatActivity
                     }
                     tm.setTags(tags);
 
-                    if (tm.getIsLocalTask() == true) {
-                        final LocationService locy = new LocationService(getApplicationContext()) {
+                    if (tm.getIsLocalTask()) {
+                        final LocationService locationService = new LocationService(getApplicationContext()) {
                             @Override
                             public void getCoordinates(double lat, double longi) {
                                 final String tskId = ta.createTask(tm, lat, longi);
                                 Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                             }
                         };
-                        //locy.onLocationChanged(Locat);
+                        locationService.updateLocation();
                     }
                     else {
                         String tskId = ta.createTask(tm);

@@ -18,20 +18,20 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import android.support.v4.app.ActivityCompat;
 
 
-
 public abstract class LocationService implements LocationListener {
     //Location Services client variable
     GoogleApiClient locGoogleApiClient = null;
     Location mLastLocation = null;
 
-
-    private double latitude;
-    private double longitude;
-
-    LocationManager lm = null;
+    private Context context;
+    private LocationManager lm = null;
 
     public LocationService(Context context) {
-        lm = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
+        this.context = context;
+        lm = (LocationManager) context.getSystemService(this.context.LOCATION_SERVICE);
+    }
+
+    public void updateLocation() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -43,30 +43,36 @@ public abstract class LocationService implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 10F, (LocationListener) this);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 10F, this);
     }
 
     public abstract void getCoordinates(double lat, double longi);
 
     @Override
     public void onLocationChanged(Location location) {
-        longitude = location.getLongitude();
-        latitude = location.getLatitude();
-        getCoordinates(latitude,longitude);
+        if (location != null) {
+            getCoordinates(location.getLatitude(), location.getLongitude());
+
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            lm.removeUpdates(this);
+        }
     }
 
     @Override
-    public void onStatusChanged(String s, int i, Bundle b){
+    public void onStatusChanged(String s, int i, Bundle b) {
 
     }
 
     @Override
-    public void onProviderEnabled(String s){
+    public void onProviderEnabled(String s) {
 
     }
 
     @Override
-    public void onProviderDisabled(String s){
+    public void onProviderDisabled(String s) {
 
     }
 }
