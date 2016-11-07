@@ -159,22 +159,6 @@ public class TaskFragment extends Fragment {
 
     }
 
-    private Calendar fillCalendar(Date d, int addHour, int addMin){
-        String items[] = d.toString().split(" "); // Fri Nov 18 14:00:51 CST 2016
-        int year = Integer.parseInt(items[5]);
-        int month = FrontEndSupport.convertMonth(items[1]);
-        int day = Integer.parseInt(items[2]);
-        String times[] = items[3].split(":");
-        int hour = Integer.parseInt(times[0]);
-        int min = Integer.parseInt(times[1]);
-        int sec = Integer.parseInt(times[2]);
-
-        hour = hour + addHour;
-        min = min + addMin;
-
-        return new GregorianCalendar(year, month, day, hour, min, sec);
-    }
-
     private void setTimePickerAndCalendarDate(TimePicker tp, CalendarView cv){
         // format: "Wed. Oct 26 2016, CDT 9:08 PM"
         String formattedDate = FrontEndSupport.getFormattedTime(savedDate.toString());
@@ -200,7 +184,7 @@ public class TaskFragment extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Date d = new Date(cv.getDate());
-                Calendar cal = fillCalendar(d, tp.getHour(), tp.getMinute());
+                Calendar cal = FrontEndSupport.fillCalendar(d, tp.getHour(), tp.getMinute());
                 savedDate = cal.getTime();
                 tskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
             }

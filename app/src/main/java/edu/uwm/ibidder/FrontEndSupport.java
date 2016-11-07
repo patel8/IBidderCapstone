@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
@@ -97,7 +98,25 @@ public class FrontEndSupport {
     }
 
     /**
-     * Takes in an abbreviated month (first three letters) and returns the month's number
+     * Configures task expiry date
+     * @param d - determined from CalendarView
+     * @param hour - determined from TimePicker
+     * @param min - determined from TimePicker
+     * @return
+     */
+    public static Calendar fillCalendar(Date d, int hour, int min){
+        String items[] = d.toString().split(" "); // Fri Nov 18 14:00:51 CST 2016
+        int year = Integer.parseInt(items[5]);
+        int month = FrontEndSupport.convertMonth(items[1]);
+        int day = Integer.parseInt(items[2]);
+        String times[] = items[3].split(":");
+        int sec = Integer.parseInt(times[2]);
+
+        return new GregorianCalendar(year, month, day, hour, min, sec);
+    }
+
+    /**
+     * Takes in an abbreviated month (first three letters) and returns the month's number (0 based)
      * @param month
      * @return calender month
      */
@@ -105,29 +124,29 @@ public class FrontEndSupport {
         month = month.toUpperCase();
         switch(month){
             case "JAN":
-                return 1;
+                return 0;
             case "FEB":
-                return 2;
+                return 1;
             case "MAR":
-                return 3;
+                return 2;
             case "APR":
-                return 4;
+                return 3;
             case "MAY":
-                return 5;
+                return 4;
             case "JUN":
-                return 6;
+                return 5;
             case "JUL":
-                return 7;
+                return 6;
             case "AUG":
-                return 8;
+                return 7;
             case "SEP":
-                return 9;
+                return 8;
             case "OCT":
-                return 10;
+                return 9;
             case "NOV":
-                return 11;
+                return 10;
             case "DEC":
-                return 12;
+                return 11;
             default:
                 return -1;
         }
