@@ -355,11 +355,19 @@ public class ProfileActivity extends AppCompatActivity
         ad.setView(view);
         final TimePicker tp = (TimePicker) view.findViewById(R.id.timePicker);
         final CalendarView cv = (CalendarView) view.findViewById(R.id.calendarView);
+        final Calendar calendar = Calendar.getInstance();
+
+        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                calendar.set(year, month, dayOfMonth);
+            }
+        });
 
         ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Choose", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Date d = new Date(cv.getDate());
+                Date d = new Date(calendar.getTimeInMillis());
                 Calendar cal = FrontEndSupport.fillCalendar(d, tp.getHour(), tp.getMinute());
                 expireDate = cal.getTime();
                 dateLabel.setText(FrontEndSupport.getFormattedTime(expireDate.toString()));
