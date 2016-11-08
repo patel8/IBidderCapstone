@@ -9,35 +9,101 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.uwm.ibidder.Activities.SettingsActivity">
+    tools:context="edu.uwm.ibidder.Fragments.profileFragment">
 
-    <TextView
-        android:text="Name:"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/settings_textview_name"/>
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
 
-    <TextView
-        android:text="Location:"
+        <TextView
+            android:text="First Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userProfileFirstName"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/settings_textview_location" />
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
 
-    <TextView
-        android:text="Phone:"
+        <TextView
+            android:text="Last Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userProfileLastName"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/settings_textview_phone" />
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
 
-    <TextView
-        android:text="Reviews:"
+        <TextView
+            android:text="Email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userProfileEmail"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/settings_textview_review" />
+        android:background="@drawable/back"
+        android:layout_marginTop="10dp">
 
-    <TextView
-        android:text="Awards:"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/settings_textview_awards" />
+        <TextView
+            android:text="Phone Number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/authui_colorPrimary"
+            android:textSize="17sp" />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/userProfilePhone"
+            />
+    </LinearLayout>
+
+
+
+
 </LinearLayout>

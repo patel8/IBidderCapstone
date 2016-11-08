@@ -9,7 +9,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="edu.uwm.ibidder.Activities.TaskActivity">
+    tools:context="edu.uwm.ibidder.Activities.TaskActivity"
+    android:background="@color/cardview_shadow_start_color">
 
     <LinearLayout
         android:orientation="vertical"
@@ -62,6 +63,7 @@
 
     <LinearLayout
         android:orientation="vertical"
+        android:id="@+id/userProfileLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/back"

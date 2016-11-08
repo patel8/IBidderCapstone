@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -31,6 +32,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import edu.uwm.ibidder.Activities.ProfileActivity;
+import edu.uwm.ibidder.Activities.UserProfileActivity;
 import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.Activities.TaskActivity;
@@ -58,6 +60,7 @@ public class TaskFragment extends Fragment {
     private boolean resetSave = false;
     private UserModel currentUser;
     private TaskModel currentTask;
+    private LinearLayout userProfileLayout;
 
     public TaskFragment() { }
 
@@ -72,6 +75,8 @@ public class TaskFragment extends Fragment {
         String taskid = ((TaskActivityII)getActivity()).getTaskID();
         String taskstatus = ((TaskActivityII)getActivity()).getTaskStatus();
         TaskModel.TaskStatusType status = FrontEndSupport.getStatus(taskstatus);
+        userProfileLayout = (LinearLayout) v.findViewById(R.id.userProfileLayout);
+
 
         Log.i("TAG", "onCreate: "+status.toString());
         TaskAccessor ta = new TaskAccessor();
@@ -98,6 +103,15 @@ public class TaskFragment extends Fragment {
                 });
             }
         });
+        userProfileLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), UserProfileActivity.class).putExtra("UserID", currentUser.getUserId()));
+            }
+        });
+
+
+
         return v;
     }
 

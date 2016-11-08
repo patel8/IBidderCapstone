@@ -21,15 +21,14 @@
             android:name=".Activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Activities.LoginActivity"
-            android:label="@string/app_name">
-        </activity>
+            android:label="@string/app_name"></activity>
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -51,7 +50,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.ForgotPasswordActivity" />
         <activity
-            android:name=".Activities.SettingsActivity"
+            android:name=".Fragments.profileFragment"
             android:label="@string/settings_label" />
         <activity
             android:name=".Activities.TaskActivity"
@@ -83,7 +82,10 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
 
-        <activity android:name=".Activities.TaskActivityII" android:label="TASK"></activity>
+        <activity
+            android:name=".Activities.TaskActivityII"
+            android:label="TASK" />
+        <activity android:name=".Activities.UserProfileActivity"></activity>
     </application>
 
 </manifest>

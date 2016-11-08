@@ -1,10 +1,7 @@
 package edu.uwm.ibidder.Activities;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -162,7 +159,9 @@ public class ProfileActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         switch (id) {
             case R.id.action_settings:
-                startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+                Intent intent = new Intent(ProfileActivity.this, UserProfileActivity.class);
+                intent.putExtra("UserID", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                startActivity(intent);
                 break;
             case R.id.action_logOut:
                 FirebaseAuth.getInstance().signOut();
@@ -206,7 +205,7 @@ public class ProfileActivity extends AppCompatActivity
         } else if (id == R.id.creator_task_history) {
             fragmentClass = creator_task_history.class;
         } else if (id == R.id.user_profile) {
-            startActivity(new Intent(ProfileActivity.this, SettingsActivity.class));
+            startActivity(new Intent(ProfileActivity.this, UserProfileActivity.class).putExtra("UserID", FirebaseAuth.getInstance().getCurrentUser().getUid()));
         } else if(id == R.id.user_timeline){
             startActivity(new Intent(ProfileActivity.this, ProfileActivity.class));
         }
