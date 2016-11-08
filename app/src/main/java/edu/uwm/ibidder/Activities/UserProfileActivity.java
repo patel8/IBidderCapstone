@@ -13,7 +13,6 @@ import edu.uwm.ibidder.Fragments.BidderListFragment;
 import edu.uwm.ibidder.Fragments.RewardsFragment;
 import edu.uwm.ibidder.Fragments.profileFragment;
 import edu.uwm.ibidder.R;
-
 public class UserProfileActivity extends AppCompatActivity {
 
     private TabLayout tabLayout;
