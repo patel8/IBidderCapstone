@@ -70,8 +70,10 @@ public class all_available_task extends Fragment {
             }
         };
 
-        //Call this whenever you want this data set to update TODO: (add to swipe-down refresh as well)
         locationService.updateLocation();
+
+        //Call this whenever you want this data set to update TODO: (add to swipe-down refresh as well)
+        //locationService.updateLocation();
 
         recyclerAdapter = new RecyclerAdapter(list);
         recyclerView.setAdapter(recyclerAdapter);
@@ -79,6 +81,7 @@ public class all_available_task extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                locationService.updateLocation();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

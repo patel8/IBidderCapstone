@@ -43,14 +43,14 @@ public abstract class LocationService implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000L, 10F, this);
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
     }
 
     public abstract void getCoordinates(double lat, double longi);
 
     @Override
     public void onLocationChanged(Location location) {
-        if (location != null) {
+        if (location != null && location.getAccuracy() < 100) {
             getCoordinates(location.getLatitude(), location.getLongitude());
 
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
