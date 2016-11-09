@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import edu.uwm.ibidder.Adapters.RecyclerAdapter;
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.ItemClickSupport;
+import edu.uwm.ibidder.Location.LocationService;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
@@ -33,7 +34,7 @@ public class all_available_task extends Fragment {
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
-
+     double latitude = 0.0, longitude = 0.0;
     public all_available_task() {
         // Required empty public constructor
     }
@@ -53,14 +54,25 @@ public class all_available_task extends Fragment {
                 new DividerItemDecoration(getActivity()));
         final ArrayList<TaskModel> list = new ArrayList<TaskModel>();
 
-        TaskAccessor taskAccessor = new TaskAccessor();
+        final TaskAccessor taskAccessor = new TaskAccessor();
+
+        final LocationService locationService = new LocationService(getContext()) {
+            @Override
+            public void getCoordinates(double lat, double longi) {
+               latitude = lat;
+                longitude = longi;
+            }
+        };
         taskAccessor.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY) {
             @Override
             public void dataUpdate(TaskModel tm) {
                 list.add(tm);
                 recyclerAdapter.notifyDataSetChanged();
             }
-        });
+        }, latitude,
+                longitude,
+                5.0)
+        ;
 
 
         recyclerAdapter = new RecyclerAdapter(list);
