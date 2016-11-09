@@ -34,7 +34,8 @@ public class all_available_task extends Fragment {
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
-     double latitude = 0.0, longitude = 0.0;
+    double latitude = 0.0, longitude = 0.0;
+
     public all_available_task() {
         // Required empty public constructor
     }
@@ -59,21 +60,18 @@ public class all_available_task extends Fragment {
         final LocationService locationService = new LocationService(getContext()) {
             @Override
             public void getCoordinates(double lat, double longi) {
-               latitude = lat;
-                longitude = longi;
+                taskAccessor.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY) {
+                    @Override
+                    public void dataUpdate(TaskModel tm) {
+                        list.add(tm);
+                        recyclerAdapter.notifyDataSetChanged();
+                    }
+                }, lat, longi, 5.0);
             }
         };
-        taskAccessor.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY) {
-            @Override
-            public void dataUpdate(TaskModel tm) {
-                list.add(tm);
-                recyclerAdapter.notifyDataSetChanged();
-            }
-        }, latitude,
-                longitude,
-                5.0)
-        ;
 
+        //Call this whenever you want this data set to update TODO: (add to swipe-down refresh as well)
+        locationService.updateLocation();
 
         recyclerAdapter = new RecyclerAdapter(list);
         recyclerView.setAdapter(recyclerAdapter);
@@ -87,7 +85,7 @@ public class all_available_task extends Fragment {
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }, 3000);
-                   recyclerAdapter.notifyDataSetChanged();
+                recyclerAdapter.notifyDataSetChanged();
             }
         });
 
