@@ -103,7 +103,8 @@ public class TaskFragment extends Fragment {
                     public void dataUpdate(BidModel bm) {
                         float proposedMin = bm.getBidValue();
                         if(proposedMin < lowestBid){
-                            tasklowbid.setText(Float.toString(proposedMin));
+                            lowestBid = proposedMin;
+                            tasklowbid.setText("$" + Float.toString(proposedMin));
                         }
                     }
                 });
@@ -163,11 +164,11 @@ public class TaskFragment extends Fragment {
         View view = inflater.inflate(R.layout.alert_dialog_place_bid, null);
         ad.setView(view);
 
-        TextView BidTitle = (TextView) view.findViewById(R.id.bid_title_alert);
+        TextView bidTitle = (TextView) view.findViewById(R.id.bid_title_alert);
         final EditText bidAmount = (EditText) view.findViewById(R.id.bid_amount_alert);
         Button bidSubmit = (Button) view.findViewById(R.id.bid_submit_alert);
 
-        BidTitle.setText("Please Enter BID (MAX BID PRICE) $" + savedPrice);
+        bidTitle.setText("Please Enter BID (MAX BID PRICE) $" + savedPrice);
         bidSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,6 +180,10 @@ public class TaskFragment extends Fragment {
                     bm.setTaskId(currentTask.getTaskId());
                     bm.setBidValue(Float.parseFloat(bidAmount.getText().toString()));
                     bidAccessor.createBid(bm);
+                    if(bm.getBidValue() < lowestBid){
+                        tasklowbid.setText("$" + Float.toString(bm.getBidValue()));
+                    }
+                    Toast.makeText(getContext(), "Bid placed: $" + bidAmount.getText().toString(), Toast.LENGTH_SHORT).show();
                 }
                 ad.dismiss();
             }
