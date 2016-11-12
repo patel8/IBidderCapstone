@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.Adapters.RecyclerAdapter;
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.ItemClickSupport;
 import edu.uwm.ibidder.Location.LocationService;
 import edu.uwm.ibidder.R;
-import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
@@ -34,12 +34,11 @@ public class all_available_task extends Fragment {
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
-    double latitude = 0.0, longitude = 0.0;
+    final ArrayList<TaskModel> taskList = new ArrayList<TaskModel>();
 
     public all_available_task() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,56 +52,45 @@ public class all_available_task extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity()));
-        final ArrayList<TaskModel> list = new ArrayList<TaskModel>();
 
-        final TaskAccessor taskAccessor = new TaskAccessor();
+        recyclerAdapter = new RecyclerAdapter(taskList);
+        recyclerView.setAdapter(recyclerAdapter);
 
         final LocationService locationService = new LocationService(getContext()) {
             @Override
             public void getCoordinates(double lat, double longi) {
+                swipeRefreshLayout.setRefreshing(true);
+                TaskAccessor taskAccessor = new TaskAccessor();
                 taskAccessor.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY) {
                     @Override
                     public void dataUpdate(TaskModel tm) {
-                        list.add(tm);
+                        taskList.add(tm);
                         recyclerAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
                     }
                 }, lat, longi, 5.0);
             }
         };
 
-        locationService.updateLocation();
-
-        //Call this whenever you want this data set to update TODO: (add to swipe-down refresh as well)
-        //locationService.updateLocation();
-
-        recyclerAdapter = new RecyclerAdapter(list);
-        recyclerView.setAdapter(recyclerAdapter);
-
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 locationService.updateLocation();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 3000);
-                recyclerAdapter.notifyDataSetChanged();
             }
         });
 
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView rv, int position, View v) {
-                TaskModel tm = list.get(position);
+                TaskModel tm = taskList.get(position);
                 Intent intent = new Intent(getContext(), TaskActivityII.class);
                 intent.putExtra("task_id", tm.getTaskId());
-                intent.putExtra("task_status", tm.getStatus().toString());
+                intent.putExtra("task_status", tm.getStatus());
                 startActivity(intent);
             }
         });
 
+        locationService.updateLocation();
 
         return v;
     }
