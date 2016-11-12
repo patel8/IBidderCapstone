@@ -39,7 +39,7 @@ public abstract class TaskCallbackListener implements ValueEventListener {
      */
     public TaskCallbackListener(TaskModel.TaskStatusType restriction, Collection<String> tags) {
         statusRestrictionType = restriction;
-        isTagRestricted = true;
+        isTagRestricted = !tags.isEmpty();
         tagRestrictions = tags;
     }
 

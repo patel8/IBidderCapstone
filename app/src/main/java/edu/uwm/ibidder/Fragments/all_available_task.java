@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.github.aakira.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.Adapters.RecyclerAdapter;
@@ -45,6 +46,7 @@ public class all_available_task extends Fragment {
     TextView searchTagsText;
     ExpandableLayout expandableFilterLayout;
     final ArrayList<TaskModel> taskList = new ArrayList<TaskModel>();
+    final ArrayList<String> searchTags = new ArrayList<String>();
 
     public all_available_task() {
         // Required empty public constructor
@@ -75,9 +77,8 @@ public class all_available_task extends Fragment {
         final LocationService locationService = new LocationService(getContext()) {
             @Override
             public void getCoordinates(double lat, double longi) {
-                swipeRefreshLayout.setRefreshing(true);
                 TaskAccessor taskAccessor = new TaskAccessor();
-                taskAccessor.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY) {
+                taskAccessor.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY, searchTags) {
                     @Override
                     public void dataUpdate(TaskModel tm) {
                         taskList.add(tm);
@@ -91,6 +92,7 @@ public class all_available_task extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
                 locationService.updateLocation();
             }
         });
@@ -113,9 +115,44 @@ public class all_available_task extends Fragment {
             }
         });
 
+        applyFilterChangesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                swipeRefreshLayout.setRefreshing(true);
+                taskList.clear();
+                expandableFilterLayout.collapse();
+
+                String tagText = searchTagsText.getText().toString();
+                searchTags.clear();
+
+                if (tagText.length() > 0) {
+                    String[] tags = tagText.split(" ");
+                    searchTags.addAll(Arrays.asList(tags));
+                }
+
+                if (nonLocalCheckbox.isChecked())
+                    nonLocalTaskUpdate();
+                else
+                    locationService.updateLocation();
+
+            }
+        });
+
+        swipeRefreshLayout.setRefreshing(true);
         locationService.updateLocation();
 
         return v;
+    }
+
+    private void nonLocalTaskUpdate() {
+        new TaskAccessor().getNonLocalTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY, searchTags) {
+            @Override
+            public void dataUpdate(TaskModel tm) {
+                taskList.add(tm);
+                recyclerAdapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
 }
