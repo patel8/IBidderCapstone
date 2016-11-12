@@ -191,7 +191,7 @@ public class ProfileActivity extends AppCompatActivity
 // Handle Each Item Accordinly.
         // Create Fragment with List Items of Selected Task and Inflate Layout.
         if (id == R.id.bidder_active_bids) {
-            fragmentClass = bidder_current_task.class;
+            fragmentClass = bidder_live_task.class;
         } else if (id == R.id.bidder_history_task) {
             fragmentClass = bidder_bid_history.class;
         } else if (id == R.id.bidder_won_tasks) {

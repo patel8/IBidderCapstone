@@ -38,7 +38,7 @@ public class bidder_bid_history extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActivity().setTitle(R.string.asbidder_active);
+        getActivity().setTitle(R.string.asbidder_history);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class bidder_bid_history extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_bidder_current_task, container, false);
+        View v = inflater.inflate(R.layout.fragment_bidder_bid_history, container, false);
 
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_bidder_current_task);
         recyclerView = (RecyclerView) v.findViewById(R.id.bidder_current_task_recyclerView);

@@ -1,9 +1,7 @@
 package edu.uwm.ibidder.Fragments;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -12,37 +10,32 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
-import edu.uwm.ibidder.Activities.ProfileActivity;
 import edu.uwm.ibidder.Activities.UserProfileActivity;
 import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.R;
-import edu.uwm.ibidder.Activities.TaskActivity;
 import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
 import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
+import edu.uwm.ibidder.dbaccess.listeners.BidCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
+import edu.uwm.ibidder.dbaccess.models.BidModel;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
 
@@ -52,7 +45,8 @@ public class TaskFragment extends Fragment {
     private TextView taskdescr;
     private TextView taskowner;
     private TextView taskendtime;
-    private TextView tskdate;
+    private TextView taskdate;
+    private TextView tasklowbid;
     private String savedName, savedDescr;
     private Date savedDate;
     private HashMap<String, Boolean> savedTags;
@@ -61,6 +55,7 @@ public class TaskFragment extends Fragment {
     private UserModel currentUser;
     private TaskModel currentTask;
     private LinearLayout userProfileLayout;
+    private float lowestBid = Float.MAX_VALUE;
 
     public TaskFragment() { }
 
@@ -101,6 +96,17 @@ public class TaskFragment extends Fragment {
                         currentUser = um;
                     }
                 });
+
+                BidAccessor ba = new BidAccessor();
+                ba.getTaskBids(tm.getTaskId(), new BidCallbackListener() {
+                    @Override
+                    public void dataUpdate(BidModel bm) {
+                        float proposedMin = bm.getBidValue();
+                        if(proposedMin < lowestBid){
+                            tasklowbid.setText(Float.toString(proposedMin));
+                        }
+                    }
+                });
             }
         });
         userProfileLayout.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +126,7 @@ public class TaskFragment extends Fragment {
         taskdescr = (TextView)v.findViewById(R.id.label_taskActDescr);
         taskowner = (TextView)v.findViewById(R.id.label_taskActPoster);
         taskendtime = (TextView)v.findViewById(R.id.label_taskActEndtime);
+        tasklowbid = (TextView)v.findViewById(R.id.label_taskActLowestBid);
     }
 
     @Override
@@ -157,15 +164,23 @@ public class TaskFragment extends Fragment {
         ad.setView(view);
 
         TextView BidTitle = (TextView) view.findViewById(R.id.bid_title_alert);
-        final EditText BidAmount = (EditText) view.findViewById(R.id.bid_amount_alert);
-        Button BidSubmit = (Button) view.findViewById(R.id.bid_submit_alert);
+        final EditText bidAmount = (EditText) view.findViewById(R.id.bid_amount_alert);
+        Button bidSubmit = (Button) view.findViewById(R.id.bid_submit_alert);
 
-        BidTitle.setText("PLease Enter BID (MAX BID PRICE) $"+savedPrice);
-        BidSubmit.setOnClickListener(new View.OnClickListener() {
+        BidTitle.setText("Please Enter BID (MAX BID PRICE) $" + savedPrice);
+        bidSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BidAccessor bidAccessor = new BidAccessor();
-                bidAlertDialog().dismiss();
+
+                if(!bidAmount.getText().toString().isEmpty()){
+                    BidAccessor bidAccessor = new BidAccessor();
+                    BidModel bm = new BidModel();
+                    bm.setBidderId(currentUser.getUserId());
+                    bm.setTaskId(currentTask.getTaskId());
+                    bm.setBidValue(Float.parseFloat(bidAmount.getText().toString()));
+                    bidAccessor.createBid(bm);
+                }
+                ad.dismiss();
             }
         });
 
@@ -200,7 +215,7 @@ public class TaskFragment extends Fragment {
                 Date d = new Date(cv.getDate());
                 Calendar cal = FrontEndSupport.fillCalendar(d, tp.getHour(), tp.getMinute());
                 savedDate = cal.getTime();
-                tskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
+                taskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
             }
         });
 
@@ -228,7 +243,7 @@ public class TaskFragment extends Fragment {
         final EditText tskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
         final EditText tsktags = (EditText)view.findViewById(R.id.editText_tasktags);
         final EditText tskprice = (EditText)view.findViewById(R.id.editText_startprice);
-        tskdate = (TextView)view.findViewById(R.id.label_taskEndTime);
+        taskdate = (TextView)view.findViewById(R.id.label_taskEndTime);
         String tagbuilder = "";
         for(String key : savedTags.keySet()){
             tagbuilder += key + " ";
@@ -240,9 +255,9 @@ public class TaskFragment extends Fragment {
             tskprice.setText("");
         else
             tskprice.setText(Float.toString(savedPrice));
-        tskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
+        taskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
 
-        tskdate.setOnClickListener(new View.OnClickListener() {
+        taskdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog ad = createTimeDialog();

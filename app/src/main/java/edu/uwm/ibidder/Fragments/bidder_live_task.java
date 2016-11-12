@@ -24,14 +24,14 @@ import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
-public class bidder_current_task extends android.support.v4.app.Fragment {
+public class bidder_live_task extends android.support.v4.app.Fragment {
 
 
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerAdapter recyclerAdapter;
 
-    public bidder_current_task() {
+    public bidder_live_task() {
 
     }
 
@@ -46,7 +46,7 @@ public class bidder_current_task extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_bidder_current_task, container, false);
+        View v = inflater.inflate(R.layout.fragment_bidder_live_task, container, false);
 
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_bidder_current_task);
         recyclerView = (RecyclerView) v.findViewById(R.id.bidder_current_task_recyclerView);
