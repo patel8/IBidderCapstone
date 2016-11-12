@@ -129,8 +129,9 @@ public class all_available_task extends Fragment {
 
     private void refreshTasks(final LocationService locationService) {
         swipeRefreshLayout.setRefreshing(true);
+        int itemCount = taskList.size();
         taskList.clear();
-        recyclerAdapter.notifyDataSetChanged();
+        recyclerAdapter.notifyItemRangeRemoved(0, itemCount);
 
         String tagText = searchTagsText.getText().toString();
         searchTags.clear();

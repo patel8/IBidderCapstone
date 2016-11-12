@@ -28,9 +28,9 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolderForAvailTasks> {
     ArrayList<TaskModel> list;
-    public RecyclerAdapter(ArrayList<TaskModel> list)
-    {
-            this.list = list;
+
+    public RecyclerAdapter(ArrayList<TaskModel> list) {
+        this.list = list;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         TaskModel model = list.get(position);
         holder.title.setText(model.getTitle());
         holder.description.setText(model.getDescription());
-        holder.Price.setText("$ "+model.getMaxPrice()+"");
+        holder.Price.setText("$ " + model.getMaxPrice() + "");
 
         Date d1 = DateTools.epochToDate(model.getExpirationTime());
         Date d2 = new Date();
@@ -59,11 +59,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         long seconds = TimeUnit.MILLISECONDS.toSeconds(diff);
 
-        holder.countDownTimer = new CountDownTimer(seconds*1000,1000) {
+        if (holder.countDownTimer != null)
+            holder.countDownTimer.cancel();
+
+        holder.countDownTimer = new CountDownTimer(seconds * 1000, 1000) {
             @Override
             public void onTick(long l) {
-                if(l <= 3600) holder.CountDown.setTextColor(Color.RED);
-                holder.CountDown.setText(timeConversion((int)l/1000));
+                if (l <= 3600) holder.CountDown.setTextColor(Color.RED);
+                holder.CountDown.setText(timeConversion((int) l / 1000));
             }
 
             @Override
@@ -83,41 +86,39 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         int minutes = totalMinutes % MINUTES_IN_AN_HOUR;
         int hours = totalMinutes / MINUTES_IN_AN_HOUR;
 
-        String result ="";
-        result += (hours < 10) ? "0":"";
-        result += hours+":";
+        String result = "";
+        result += (hours < 10) ? "0" : "";
+        result += hours + ":";
 
-        result += (minutes < 10) ? "0":"";
-        result += minutes+":";
+        result += (minutes < 10) ? "0" : "";
+        result += minutes + ":";
 
-        result += (seconds < 10) ? "0":"";
+        result += (seconds < 10) ? "0" : "";
         result += seconds;
 
         return result;
 
 
-
     }
 
-    public static class ViewHolderForAvailTasks extends RecyclerView.ViewHolder{
+    public static class ViewHolderForAvailTasks extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView description;
         public TextView Price;
-        public  TextView CountDown;
+        public TextView CountDown;
         public CountDownTimer countDownTimer;
 
-        public ViewHolderForAvailTasks(View v){
+        public ViewHolderForAvailTasks(View v) {
             super(v);
 
             title = (TextView) v.findViewById(R.id.textViewListTitle);
             description = (TextView) v.findViewById(R.id.textViewListDescription);
-            Price =   (TextView) v.findViewById(R.id.textViewListPrice);
+            Price = (TextView) v.findViewById(R.id.textViewListPrice);
             CountDown = (TextView) v.findViewById(R.id.textViewListDateTime);
 
         }
 
     }
-
 
 
 }
