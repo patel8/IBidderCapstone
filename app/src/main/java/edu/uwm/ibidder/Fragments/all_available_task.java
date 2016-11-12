@@ -120,6 +120,7 @@ public class all_available_task extends Fragment {
             public void onClick(View v) {
                 swipeRefreshLayout.setRefreshing(true);
                 taskList.clear();
+                recyclerAdapter.notifyDataSetChanged();
                 expandableFilterLayout.collapse();
 
                 String tagText = searchTagsText.getText().toString();
