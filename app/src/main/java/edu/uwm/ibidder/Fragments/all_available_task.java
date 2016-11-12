@@ -4,7 +4,6 @@ package edu.uwm.ibidder.Fragments;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -92,8 +91,7 @@ public class all_available_task extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                swipeRefreshLayout.setRefreshing(true);
-                locationService.updateLocation();
+                refreshTasks(locationService);
             }
         });
 
@@ -118,24 +116,8 @@ public class all_available_task extends Fragment {
         applyFilterChangesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                swipeRefreshLayout.setRefreshing(true);
-                taskList.clear();
-                recyclerAdapter.notifyDataSetChanged();
                 expandableFilterLayout.collapse();
-
-                String tagText = searchTagsText.getText().toString();
-                searchTags.clear();
-
-                if (tagText.length() > 0) {
-                    String[] tags = tagText.split(" ");
-                    searchTags.addAll(Arrays.asList(tags));
-                }
-
-                if (nonLocalCheckbox.isChecked())
-                    nonLocalTaskUpdate();
-                else
-                    locationService.updateLocation();
-
+                refreshTasks(locationService);
             }
         });
 
@@ -143,6 +125,25 @@ public class all_available_task extends Fragment {
         locationService.updateLocation();
 
         return v;
+    }
+
+    private void refreshTasks(final LocationService locationService) {
+        swipeRefreshLayout.setRefreshing(true);
+        taskList.clear();
+        recyclerAdapter.notifyDataSetChanged();
+
+        String tagText = searchTagsText.getText().toString();
+        searchTags.clear();
+
+        if (tagText.length() > 0) {
+            String[] tags = tagText.split(" ");
+            searchTags.addAll(Arrays.asList(tags));
+        }
+
+        if (nonLocalCheckbox.isChecked())
+            nonLocalTaskUpdate();
+        else
+            locationService.updateLocation();
     }
 
     private void nonLocalTaskUpdate() {
