@@ -1,12 +1,80 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="edu.uwm.ibidder.Fragments.all_available_task">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="edu.uwm.ibidder.Fragments.all_available_task"
+    android:orientation="vertical">
+
+    <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+        android:id="@+id/expandableFilterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:ael_expanded="false"
+        app:ael_duration="500"
+        app:ael_interpolator="bounce"
+        app:ael_orientation="vertical">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_tags"
+                    android:layout_weight="1" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:ems="10"
+                    android:id="@+id/searchTagsText"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:text="@string/search_local_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/nonLocalCheckbox"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <Button
+                android:text="@string/apply_filter_changes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/applyFilterChangesButton"
+                android:layout_weight="1"
+                android:layout_gravity="right" />
+
+        </LinearLayout>
+
+    </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+    <Button
+        android:text="@string/toggle_filter_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toggleFilter" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+
         android:id="@+id/fragment_all_available_swipeRefresh">
 
         <android.support.v7.widget.RecyclerView
@@ -21,4 +89,4 @@
     </android.support.v4.widget.SwipeRefreshLayout>
     <!-- TODO: Update blank fragment layout -->
 
-</FrameLayout>
+</LinearLayout>

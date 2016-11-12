@@ -25,6 +25,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dexOptions {
+        javaMaxHeapSize "2g"
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
 }
 
 dependencies {
@@ -43,6 +52,7 @@ dependencies {
     compile 'com.firebaseui:firebase-ui:0.6.1'
     compile 'com.google.firebase:firebase-messaging:9.6.1'
     compile 'com.android.support:multidex:1.0.1'
+    compile 'com.github.aakira:expandable-layout:1.6.0@aar'
     testCompile 'junit:junit:4.12'
 }
 

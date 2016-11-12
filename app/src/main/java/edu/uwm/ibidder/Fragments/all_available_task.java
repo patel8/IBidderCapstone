@@ -12,6 +12,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
+
+import com.github.aakira.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 
@@ -34,6 +39,11 @@ public class all_available_task extends Fragment {
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
+    Button toggleFilterButton;
+    Button applyFilterChangesButton;
+    CheckBox nonLocalCheckbox;
+    TextView searchTagsText;
+    ExpandableLayout expandableFilterLayout;
     final ArrayList<TaskModel> taskList = new ArrayList<TaskModel>();
 
     public all_available_task() {
@@ -47,6 +57,12 @@ public class all_available_task extends Fragment {
         View v = inflater.inflate(R.layout.fragment_all_available_task, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.fragment_all_available_swipeRefresh);
         swipeRefreshLayout.setColorSchemeColors(Color.GREEN, Color.RED);
+        toggleFilterButton = (Button) v.findViewById(R.id.toggleFilter);
+        expandableFilterLayout = (ExpandableLayout) v.findViewById(R.id.expandableFilterLayout);
+        applyFilterChangesButton = (Button) v.findViewById(R.id.applyFilterChangesButton);
+        nonLocalCheckbox = (CheckBox) v.findViewById(R.id.nonLocalCheckbox);
+        searchTagsText = (TextView) v.findViewById(R.id.searchTagsText);
+
         recyclerView = (RecyclerView) v.findViewById(R.id.available_task_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -87,6 +103,13 @@ public class all_available_task extends Fragment {
                 intent.putExtra("task_id", tm.getTaskId());
                 intent.putExtra("task_status", tm.getStatus());
                 startActivity(intent);
+            }
+        });
+
+        toggleFilterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                expandableFilterLayout.toggle();
             }
         });
 
