@@ -9,4 +9,5 @@
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="lightgray">#c0c0c0</color>
+    <color name="BackGroundColorTask">#e6e6e6</color>
 </resources>

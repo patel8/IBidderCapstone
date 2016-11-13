@@ -8,8 +8,10 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -30,6 +32,8 @@ public class TaskActivityII extends AppCompatActivity {
     private MenuItem item;
     private String taskID;
     private String taskStatus;
+    private Toolbar toolbar;
+    private boolean showToolBar;
     private boolean enableEditMenu = false;
 
     public String getTaskID()
@@ -45,7 +49,10 @@ public class TaskActivityII extends AppCompatActivity {
         setContentView(R.layout.activity_task_ii);
         taskID = getIntent().getStringExtra("task_id");
         taskStatus = getIntent().getStringExtra("task_status");
+        showToolBar = getIntent().getBooleanExtra("ShowToolBar", false);
 
+        toolbar = (Toolbar) findViewById(R.id.TaskToolBar);
+        toolbar.setVisibility(showToolBar? View.VISIBLE: View.GONE);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setAdapter(new CustomAdapter(getSupportFragmentManager(), getApplicationContext()));
 
