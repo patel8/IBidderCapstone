@@ -12,15 +12,16 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
  * Created by Sagar on 10/25/2016.
  */
 
- abstract class viewHolder extends RecyclerView.ViewHolder{
+  class viewHolder extends RecyclerView.ViewHolder{
     public TextView title;
-    public TextView description;
+    public TextView distance;
     public TextView DateTime;
     public TextView Price;
 
     public viewHolder(View v){
         super(v);
 
+        distance = (TextView) v.findViewById(R.id.textViewListDistance);
         title = (TextView) v.findViewById(R.id.textViewListTitle);
         DateTime = (TextView) v.findViewById(R.id.textViewListDateTime);
         Price = (TextView) v.findViewById(R.id.textViewListPrice);

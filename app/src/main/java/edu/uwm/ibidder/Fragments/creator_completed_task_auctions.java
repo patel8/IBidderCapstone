@@ -77,9 +77,9 @@ public class creator_completed_task_auctions extends Fragment {
             @Override
             protected void populateViewHolder(viewHolder viewHolder, TaskModel taskModel, int i) {
                 viewHolder.title.setText(taskModel.getTitle());
-                viewHolder.description.setText(taskModel.getDescription());
-                viewHolder.DateTime.setText(taskModel.getExpirationTime() + "");
-                viewHolder.Price.setText(taskModel.getMaxPrice() + "");
+                viewHolder.DateTime.setText(DateTools.epochToDate(taskModel.getExpirationTime())+"");
+                viewHolder.Price.setText("$"+taskModel.getMaxPrice() + "");
+                viewHolder.distance.setVisibility(View.GONE);
             }
         };
 
@@ -97,23 +97,6 @@ public class creator_completed_task_auctions extends Fragment {
         });
 
         return v;
-    }
-    public static class viewHolder extends RecyclerView.ViewHolder{
-
-        public TextView title;
-        public TextView description;
-        public TextView DateTime;
-        public TextView Price;
-
-        public viewHolder(View v){
-            super(v);
-
-            title = (TextView) v.findViewById(R.id.textViewListTitle);
-            DateTime = (TextView) v.findViewById(R.id.textViewListDateTime);
-            Price = (TextView) v.findViewById(R.id.textViewListPrice);
-
-
-        }
     }
 
 }
