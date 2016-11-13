@@ -50,7 +50,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(final ViewHolderForAvailTasks holder, int position) {
         TaskModel model = list.get(position);
         holder.title.setText(model.getTitle());
-        holder.description.setText(model.getDescription());
         holder.Price.setText("$ " + model.getMaxPrice() + "");
 
         Date d1 = DateTools.epochToDate(model.getExpirationTime());
@@ -112,7 +111,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             super(v);
 
             title = (TextView) v.findViewById(R.id.textViewListTitle);
-            description = (TextView) v.findViewById(R.id.textViewListDescription);
             Price = (TextView) v.findViewById(R.id.textViewListPrice);
             CountDown = (TextView) v.findViewById(R.id.textViewListDateTime);
 

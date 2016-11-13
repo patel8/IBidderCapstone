@@ -22,7 +22,6 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
         super(v);
 
         title = (TextView) v.findViewById(R.id.textViewListTitle);
-        description = (TextView) v.findViewById(R.id.textViewListDescription);
         DateTime = (TextView) v.findViewById(R.id.textViewListDateTime);
         Price = (TextView) v.findViewById(R.id.textViewListPrice);
 

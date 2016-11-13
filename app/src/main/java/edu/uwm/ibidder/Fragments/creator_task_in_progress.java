@@ -108,7 +108,6 @@ public class creator_task_in_progress extends Fragment {
             super(v);
 
             title = (TextView) v.findViewById(R.id.textViewListTitle);
-            description = (TextView) v.findViewById(R.id.textViewListDescription);
             DateTime = (TextView) v.findViewById(R.id.textViewListDateTime);
             Price = (TextView) v.findViewById(R.id.textViewListPrice);
 

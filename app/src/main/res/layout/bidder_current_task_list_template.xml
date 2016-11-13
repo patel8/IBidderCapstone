@@ -42,25 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textViewListDateTime"
-            android:layout_weight="4" />
-
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewListDescription"
-            android:layout_weight="4"
-            android:visibility="gone" />
-
-        <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewListPriceLabel"
-            android:layout_weight="1"
-            android:textSize="16sp"
-            android:textColor="@color/authui_colorPrimary"
-            android:visibility="gone" />
+            android:layout_weight="1" />
 
         <TextView
             android:text="TextView"
@@ -70,6 +52,15 @@
             android:textSize="17sp"
             android:layout_weight="1"
             android:textColor="@color/authui_colorPrimary" />
+
+        <TextView
+            android:text="Distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewListDistance"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textColor="@android:color/holo_green_light" />
     </LinearLayout>
 
 </LinearLayout>

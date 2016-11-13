@@ -3,9 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#DCC6C6</color>
-    <color name="LabelColor">#DCC6C6</color>
+    <color name="LabelColor">#2d2d2d</color>
     <color name="buttonLogin">#f4ad32</color>
-    <color name="TopBarColor">#b48382</color>
+    <color name="TopBarColor">#000000</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="lightgray">#c0c0c0</color>
