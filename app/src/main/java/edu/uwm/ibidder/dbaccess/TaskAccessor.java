@@ -1,7 +1,5 @@
 package edu.uwm.ibidder.dbaccess;
 
-import android.location.Location;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.firebase.geofire.GeoLocation;
@@ -14,14 +12,12 @@ import com.google.firebase.database.Query;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.uwm.ibidder.Location.LocationService;
 import edu.uwm.ibidder.dbaccess.listeners.BidCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.BidModel;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 import static android.content.ContentValues.TAG;
-import static java.security.AccessController.getContext;
 
 /**
  * Handles task data access and manipulation
@@ -168,9 +164,10 @@ public class TaskAccessor extends BaseAccessor {
 
     /**
      * This returns all non local (tasks not tied to a location) tasks one time to the passed-in callback.
+     *
      * @param taskCallbackListener The callbackListener to pass the tasks to.
      */
-    public void getNonLocalTasksOnce(TaskCallbackListener taskCallbackListener){
+    public void getNonLocalTasksOnce(TaskCallbackListener taskCallbackListener) {
         DatabaseReference ref = database.getReference("tasks/ready");
         ref.orderByChild("isLocalTask").equalTo(false).addListenerForSingleValueEvent(taskCallbackListener);
     }
@@ -232,6 +229,7 @@ public class TaskAccessor extends BaseAccessor {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
                 keysInZone.add(key);
+                callback.addLocation(key, location);
             }
 
             @Override

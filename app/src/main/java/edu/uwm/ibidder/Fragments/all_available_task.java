@@ -15,10 +15,15 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.util.GeoUtils;
 import com.github.aakira.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.Adapters.RecyclerAdapter;
@@ -46,6 +51,10 @@ public class all_available_task extends Fragment {
     TextView searchTagsText;
     ExpandableLayout expandableFilterLayout;
     final ArrayList<TaskModel> taskList = new ArrayList<TaskModel>();
+
+    final SortedMap<Double, TaskModel> tasksWithLocationMap = new TreeMap<Double, TaskModel>();
+    final ArrayList<TaskModel> nonLocalTasksList = new ArrayList<TaskModel>();
+
     final ArrayList<String> searchTags = new ArrayList<String>();
 
     public all_available_task() {
@@ -78,12 +87,15 @@ public class all_available_task extends Fragment {
         final LocationService locationService = new LocationService(getContext()) {
             @Override
             public void getCoordinates(double lat, double longi) {
+                final GeoLocation userLocation = new GeoLocation(lat, longi);
+
                 TaskAccessor taskAccessor = new TaskAccessor();
                 taskAccessor.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY, searchTags) {
                     @Override
-                    public void dataUpdate(TaskModel tm) {
-                        taskList.add(tm);
-                        recyclerAdapter.notifyDataSetChanged();
+                    public void dataWithLocationUpdate(TaskModel task, GeoLocation location) {
+                        tasksWithLocationMap.put(GeoUtils.distance(userLocation, location), task);
+
+                        updateTaskList();
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 }, lat, longi, 5.0);
@@ -130,9 +142,8 @@ public class all_available_task extends Fragment {
 
     private void refreshTasks(final LocationService locationService) {
         swipeRefreshLayout.setRefreshing(true);
-        int itemCount = taskList.size();
-        taskList.clear();
-        recyclerAdapter.notifyItemRangeRemoved(0, itemCount);
+        tasksWithLocationMap.clear();
+        nonLocalTasksList.clear();
 
         String tagText = searchTagsText.getText().toString();
         searchTags.clear();
@@ -153,11 +164,30 @@ public class all_available_task extends Fragment {
         new TaskAccessor().getNonLocalTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY, searchTags) {
             @Override
             public void dataUpdate(TaskModel tm) {
-                taskList.add(tm);
-                recyclerAdapter.notifyDataSetChanged();
+                nonLocalTasksList.add(tm);
+
+                updateTaskList();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    private void updateTaskList() {
+        taskList.clear();
+
+        //put non local tasks first
+        for (TaskModel t : nonLocalTasksList) {
+            taskList.add(t);
+            //We assume non local tasks have a distance of 0.0
+        }
+
+        for (Map.Entry<Double, TaskModel> entry : tasksWithLocationMap.entrySet()) {
+            taskList.add(entry.getValue());
+            //You can get the distance of a local task by calling entry.getKey() here.
+        }
+
+
+        recyclerAdapter.notifyDataSetChanged();
     }
 
 }

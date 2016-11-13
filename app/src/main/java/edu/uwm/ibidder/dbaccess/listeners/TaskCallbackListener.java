@@ -2,11 +2,13 @@ package edu.uwm.ibidder.dbaccess.listeners;
 
 import android.util.Log;
 
+import com.firebase.geofire.GeoLocation;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
@@ -21,6 +23,7 @@ public abstract class TaskCallbackListener implements ValueEventListener {
     private TaskModel.TaskStatusType statusRestrictionType;
     private boolean isTagRestricted;
     private Collection<String> tagRestrictions;
+    private HashMap<String, GeoLocation> locations;
 
     /**
      * Creates a TaskCallbackListener that only returns tasks with the status of the passed-in restriction enum
@@ -29,6 +32,7 @@ public abstract class TaskCallbackListener implements ValueEventListener {
      */
     public TaskCallbackListener(TaskModel.TaskStatusType restriction) {
         statusRestrictionType = restriction;
+        locations = new HashMap<String, GeoLocation>();
     }
 
     /**
@@ -41,6 +45,7 @@ public abstract class TaskCallbackListener implements ValueEventListener {
         statusRestrictionType = restriction;
         isTagRestricted = !tags.isEmpty();
         tagRestrictions = tags;
+        locations = new HashMap<String, GeoLocation>();
     }
 
     @Override
@@ -68,12 +73,28 @@ public abstract class TaskCallbackListener implements ValueEventListener {
                 if (canUpdateData)
                     dataUpdate(taskModel);
 
+                if (locations.size() > 0)
+                    dataWithLocationUpdate(taskModel, locations.get(taskModel.getTaskId()));
+
             }
         } catch (Exception e) {
             TaskModel singleTask = dataSnapshot.getValue(TaskModel.class);
             dataUpdate(singleTask);
+
+            if (locations.size() > 0)
+                dataWithLocationUpdate(singleTask, locations.get(singleTask.getTaskId()));
         }
 
+    }
+
+    /**
+     * Adds a location to this callback
+     *
+     * @param key The taskId for this location
+     * @param l   The location to add
+     */
+    public void addLocation(String key, GeoLocation l) {
+        locations.put(key, l);
     }
 
 
@@ -82,7 +103,17 @@ public abstract class TaskCallbackListener implements ValueEventListener {
      *
      * @param tm The updated TaskModel object
      */
-    public abstract void dataUpdate(TaskModel tm);
+    public void dataUpdate(TaskModel tm) {
+    }
+
+    /**
+     * Returns the data with an associated location.  This is an optional overridable method that does nothing by default.
+     *
+     * @param task     The task associated with the location
+     * @param location The location of the last TaskModel object.
+     */
+    public void dataWithLocationUpdate(TaskModel task, GeoLocation location) {
+    }
 
     @Override
     public void onCancelled(DatabaseError databaseError) {
