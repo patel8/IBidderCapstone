@@ -15,13 +15,16 @@ import android.widget.CalendarView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Query;
 
 import java.util.Calendar;
 import java.util.Date;
 
+import edu.uwm.ibidder.Activities.ProfileActivity;
 import edu.uwm.ibidder.Activities.UserProfileActivity;
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.FrontEndSupport;
@@ -30,9 +33,11 @@ import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
 import edu.uwm.ibidder.dbaccess.ReviewAccessor;
+import edu.uwm.ibidder.dbaccess.TaskWinnerAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.BidModel;
+import edu.uwm.ibidder.dbaccess.models.TaskWinnerModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
 import edu.uwm.ibidder.ItemClickSupport;
 
@@ -55,7 +60,6 @@ public class BidderListFragment extends Fragment {
         // Inflate the layout for this fragment
 
         supportPickingBidder = getActivity().getIntent().getBooleanExtra("PickBidder",false);
-
         View v =  inflater.inflate(R.layout.fragment_bidder_list, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.bidderListFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
@@ -103,8 +107,10 @@ public class BidderListFragment extends Fragment {
             ItemClickSupport.addTo(recyclerView).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
 
                 @Override
-                public boolean onItemLongClicked(RecyclerView rv, int postion, View v) {
+                public boolean onItemLongClicked(RecyclerView rv, final int postion, View v) {
 
+
+                    final BidModel bidModel = adapter.getItem(postion);
                     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
                     builder.setTitle("Confirm");
@@ -114,8 +120,18 @@ public class BidderListFragment extends Fragment {
 
                         public void onClick(DialogInterface dialog, int which) {
                             // Do nothing but close the dialog
+                        TaskWinnerAccessor taskWinnerAccessor = new TaskWinnerAccessor();
 
+                            TaskWinnerModel taskWinnerModel = new TaskWinnerModel();
+                            taskWinnerModel.setWinnerId(bidModel.getBidderId());
+                            taskWinnerModel.setTaskId(bidModel.getTaskId());
+                            taskWinnerModel.setTaskOwnerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                            Toast.makeText(getContext(), "Winner has been picked", Toast.LENGTH_SHORT).show();
+                            taskWinnerAccessor.CreateTaskWinner(taskWinnerModel);
                             dialog.dismiss();
+                            startActivity(new Intent(getActivity(), ProfileActivity.class));
+
                         }
                     });
 

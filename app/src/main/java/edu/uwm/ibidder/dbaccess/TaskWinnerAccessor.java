@@ -10,7 +10,7 @@ import edu.uwm.ibidder.dbaccess.models.TaskWinnerModel;
  */
 public class TaskWinnerAccessor extends BaseAccessor {
 
-    TaskWinnerAccessor() {
+    public TaskWinnerAccessor() {
         super();
     }
 
