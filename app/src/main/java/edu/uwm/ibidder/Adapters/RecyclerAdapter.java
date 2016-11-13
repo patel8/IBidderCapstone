@@ -51,7 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         TaskModel model = list.get(position);
         holder.title.setText(model.getTitle());
         holder.Price.setText("$ " + model.getMaxPrice() + "");
-
+        holder.taskItNow.setVisibility(model.getIsTaskItNow()? View.VISIBLE : View.GONE);
         Date d1 = DateTools.epochToDate(model.getExpirationTime());
         Date d2 = new Date();
         long diff = d1.getTime() - d2.getTime();
@@ -102,10 +102,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     public static class ViewHolderForAvailTasks extends RecyclerView.ViewHolder {
         public TextView title;
-        public TextView description;
         public TextView Price;
         public TextView CountDown;
         public CountDownTimer countDownTimer;
+        public TextView taskItNow;
 
         public ViewHolderForAvailTasks(View v) {
             super(v);
@@ -113,6 +113,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             title = (TextView) v.findViewById(R.id.textViewListTitle);
             Price = (TextView) v.findViewById(R.id.textViewListPrice);
             CountDown = (TextView) v.findViewById(R.id.textViewListDateTime);
+            taskItNow = (TextView) v.findViewById(R.id.textViewTaskItNow);
 
         }
 

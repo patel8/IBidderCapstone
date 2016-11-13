@@ -10,7 +10,7 @@
         android:layout_margin="5dp">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/textViewListTitle"
             android:textSize="18sp"
@@ -21,6 +21,16 @@
             android:maxLines="1"
             android:singleLine="false"
             android:text="Title" />
+
+        <TextView
+            android:text="Task it now"
+            android:textColor="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:id="@+id/textViewTaskItNow"
+            android:layout_weight=".5"
+            android:gravity="top|center" />
 
     </LinearLayout>
 

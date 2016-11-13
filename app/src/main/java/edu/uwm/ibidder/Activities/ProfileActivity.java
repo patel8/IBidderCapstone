@@ -275,6 +275,7 @@ public class ProfileActivity extends AppCompatActivity
         final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
         final EditText tasktags = (EditText)view.findViewById(R.id.editText_tasktags);
         final CheckBox isTaskLocal = (CheckBox)view.findViewById(R.id.checkbox_taskLocal);
+        final CheckBox taskItNow = (CheckBox) view.findViewById(R.id.checkbox_taskItNow);
         dateLabel = (TextView)view.findViewById(R.id.label_taskEndTime);
         expireDate = new Date();
         dateLabel.setText(FrontEndSupport.getFormattedTime(expireDate.toString()));
@@ -338,6 +339,7 @@ public class ProfileActivity extends AppCompatActivity
                         String tskId = ta.createTask(tm);
                         Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                     }
+                    tm.setIsTaskItNow(taskItNow.isChecked());
                 }
             }
         });
