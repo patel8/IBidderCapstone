@@ -20,9 +20,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.uwm.ibidder.Activities.UserProfileActivity;
 import edu.uwm.ibidder.FrontEndSupport;
@@ -52,10 +56,13 @@ public class TaskFragment extends Fragment {
     private HashMap<String, Boolean> savedTags;
     private float savedPrice;
     private boolean resetSave = false;
-    private UserModel currentUser;
+    private UserModel taskOwner;
     private TaskModel currentTask;
     private LinearLayout userProfileLayout;
     private float lowestBid = Float.MAX_VALUE;
+    private String bidderID;
+    private String bidIDToUpdate;
+    private boolean needsUpdate = false;
 
     public TaskFragment() { }
 
@@ -70,6 +77,7 @@ public class TaskFragment extends Fragment {
         String taskid = ((TaskActivityII)getActivity()).getTaskID();
         String taskstatus = ((TaskActivityII)getActivity()).getTaskStatus();
         TaskModel.TaskStatusType status = FrontEndSupport.getStatus(taskstatus);
+        bidderID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userProfileLayout = (LinearLayout) v.findViewById(R.id.userProfileLayout);
 
 
@@ -90,7 +98,11 @@ public class TaskFragment extends Fragment {
                     public void dataUpdate(BidModel bm) {
                         if(bm.getBidValue() < lowestBid){
                             lowestBid = bm.getBidValue();
-                            tasklowbid.setText("$" + Float.toString(lowestBid));
+                            tasklowbid.setText(Float.toString(lowestBid));
+                        }
+                        if(bm.getBidderId().equals(bidderID)){
+                            bidIDToUpdate = bm.getBidId();
+                            needsUpdate = true;
                         }
                     }
                 });
@@ -102,7 +114,7 @@ public class TaskFragment extends Fragment {
                     @Override
                     public void dataUpdate(UserModel um) {
                         taskowner.setText(um.getFirstName());
-                        currentUser = um;
+                        taskOwner = um;
                     }
                 });
 
@@ -111,7 +123,7 @@ public class TaskFragment extends Fragment {
         userProfileLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getContext(), UserProfileActivity.class).putExtra("UserID", currentUser.getUserId()));
+                startActivity(new Intent(getContext(), UserProfileActivity.class).putExtra("UserID", taskOwner.getUserId()));
             }
         });
 
@@ -172,26 +184,26 @@ public class TaskFragment extends Fragment {
             public void onClick(View view) {
                 if(!bidAmount.getText().toString().isEmpty()){
                     final BidAccessor bidAccessor = new BidAccessor();
-                    BidModel bm = new BidModel();
-                    bm.setBidderId(currentUser.getUserId());
-                    bm.setTaskId(currentTask.getTaskId());
-                    bm.setBidValue(Float.parseFloat(bidAmount.getText().toString()));
+                    final BidModel newBid = new BidModel();
+                    newBid.setBidderId(bidderID);
+                    newBid.setTaskId(currentTask.getTaskId());
+                    newBid.setBidValue(Float.parseFloat(bidAmount.getText().toString()));
 
-                    bidAccessor.getTaskBids(currentTask.getTaskId(), new BidCallbackListener() {
-                        @Override
-                        public void dataUpdate(BidModel bm) {
-                            if(bm.getBidValue() < lowestBid){
-                                lowestBid = bm.getBidValue();
-                            }
-                            if(bm.getBidderId().equals(currentUser.getUserId())){
-                                bidAccessor.removeBid(bm.getBidId());
-                            }
-                        }
-                    });
+                    if(needsUpdate){
+                        newBid.setBidId(bidIDToUpdate);
+                        bidAccessor.updateBid(bidIDToUpdate, newBid);
+                        //Log.i("TAG", "----------onClick: just updated a bid");
 
-                    bidAccessor.createBid(bm);
-                    if(lowestBid > bm.getBidValue()){
-                        tasklowbid.setText("$" + Float.toString(bm.getBidValue()));
+                    } else{
+                        bidAccessor.createBid(newBid);
+                        bidIDToUpdate = newBid.getBidId();
+                        needsUpdate = true;
+                        //Log.i("TAG", "----------onClick: just created a bid");
+                    }
+
+                    if(lowestBid > newBid.getBidValue()){
+                        lowestBid = newBid.getBidValue();
+                        tasklowbid.setText("$" + Float.toString(lowestBid));
                     }
 
                     Toast.makeText(getContext(), "Bid placed: $" + bidAmount.getText().toString(), Toast.LENGTH_SHORT).show();
@@ -307,7 +319,7 @@ public class TaskFragment extends Fragment {
                                 //TODO: perform Firebase password validation to replace the task with a new one
                                 if(FrontEndSupport.taskCreateValidation(savedName, savedDescr, Float.toString(savedPrice), savedDate, getActivity())){
                                     final TaskAccessor ta = new TaskAccessor();
-                                    TaskModel newTM = new TaskModel(savedName, savedDescr, savedPrice, currentUser.getUserId(), DateTools.dateToEpoch(savedDate), false, false, savedTags);
+                                    TaskModel newTM = new TaskModel(savedName, savedDescr, savedPrice, taskOwner.getUserId(), DateTools.dateToEpoch(savedDate), false, false, savedTags);
                                     ta.createTask(newTM);
                                     ta.removeTask(currentTask.getTaskId());//doesnt seem to be removing
                                     Intent intent = new Intent(getActivity(), TaskActivityII.class);
