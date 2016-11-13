@@ -84,7 +84,16 @@ public class TaskFragment extends Fragment {
                 taskname.setText(savedName);
                 taskdescr.setText(savedDescr);
                 currentTask = tm;
-
+                BidAccessor ba = new BidAccessor();
+                ba.getTaskBids(tm.getTaskId(), new BidCallbackListener() {
+                    @Override
+                    public void dataUpdate(BidModel bm) {
+                        if(bm.getBidValue() < lowestBid){
+                            lowestBid = bm.getBidValue();
+                            tasklowbid.setText("$" + Float.toString(lowestBid));
+                        }
+                    }
+                });
                 Date d = DateTools.epochToDate(tm.getExpirationTime());
                 savedDate = d;
                 taskendtime.setText(FrontEndSupport.getFormattedTime(d.toString()));
@@ -97,17 +106,6 @@ public class TaskFragment extends Fragment {
                     }
                 });
 
-                BidAccessor ba = new BidAccessor();
-                ba.getTaskBids(tm.getTaskId(), new BidCallbackListener() {
-                    @Override
-                    public void dataUpdate(BidModel bm) {
-                        float proposedMin = bm.getBidValue();
-                        if(proposedMin < lowestBid){
-                            lowestBid = proposedMin;
-                            tasklowbid.setText("$" + Float.toString(proposedMin));
-                        }
-                    }
-                });
             }
         });
         userProfileLayout.setOnClickListener(new View.OnClickListener() {
@@ -172,17 +170,30 @@ public class TaskFragment extends Fragment {
         bidSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if(!bidAmount.getText().toString().isEmpty()){
-                    BidAccessor bidAccessor = new BidAccessor();
+                    final BidAccessor bidAccessor = new BidAccessor();
                     BidModel bm = new BidModel();
                     bm.setBidderId(currentUser.getUserId());
                     bm.setTaskId(currentTask.getTaskId());
                     bm.setBidValue(Float.parseFloat(bidAmount.getText().toString()));
+
+                    bidAccessor.getTaskBids(currentTask.getTaskId(), new BidCallbackListener() {
+                        @Override
+                        public void dataUpdate(BidModel bm) {
+                            if(bm.getBidValue() < lowestBid){
+                                lowestBid = bm.getBidValue();
+                            }
+                            if(bm.getBidderId().equals(currentUser.getUserId())){
+                                bidAccessor.removeBid(bm.getBidId());
+                            }
+                        }
+                    });
+
                     bidAccessor.createBid(bm);
-                    if(bm.getBidValue() < lowestBid){
+                    if(lowestBid > bm.getBidValue()){
                         tasklowbid.setText("$" + Float.toString(bm.getBidValue()));
                     }
+
                     Toast.makeText(getContext(), "Bid placed: $" + bidAmount.getText().toString(), Toast.LENGTH_SHORT).show();
                 }
                 ad.dismiss();
