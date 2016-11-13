@@ -22,11 +22,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
 import edu.uwm.ibidder.Activities.UserProfileActivity;
 import edu.uwm.ibidder.FrontEndSupport;
@@ -98,7 +96,7 @@ public class TaskFragment extends Fragment {
                     public void dataUpdate(BidModel bm) {
                         if(bm.getBidValue() < lowestBid){
                             lowestBid = bm.getBidValue();
-                            tasklowbid.setText(Float.toString(lowestBid));
+                            tasklowbid.setText("$" + Float.toString(lowestBid));
                         }
                         if(bm.getBidderId().equals(bidderID)){
                             bidIDToUpdate = bm.getBidId();
