@@ -46,11 +46,28 @@
                 android:layout_height="wrap_content">
 
                 <CheckBox
-                    android:text="@string/search_local_task"
+                    android:text="@string/search_non_local_task"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/nonLocalCheckbox"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:checked="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/showLocalCheckbox"
+                    android:layout_weight="1"
+                    android:text="@string/search_local_task"
+                    android:checked="true" />
             </LinearLayout>
 
             <Button

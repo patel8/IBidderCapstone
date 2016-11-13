@@ -42,6 +42,7 @@ public class all_available_task extends Fragment {
     Button toggleFilterButton;
     Button applyFilterChangesButton;
     CheckBox nonLocalCheckbox;
+    CheckBox localCheckbox;
     TextView searchTagsText;
     ExpandableLayout expandableFilterLayout;
     final ArrayList<TaskModel> taskList = new ArrayList<TaskModel>();
@@ -62,6 +63,7 @@ public class all_available_task extends Fragment {
         expandableFilterLayout = (ExpandableLayout) v.findViewById(R.id.expandableFilterLayout);
         applyFilterChangesButton = (Button) v.findViewById(R.id.applyFilterChangesButton);
         nonLocalCheckbox = (CheckBox) v.findViewById(R.id.nonLocalCheckbox);
+        localCheckbox = (CheckBox) v.findViewById(R.id.showLocalCheckbox);
         searchTagsText = (TextView) v.findViewById(R.id.searchTagsText);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.available_task_recyclerView);
@@ -121,8 +123,7 @@ public class all_available_task extends Fragment {
             }
         });
 
-        swipeRefreshLayout.setRefreshing(true);
-        locationService.updateLocation();
+        refreshTasks(locationService);
 
         return v;
     }
@@ -143,7 +144,8 @@ public class all_available_task extends Fragment {
 
         if (nonLocalCheckbox.isChecked())
             nonLocalTaskUpdate();
-        else
+
+        if (localCheckbox.isChecked())
             locationService.updateLocation();
     }
 
