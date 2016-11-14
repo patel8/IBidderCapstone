@@ -1,106 +1,113 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="edu.uwm.ibidder.Fragments.all_available_task"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="edu.uwm.ibidder.Fragments.all_available_task">
 
     <com.github.aakira.expandablelayout.ExpandableRelativeLayout
         android:id="@+id/expandableFilterLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:ael_expanded="false"
         app:ael_duration="500"
+        app:ael_expanded="false"
         app:ael_interpolator="bounce"
         app:ael_orientation="vertical">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/search_tags"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:text="@string/search_tags" />
+
+                <!-- Dummy item to prevent EditText from receiving focus -->
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true" />
 
                 <EditText
+                    android:id="@+id/searchTagsText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
+                    android:layout_weight="1"
                     android:ems="10"
-                    android:id="@+id/searchTagsText"
-                    android:layout_weight="1" />
+                    android:inputType="textPersonName"
+                    android:nextFocusLeft="@id/searchTagsText"
+                    android:nextFocusUp="@id/searchTagsText" />
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <CheckBox
-                    android:text="@string/search_non_local_task"
+                    android:id="@+id/nonLocalCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/nonLocalCheckbox"
                     android:layout_weight="1"
-                    android:checked="true" />
+                    android:checked="true"
+                    android:text="@string/search_non_local_task" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="horizontal">
 
                 <CheckBox
+                    android:id="@+id/showLocalCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/showLocalCheckbox"
                     android:layout_weight="1"
-                    android:text="@string/search_local_task"
-                    android:checked="true" />
+                    android:checked="true"
+                    android:text="@string/search_local_task" />
             </LinearLayout>
 
             <Button
-                android:text="@string/apply_filter_changes"
+                android:id="@+id/applyFilterChangesButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/applyFilterChangesButton"
+                android:layout_gravity="right"
                 android:layout_weight="1"
-                android:layout_gravity="right" />
+                android:text="@string/apply_filter_changes" />
 
         </LinearLayout>
 
     </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
 
     <Button
-        android:text="@string/toggle_filter_text"
+        android:id="@+id/toggleFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toggleFilter" />
+        android:text="@string/toggle_filter_text" />
 
     <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/fragment_all_available_swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
 
-        android:id="@+id/fragment_all_available_swipeRefresh">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/available_task_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:id="@+id/available_task_recyclerView"
-            ></android.support.v7.widget.RecyclerView>
-
+            android:scrollbars="vertical"></android.support.v7.widget.RecyclerView>
 
 
     </android.support.v4.widget.SwipeRefreshLayout>
