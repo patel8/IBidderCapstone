@@ -250,6 +250,8 @@
       }
     },
     "reviews": {
+      ".read": "auth !== null",
+      ".write": "auth !== null",
       ".indexOn": [
         "wasRead",
         "reviewWriterId",
@@ -281,6 +283,7 @@
       }
     },
     "aggregatedReviews": {
+      ".read": "auth !== null",
       "$aggregatedreviewid": {
         "reviewScore": {
           ".validate": "newData.val() !== null && newData.isNumber()"
@@ -298,6 +301,8 @@
       }
     },
     "tasksCompleted": {
+      ".read": "auth !== null",
+      ".write": "auth !== null",
       ".indexOn": [
         "wasRead"
       ],
