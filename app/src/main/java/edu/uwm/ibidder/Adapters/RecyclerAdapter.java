@@ -1,18 +1,12 @@
 package edu.uwm.ibidder.Adapters;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,7 +64,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             String distanceString;
 
             if (d >= 0)
-                distanceString = Math.round((d * 100.0)) / 100.0 + "km away";
+                distanceString = Math.round(d) + "km away";
             else
                 distanceString = "Non-local task";
             holder.distance.setText(distanceString);
