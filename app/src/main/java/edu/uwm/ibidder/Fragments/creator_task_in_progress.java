@@ -79,6 +79,8 @@ public class creator_task_in_progress extends Fragment {
                 viewHolder.DateTime.setText(taskModel.getExpirationTime() + "");
                 viewHolder.Price.setText(taskModel.getMaxPrice() + "");
                 viewHolder.distance.setVisibility(View.GONE);
+
+                viewHolder.taskItNow.setVisibility(taskModel.getIsTaskItNow()?View.VISIBLE:View.GONE);
             }
         };
 

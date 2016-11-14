@@ -17,6 +17,7 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
     public TextView distance;
     public TextView DateTime;
     public TextView Price;
+    public TextView taskItNow;
 
     public viewHolder(View v){
         super(v);
@@ -25,6 +26,7 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
         title = (TextView) v.findViewById(R.id.textViewListTitle);
         DateTime = (TextView) v.findViewById(R.id.textViewListDateTime);
         Price = (TextView) v.findViewById(R.id.textViewListPrice);
+        taskItNow = (TextView) v.findViewById(R.id.textViewTaskItNow);
 
 
     }

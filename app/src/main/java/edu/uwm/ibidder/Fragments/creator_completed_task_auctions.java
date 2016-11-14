@@ -88,6 +88,7 @@ public class creator_completed_task_auctions extends Fragment {
                 viewHolder.DateTime.setText(FrontEndSupport.getFormattedTime(DateTools.epochToDate(taskModel.getExpirationTime()).toString())+"");
                 viewHolder.Price.setText("$"+taskModel.getMaxPrice() + "");
                 viewHolder.distance.setVisibility(View.GONE);
+                viewHolder.taskItNow.setVisibility(taskModel.getIsTaskItNow()?View.VISIBLE:View.GONE);
             }
         };
 

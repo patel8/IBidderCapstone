@@ -324,7 +324,7 @@ public class ProfileActivity extends AppCompatActivity
                         tags.put(item, true);
                     }
                     tm.setTags(tags);
-
+                    tm.setIsTaskItNow(taskItNow.isChecked());
                     if (tm.getIsLocalTask()) {
                         final LocationService locationService = new LocationService(getApplicationContext()) {
                             @Override
@@ -339,7 +339,7 @@ public class ProfileActivity extends AppCompatActivity
                         String tskId = ta.createTask(tm);
                         Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                     }
-                    tm.setIsTaskItNow(taskItNow.isChecked());
+
                 }
             }
         });
