@@ -5,10 +5,7 @@
     android:id="@+id/activity_task_ii"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     tools:context="edu.uwm.ibidder.Activities.TaskActivityII">
 
 
@@ -16,7 +13,10 @@
         android:id="@+id/userTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabSelectedTextColor="@color/LabelColor">
+        android:background="@color/LabelColor"
+        app:tabTextColor="@android:color/background_light"
+        app:tabSelectedTextColor="@color/colorAccent"
+        >
 
     </android.support.design.widget.TabLayout>
 
