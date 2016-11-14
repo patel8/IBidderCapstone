@@ -1,6 +1,7 @@
 package edu.uwm.ibidder.Activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -20,6 +23,7 @@ import edu.uwm.ibidder.Fragments.TaskFragment;
 import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
+import edu.uwm.ibidder.dbaccess.TaskCompletedAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
@@ -32,6 +36,7 @@ public class TaskActivityII extends AppCompatActivity {
     private MenuItem item;
     private String taskID;
     private String taskStatus;
+    private Button buttonTaskComplete;
     private Toolbar toolbar;
     private boolean showToolBar;
     private boolean enableEditMenu = false;
@@ -54,6 +59,17 @@ public class TaskActivityII extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.TaskToolBar);
         toolbar.setVisibility(showToolBar? View.VISIBLE: View.GONE);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
+        buttonTaskComplete = (Button) findViewById(R.id.buttomCompleteTask);
+        buttonTaskComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Todo: When Task Complete Button is clicked.
+                TaskCompletedAccessor taskCompletedAccessor = new TaskCompletedAccessor();
+                taskCompletedAccessor.markTaskCompleted(taskID);
+                Toast.makeText(TaskActivityII.this, "Task is Marked Successfully", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(TaskActivityII.this, ProfileActivity.class));
+            }
+        });
         viewPager.setAdapter(new CustomAdapter(getSupportFragmentManager(), getApplicationContext()));
 
         tabLayout = (TabLayout) findViewById(R.id.taskTabLayout);
