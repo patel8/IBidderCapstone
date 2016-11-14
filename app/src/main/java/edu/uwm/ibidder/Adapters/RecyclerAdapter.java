@@ -27,10 +27,22 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
  */
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolderForAvailTasks> {
-    ArrayList<TaskModel> list;
+    private ArrayList<TaskModel> list;
+    private ArrayList<Double> distances;
+    private boolean hasDistances;
 
     public RecyclerAdapter(ArrayList<TaskModel> list) {
         this.list = list;
+        hasDistances = false;
+        distances = new ArrayList<Double>();
+    }
+
+    public void setDistances(ArrayList<Double> toAdd) {
+        hasDistances = true;
+        distances.clear();
+
+        for (Double x : toAdd)
+            distances.add(x);
     }
 
     @Override
@@ -51,7 +63,19 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         TaskModel model = list.get(position);
         holder.title.setText(model.getTitle());
         holder.Price.setText("$ " + model.getMaxPrice() + "");
-        holder.taskItNow.setVisibility(model.getIsTaskItNow()? View.VISIBLE : View.GONE);
+        holder.taskItNow.setVisibility(model.getIsTaskItNow() ? View.VISIBLE : View.GONE);
+
+        if (hasDistances) {
+            Double d = distances.get(position);
+            String distanceString;
+
+            if (d >= 0)
+                distanceString = Math.round((d * 100.0)) / 100.0 + "km away";
+            else
+                distanceString = "Non-local task";
+            holder.distance.setText(distanceString);
+        }
+
         Date d1 = DateTools.epochToDate(model.getExpirationTime());
         Date d2 = new Date();
         long diff = d1.getTime() - d2.getTime();
@@ -106,6 +130,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public TextView CountDown;
         public CountDownTimer countDownTimer;
         public TextView taskItNow;
+        public TextView distance;
 
         public ViewHolderForAvailTasks(View v) {
             super(v);
@@ -114,6 +139,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             Price = (TextView) v.findViewById(R.id.textViewListPrice);
             CountDown = (TextView) v.findViewById(R.id.textViewListDateTime);
             taskItNow = (TextView) v.findViewById(R.id.textViewTaskItNow);
+            distance = (TextView) v.findViewById(R.id.textViewListDistance);
 
         }
 

@@ -175,17 +175,22 @@ public class all_available_task extends Fragment {
     private void updateTaskList() {
         taskList.clear();
 
+        ArrayList<Double> newDistances = new ArrayList<Double>();
+
         //put non local tasks first
         for (TaskModel t : nonLocalTasksList) {
             taskList.add(t);
-            //We assume non local tasks have a distance of 0.0
+            //We assume non local tasks have a distance of -1.0
+            newDistances.add(-1.0);
         }
 
         for (Map.Entry<Double, TaskModel> entry : tasksWithLocationMap.entrySet()) {
             taskList.add(entry.getValue());
             //You can get the distance of a local task by calling entry.getKey() here.
+            newDistances.add(entry.getKey());
         }
 
+        recyclerAdapter.setDistances(newDistances);
 
         recyclerAdapter.notifyDataSetChanged();
     }
