@@ -48,8 +48,8 @@ public class bidder_bid_history extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bidder_bid_history, container, false);
 
-        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_bidder_current_task);
-        recyclerView = (RecyclerView) v.findViewById(R.id.bidder_current_task_recyclerView);
+        swipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_bidder_bid_history);
+        recyclerView = (RecyclerView) v.findViewById(R.id.bidder_bid_history_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         swipeRefreshLayout.setColorSchemeColors(Color.GREEN, Color.RED);
