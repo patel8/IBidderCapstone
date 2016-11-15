@@ -44,6 +44,15 @@ public abstract class LocationService implements LocationListener {
     }
 
     /**
+     * Returns true if gps is turned on
+     *
+     * @return The status of the gps
+     */
+    public boolean isGPSOn() {
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    /**
      * This locationservice starts listening again
      */
     public void rebuild() {
