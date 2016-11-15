@@ -1,64 +1,63 @@
 package edu.uwm.ibidder.Location;
 
-import android.*;
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-
 import android.support.v4.app.ActivityCompat;
 
 
 public abstract class LocationService implements LocationListener {
-    //Location Services client variable
-    GoogleApiClient locGoogleApiClient = null;
-    Location mLastLocation = null;
+    private Location lastLocation;
+    private boolean waitingForLocation;
 
+    private LocationManager locationManager;
     private Context context;
-    private LocationManager lm = null;
 
     public LocationService(Context context) {
         this.context = context;
-        lm = (LocationManager) context.getSystemService(this.context.LOCATION_SERVICE);
+        locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        waitingForLocation = false;
+        lastLocation = null;
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        lastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        locationManager.requestSingleUpdate(LocationManager.PASSIVE_PROVIDER, this, null);
+        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 1000, 1, this);
     }
 
     public void updateLocation() {
+        if (lastLocation == null)
+            waitingForLocation = true;
+        else
+            getCoordinates(lastLocation.getLatitude(), lastLocation.getLongitude());
+    }
+
+    public void dispose() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+        locationManager.removeUpdates(this);
     }
 
     public abstract void getCoordinates(double lat, double longi);
 
     @Override
     public void onLocationChanged(Location location) {
-        if (location != null && location.getAccuracy() < 100) {
+        if (waitingForLocation) {
             getCoordinates(location.getLatitude(), location.getLongitude());
-
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
-            lm.removeUpdates(this);
+            waitingForLocation = false;
         }
+
+        lastLocation = location;
     }
 
     @Override

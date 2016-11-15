@@ -64,7 +64,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             String distanceString;
 
             if (d >= 0)
-                distanceString = Math.round(d) + "km away";
+                distanceString = Math.round(d) + "m away";
             else
                 distanceString = "Non-local task";
             holder.distance.setText(distanceString);

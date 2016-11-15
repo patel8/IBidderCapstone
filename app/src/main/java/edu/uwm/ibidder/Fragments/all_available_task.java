@@ -57,6 +57,8 @@ public class all_available_task extends Fragment {
 
     final ArrayList<String> searchTags = new ArrayList<String>();
 
+    LocationService disposableLocation;
+
     public all_available_task() {
         // Required empty public constructor
     }
@@ -102,6 +104,8 @@ public class all_available_task extends Fragment {
             }
         };
 
+        disposableLocation = locationService;
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -138,6 +142,13 @@ public class all_available_task extends Fragment {
         refreshTasks(locationService);
 
         return v;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (disposableLocation != null)
+            disposableLocation.dispose();
     }
 
     private void refreshTasks(final LocationService locationService) {
