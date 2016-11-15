@@ -3,11 +3,11 @@ package edu.uwm.ibidder.Activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,17 +27,24 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
-import com.google.firebase.auth.FirebaseAuth;
-
-import edu.uwm.ibidder.Fragments.*;
+import edu.uwm.ibidder.Fragments.all_available_task;
+import edu.uwm.ibidder.Fragments.bidder_bid_history;
+import edu.uwm.ibidder.Fragments.bidder_live_task;
+import edu.uwm.ibidder.Fragments.bidder_won_tasks;
+import edu.uwm.ibidder.Fragments.creator_completed_task_auctions;
+import edu.uwm.ibidder.Fragments.creator_task_history;
+import edu.uwm.ibidder.Fragments.creator_task_in_auction;
+import edu.uwm.ibidder.Fragments.creator_task_in_progress;
 import edu.uwm.ibidder.FrontEndSupport;
+import edu.uwm.ibidder.Location.LocationService;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.DateTools;
-import edu.uwm.ibidder.Location.LocationService;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
@@ -93,11 +100,11 @@ public class ProfileActivity extends AppCompatActivity
         Fragment fragment = null;
         Class fragmentClass = null;
         fragmentClass = all_available_task.class;
-        try{
+        try {
             fragment = (Fragment) fragmentClass.newInstance();
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -206,7 +213,7 @@ public class ProfileActivity extends AppCompatActivity
             fragmentClass = creator_task_history.class;
         } else if (id == R.id.user_profile) {
             startActivity(new Intent(ProfileActivity.this, UserProfileActivity.class).putExtra("UserID", FirebaseAuth.getInstance().getCurrentUser().getUid()));
-        } else if(id == R.id.user_timeline){
+        } else if (id == R.id.user_timeline) {
             startActivity(new Intent(ProfileActivity.this, ProfileActivity.class));
         }
 
@@ -223,7 +230,7 @@ public class ProfileActivity extends AppCompatActivity
         return true;
     }
 
-    private AlertDialog createAlertDialogForUsers(UserModel userModel){
+    private AlertDialog createAlertDialogForUsers(UserModel userModel) {
         final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
         LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
         ad.setTitle("User Fields");
@@ -263,20 +270,20 @@ public class ProfileActivity extends AppCompatActivity
         return ad;
     }
 
-    private AlertDialog createAlertDialog(){
+    private AlertDialog createAlertDialog() {
         final AlertDialog ad = new AlertDialog.Builder(ProfileActivity.this).create();
         LayoutInflater inflater = ProfileActivity.this.getLayoutInflater();
         ad.setTitle("Create a task");
         ad.setMessage("What can a BidButler do for you?");
         View view = inflater.inflate(R.layout.alertdialog_taskcreator, null);
         ad.setView(view);
-        final EditText taskname = (EditText)view.findViewById(R.id.editText_taskname);
-        final EditText taskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
-        final EditText taskprice = (EditText)view.findViewById(R.id.editText_startprice);
-        final EditText tasktags = (EditText)view.findViewById(R.id.editText_tasktags);
-        final CheckBox isTaskLocal = (CheckBox)view.findViewById(R.id.checkbox_taskLocal);
+        final EditText taskname = (EditText) view.findViewById(R.id.editText_taskname);
+        final EditText taskdescr = (EditText) view.findViewById(R.id.editText_taskdescription);
+        final EditText taskprice = (EditText) view.findViewById(R.id.editText_startprice);
+        final EditText tasktags = (EditText) view.findViewById(R.id.editText_tasktags);
+        final CheckBox isTaskLocal = (CheckBox) view.findViewById(R.id.checkbox_taskLocal);
         final CheckBox taskItNow = (CheckBox) view.findViewById(R.id.checkbox_taskItNow);
-        dateLabel = (TextView)view.findViewById(R.id.label_taskEndTime);
+        dateLabel = (TextView) view.findViewById(R.id.label_taskEndTime);
         expireDate = new Date();
         dateLabel.setText(FrontEndSupport.getFormattedTime(expireDate.toString()));
 
@@ -298,7 +305,7 @@ public class ProfileActivity extends AppCompatActivity
                 String tagitems[] = tsktags.split(" ");
                 HashMap<String, Boolean> tags = new HashMap();
 
-                if(FrontEndSupport.taskCreateValidation(tskname, tskdesc, tskprice, expireDate, ProfileActivity.this)){
+                if (FrontEndSupport.taskCreateValidation(tskname, tskdesc, tskprice, expireDate, ProfileActivity.this)) {
                     final TaskAccessor ta = new TaskAccessor();
                     final TaskModel tm = new TaskModel();
                     // Title
@@ -314,13 +321,13 @@ public class ProfileActivity extends AppCompatActivity
                     // isTaskNow
                     tm.setIsTaskItNow(false);
                     // isLocalTask
-                    if(isTaskLocal.isChecked()) {
+                    if (isTaskLocal.isChecked()) {
                         tm.setIsLocalTask(true);
                     } else {
                         tm.setIsLocalTask(false);
                     }
                     // tags
-                    for(String item : tagitems){
+                    for (String item : tagitems) {
                         tags.put(item, true);
                     }
                     tm.setTags(tags);
@@ -334,8 +341,7 @@ public class ProfileActivity extends AppCompatActivity
                             }
                         };
                         locationService.updateLocation();
-                    }
-                    else {
+                    } else {
                         String tskId = ta.createTask(tm);
                         Toast.makeText(ProfileActivity.this, "created " + tskId, Toast.LENGTH_LONG).show();
                     }
@@ -365,13 +371,16 @@ public class ProfileActivity extends AppCompatActivity
             }
         });
 
-        ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Choose", new DialogInterface.OnClickListener() {
+        Button chooseButton = (Button) view.findViewById(R.id.buttonPickTimeDate);
+
+        chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 Date d = new Date(calendar.getTimeInMillis());
                 Calendar cal = FrontEndSupport.fillCalendar(d, tp.getHour(), tp.getMinute());
                 expireDate = cal.getTime();
                 dateLabel.setText(FrontEndSupport.getFormattedTime(expireDate.toString()));
+                ad.dismiss();
             }
         });
 

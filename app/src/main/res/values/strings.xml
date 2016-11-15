@@ -26,6 +26,7 @@
     <string name="search_non_local_task">Show Non-local Tasks</string>
     <string name="search_local_task">Show Local Tasks</string>
     <string name="apply_filter_changes">Apply Changes</string>
+    <string name="date_choose_button">Choose</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
