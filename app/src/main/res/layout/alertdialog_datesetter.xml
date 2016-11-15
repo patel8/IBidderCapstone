@@ -18,6 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonPickTimeDate"
+            android:background="@color/LabelColor"
+            android:textStyle="bold"
+            android:textColor="@color/white"
             android:layout_gravity="center"
 
             />
