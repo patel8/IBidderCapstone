@@ -11,35 +11,30 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Query;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import edu.uwm.ibidder.Activities.ProfileActivity;
+import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.Activities.UserProfileActivity;
 import edu.uwm.ibidder.DividerItemDecoration;
-import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.ItemClickSupport;
 import edu.uwm.ibidder.R;
-import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
 import edu.uwm.ibidder.dbaccess.ReviewAccessor;
 import edu.uwm.ibidder.dbaccess.TaskWinnerAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
+import edu.uwm.ibidder.dbaccess.listeners.AggregatedReviewCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
+import edu.uwm.ibidder.dbaccess.models.AggregatedReviewModel;
 import edu.uwm.ibidder.dbaccess.models.BidModel;
 import edu.uwm.ibidder.dbaccess.models.TaskWinnerModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
-import edu.uwm.ibidder.ItemClickSupport;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,18 +54,17 @@ public class BidderListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        supportPickingBidder = getActivity().getIntent().getBooleanExtra("PickBidder",false);
-        View v =  inflater.inflate(R.layout.fragment_bidder_list, container, false);
+        supportPickingBidder = getActivity().getIntent().getBooleanExtra("PickBidder", false);
+        View v = inflater.inflate(R.layout.fragment_bidder_list, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.bidderListFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
-
         recyclerView.addItemDecoration(
                 new DividerItemDecoration(getActivity()));
         BidAccessor bidAccessor = new BidAccessor();
-        Query q = bidAccessor.getTaskBidsQuery(((TaskActivityII)getActivity()).getTaskID());
+        Query q = bidAccessor.getTaskBidsQuery(((TaskActivityII) getActivity()).getTaskID());
         adapter = new FirebaseRecyclerAdapter<BidModel, BidderListHolder>(
                 BidModel.class,
                 R.layout.bidder_list_template,
@@ -84,11 +78,22 @@ public class BidderListFragment extends Fragment {
                     @Override
                     public void dataUpdate(UserModel um) {
                         viewHolder.userName.setText(um.getFirstName());
-                        ReviewAccessor reviewAccessor = new ReviewAccessor();
-                        reviewAccessor.getReviewsByUserIdQuery(um.getUserId());
                     }
                 });
-                viewHolder.userBid.setText("$ "+model.getBidValue()+"");
+
+                viewHolder.userRating.setIsIndicator(true);
+                ReviewAccessor reviewAccessor = new ReviewAccessor();
+                reviewAccessor.getAggregatedReviewByUserIdOnce(model.getBidderId(), new AggregatedReviewCallbackListener() {
+                    @Override
+                    public void dataUpdate(AggregatedReviewModel ar) {
+                        if (ar != null)
+                            viewHolder.userRating.setRating(ar.getReviewScore());
+                        else
+                            viewHolder.userRating.setRating(0);
+                    }
+                });
+
+                viewHolder.userBid.setText("$ " + model.getBidValue() + "");
             }
         };
 
@@ -102,8 +107,7 @@ public class BidderListFragment extends Fragment {
             }
         });
 
-        if(supportPickingBidder)
-        {
+        if (supportPickingBidder) {
             ItemClickSupport.addTo(recyclerView).setOnItemLongClickListener(new ItemClickSupport.OnItemLongClickListener() {
 
                 @Override
@@ -120,7 +124,7 @@ public class BidderListFragment extends Fragment {
 
                         public void onClick(DialogInterface dialog, int which) {
                             // Do nothing but close the dialog
-                        TaskWinnerAccessor taskWinnerAccessor = new TaskWinnerAccessor();
+                            TaskWinnerAccessor taskWinnerAccessor = new TaskWinnerAccessor();
 
                             TaskWinnerModel taskWinnerModel = new TaskWinnerModel();
                             taskWinnerModel.setWinnerId(bidModel.getBidderId());
@@ -160,12 +164,12 @@ public class BidderListFragment extends Fragment {
     }
 
 
-    public static class BidderListHolder extends RecyclerView.ViewHolder{
+    public static class BidderListHolder extends RecyclerView.ViewHolder {
         public TextView userName;
         public TextView userBid;
         public RatingBar userRating;
 
-        public BidderListHolder(View v){
+        public BidderListHolder(View v) {
             super(v);
             userName = (TextView) v.findViewById(R.id.bidder_list_bidder_name);
             userBid = (TextView) v.findViewById(R.id.bidder_list_bid_amount);
