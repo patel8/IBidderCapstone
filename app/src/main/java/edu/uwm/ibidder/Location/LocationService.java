@@ -23,14 +23,7 @@ public abstract class LocationService implements LocationListener {
         waitingForLocation = false;
         lastLocation = null;
 
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
-        lastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
-        locationManager.requestSingleUpdate(LocationManager.PASSIVE_PROVIDER, this, null);
-        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 1000, 1, this);
+        rebuild();
     }
 
     public void updateLocation() {
@@ -38,6 +31,16 @@ public abstract class LocationService implements LocationListener {
             waitingForLocation = true;
         else
             getCoordinates(lastLocation.getLatitude(), lastLocation.getLongitude());
+    }
+
+    public void rebuild() {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        lastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        locationManager.requestSingleUpdate(LocationManager.PASSIVE_PROVIDER, this, null);
+        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 1000, 1, this);
     }
 
     public void dispose() {

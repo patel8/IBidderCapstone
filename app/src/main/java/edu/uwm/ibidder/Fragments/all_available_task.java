@@ -145,6 +145,13 @@ public class all_available_task extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (disposableLocation != null)
+            disposableLocation.rebuild();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         if (disposableLocation != null)
