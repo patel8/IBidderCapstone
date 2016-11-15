@@ -9,7 +9,9 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
-
+/**
+ * Manages a user's location updates
+ */
 public abstract class LocationService implements LocationListener {
     private Location lastLocation;
     private boolean waitingForLocation;
@@ -17,6 +19,11 @@ public abstract class LocationService implements LocationListener {
     private LocationManager locationManager;
     private Context context;
 
+    /**
+     * Creates a locationService that starts listening immediately, permissions must be requested before calling.
+     *
+     * @param context The context that this location service lives in.
+     */
     public LocationService(Context context) {
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -26,6 +33,9 @@ public abstract class LocationService implements LocationListener {
         rebuild();
     }
 
+    /**
+     * Solicit an update from this location service (calls getCoordinates)
+     */
     public void updateLocation() {
         if (lastLocation == null)
             waitingForLocation = true;
@@ -33,6 +43,9 @@ public abstract class LocationService implements LocationListener {
             getCoordinates(lastLocation.getLatitude(), lastLocation.getLongitude());
     }
 
+    /**
+     * This locationservice starts listening again
+     */
     public void rebuild() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -43,6 +56,9 @@ public abstract class LocationService implements LocationListener {
         locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 1000, 1, this);
     }
 
+    /**
+     * This location service stops listening
+     */
     public void dispose() {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -51,6 +67,12 @@ public abstract class LocationService implements LocationListener {
         locationManager.removeUpdates(this);
     }
 
+    /**
+     * Overridable, is sent lat/longitude of the user
+     *
+     * @param lat   The lattitude of the user
+     * @param longi The longittude of the user
+     */
     public abstract void getCoordinates(double lat, double longi);
 
     @Override
