@@ -3,6 +3,7 @@ package edu.uwm.ibidder.dbaccess;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
+import edu.uwm.ibidder.dbaccess.listeners.AggregatedReviewCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.ReviewModel;
 
 /**
@@ -19,6 +20,12 @@ public class ReviewAccessor extends BaseAccessor {
     public DatabaseReference getAggregatedReviewByUserIdRef(String userId) {
         return database.getReference("aggregatedReviews/" + userId);
     }
+
+    public void getAggregatedReviewByUserIdOnce(String userId, final AggregatedReviewCallbackListener aggregatedReviewCallback) {
+        DatabaseReference ref = getAggregatedReviewByUserIdRef(userId);
+        ref.addListenerForSingleValueEvent(aggregatedReviewCallback);
+    }
+
 
     /**
      * Returns a query for the reviews for a user
