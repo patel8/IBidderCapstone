@@ -75,24 +75,40 @@ setInterval(function () {
         var data = snapshot.val();
         for (var key in data) {
             var item = data[key];
-            item.status = "TIMED_OUT";
+            taskToTimeout(item);
+        }
+    });
 
-            var itemEntry = firebase.database().ref("tasks/timed_out/" + key);
-            itemEntry.set(item);
+    ref.orderByChild("isTaskItNow").equalTo(true).once("value", function (snapshot) {
+        var data = snapshot.val();
 
-            var itemRemoval = firebase.database().ref("tasks/ready/" + key);
-            itemRemoval.remove();
+        for (var key in data) {
+            var item = data[key];
 
-            if (item.isLocalTask)
-                geoFireRef.remove(key);
-
-            sendNotificationToUser(item.ownerId, "Your auction has finished.", function () {
-                console.log("Sent auction completion message successfully.  ")
-            }, item);
+            firebase.database().ref("bids").orderByChild("taskId").equalTo(item.taskId).once("child_added", function (snapshot) {
+                taskToTimeout(item);
+            });
         }
     });
 
 }, 10 * 1000);
+
+function taskToTimeout(item) {
+    item.status = "TIMED_OUT";
+
+    var itemEntry = firebase.database().ref("tasks/timed_out/" + key);
+    itemEntry.set(item);
+
+    var itemRemoval = firebase.database().ref("tasks/ready/" + key);
+    itemRemoval.remove();
+
+    if (item.isLocalTask)
+        geoFireRef.remove(key);
+
+    sendNotificationToUser(item.ownerId, "Your auction has finished.", function () {
+        console.log("Sent auction completion message successfully.  ")
+    }, item);
+}
 
 /*
  Monitor reports and update tasks and bids as necessary.
