@@ -64,9 +64,8 @@ function deleteAllBidsOnTask(taskId, message) {
     });
 }
 
-//TODO: do listener stuff
 /*
- Check every minute to update task statuses.  This also notifies users when an auction finishes.
+ Check every 10 seconds to update task statuses.  This also notifies users when an auction finishes.
  */
 setInterval(function () {
 
@@ -93,7 +92,7 @@ setInterval(function () {
         }
     });
 
-}, 60 * 1000);
+}, 10 * 1000);
 
 /*
  Monitor reports and update tasks and bids as necessary.
@@ -135,6 +134,10 @@ firebase.database().ref("taskWinners").orderByChild("wasNotified").equalTo(false
         task.status = "ACCEPTED";
         taskRef.remove();
         firebase.database().ref("tasks/accepted/" + taskWinner.taskId).set(task);
+
+        sendNotificationToUser(taskWinner.winnerId, "You are the winner of a task.  ", function () {
+            console.log("Sent winner selected message successfully.  ")
+        }, task);
 
         firebase.database().ref("bids").orderByChild("taskId").equalTo(snapshot.key).once("child_added", function (snapshot) {
             var bid = snapshot.val();
