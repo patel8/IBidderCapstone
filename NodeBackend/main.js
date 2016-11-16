@@ -90,7 +90,7 @@ setInterval(function () {
             firebase.database().ref("bids").orderByChild("taskId").equalTo(item.taskId).once("value", function (snapshot) {
                 var bidData = snapshot.val();
 
-                if (Object.keys(bidData).length > 0) {
+                if (bidData != null && Object.keys(bidData).length > 0) {
                     var firstBid = bidData[Object.keys(bidData)[0]];
                     taskToTimeout(taskData[firstBid.taskId]);
                 }
