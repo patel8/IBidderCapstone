@@ -52,7 +52,8 @@
           "status",
           "expirationTime",
           "wasDeleted",
-          "isLocalTask"
+          "isLocalTask",
+          "isTaskItNow"
         ],
         "$taskid": {
           // Anyone can read a task.  Only the owner can write it.
@@ -252,6 +253,7 @@
     "reviews": {
       ".read": "auth !== null",
       ".write": "auth !== null",
+
       ".indexOn": [
         "wasRead",
         "reviewWriterId",
@@ -284,6 +286,7 @@
     },
     "aggregatedReviews": {
       ".read": "auth !== null",
+
       "$aggregatedreviewid": {
         "reviewScore": {
           ".validate": "newData.val() !== null && newData.isNumber()"
@@ -303,6 +306,7 @@
     "tasksCompleted": {
       ".read": "auth !== null",
       ".write": "auth !== null",
+
       ".indexOn": [
         "wasRead"
       ],
