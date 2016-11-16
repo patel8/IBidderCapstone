@@ -187,24 +187,31 @@ public class TaskFragment extends Fragment {
                     newBid.setTaskId(currentTask.getTaskId());
                     newBid.setBidValue(Float.parseFloat(bidAmount.getText().toString()));
 
-                    if(needsUpdate){
-                        newBid.setBidId(bidIDToUpdate);
-                        bidAccessor.updateBid(bidIDToUpdate, newBid);
-                        //Log.i("TAG", "----------onClick: just updated a bid");
-
-                    } else{
-                        bidAccessor.createBid(newBid);
-                        bidIDToUpdate = newBid.getBidId();
-                        needsUpdate = true;
-                        //Log.i("TAG", "----------onClick: just created a bid");
+                    if(newBid.getBidValue() < 0 || newBid.getBidValue() > currentTask.getMaxPrice())
+                    {
+                        Toast.makeText(getContext(), "Cannot place Bid lower than 0 or higher than Max Price", Toast.LENGTH_SHORT).show();
                     }
+                    else {
 
-                    if(lowestBid > newBid.getBidValue()){
-                        lowestBid = newBid.getBidValue();
-                        tasklowbid.setText("$" + Float.toString(lowestBid));
+                        if (needsUpdate) {
+                            newBid.setBidId(bidIDToUpdate);
+                            bidAccessor.updateBid(bidIDToUpdate, newBid);
+                            //Log.i("TAG", "----------onClick: just updated a bid");
+
+                        } else {
+                            bidAccessor.createBid(newBid);
+                            bidIDToUpdate = newBid.getBidId();
+                            needsUpdate = true;
+                            //Log.i("TAG", "----------onClick: just created a bid");
+                        }
+
+                        if (lowestBid > newBid.getBidValue()) {
+                            lowestBid = newBid.getBidValue();
+                            tasklowbid.setText("$" + Float.toString(lowestBid));
+                        }
+
+                        Toast.makeText(getContext(), "Bid placed: $" + bidAmount.getText().toString(), Toast.LENGTH_SHORT).show();
                     }
-
-                    Toast.makeText(getContext(), "Bid placed: $" + bidAmount.getText().toString(), Toast.LENGTH_SHORT).show();
                 }
                 ad.dismiss();
             }
