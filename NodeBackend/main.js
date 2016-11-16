@@ -22,32 +22,34 @@ function sendNotificationToUser(userKey, message, onSuccess, taskModel) {
                 taskStatus: null
             };
 
-        request({
-            url: 'https://fcm.googleapis.com/fcm/send',
-            method: 'POST',
-            headers: {
-                'Content-Type': ' application/json',
-                'Authorization': 'key=' + API_KEY
-            },
-            body: JSON.stringify({
-                data: {
-                    title: message,
-                    taskId: taskModel.taskId,
-                    taskStatus: taskModel.status
+        if (messengerId != null) {
+            request({
+                url: 'https://fcm.googleapis.com/fcm/send',
+                method: 'POST',
+                headers: {
+                    'Content-Type': ' application/json',
+                    'Authorization': 'key=' + API_KEY
                 },
-                to: messengerId
-            })
-        }, function (error, response, body) {
-            if (error) {
-                console.error(error);
-            }
-            else if (response.statusCode >= 400) {
-                console.error('HTTP Error: ' + response.statusCode + ' - ' + response.statusMessage);
-            }
-            else {
-                onSuccess();
-            }
-        });
+                body: JSON.stringify({
+                    data: {
+                        title: message,
+                        taskId: taskModel.taskId,
+                        taskStatus: taskModel.status
+                    },
+                    to: messengerId
+                })
+            }, function (error, response, body) {
+                if (error) {
+                    console.error(error);
+                }
+                else if (response.statusCode >= 400) {
+                    console.error('HTTP Error: ' + response.statusCode + ' - ' + response.statusMessage);
+                }
+                else {
+                    onSuccess();
+                }
+            });
+        }
     });
 }
 
@@ -80,17 +82,17 @@ setInterval(function () {
     });
 
     ref.orderByChild("isTaskItNow").equalTo(true).once("value", function (snapshot) {
-        var data = snapshot.val();
+        var taskData = snapshot.val();
 
-        for (var key in data) {
-            var item = data[key];
+        for (var key in taskData) {
+            var item = taskData[key];
 
             firebase.database().ref("bids").orderByChild("taskId").equalTo(item.taskId).once("value", function (snapshot) {
-                var data = snapshot.val();
+                var bidData = snapshot.val();
 
-                if (Object.keys(data).length > 0) {
-                    var firstBid = data[Object.keys(data)[0]];
-                    taskToTimeout(firstBid.taskId);
+                if (bidData != null && Object.keys(bidData).length > 0) {
+                    var firstBid = bidData[Object.keys(bidData)[0]];
+                    taskToTimeout(taskData[firstBid.taskId]);
                 }
             });
         }
