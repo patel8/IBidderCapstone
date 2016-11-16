@@ -100,6 +100,10 @@ setInterval(function () {
 
 }, 10 * 1000);
 
+/**
+ * Moves a task to timeout queue
+ * @param item The task model to timeout
+ */
 function taskToTimeout(item) {
     item.status = "TIMED_OUT";
     var key = item.taskId;
