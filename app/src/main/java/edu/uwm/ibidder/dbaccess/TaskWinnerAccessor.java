@@ -3,6 +3,7 @@ package edu.uwm.ibidder.dbaccess;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
+import edu.uwm.ibidder.dbaccess.listeners.TaskWinnerCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskWinnerModel;
 
 /**
@@ -32,6 +33,11 @@ public class TaskWinnerAccessor extends BaseAccessor {
     public Query GetTaskWinnersByWinnerIdQuery(String winnerId) {
         DatabaseReference ref = database.getReference("taskWinners/");
         return ref.orderByChild("winnerId").equalTo(winnerId);
+    }
+
+    public void GetTaskWinnerByTaskIdOnce(String taskId, final TaskWinnerCallbackListener taskWinnerCallbackListener) {
+        DatabaseReference ref = database.getReference("taskWinners/" + taskId);
+        ref.addListenerForSingleValueEvent(taskWinnerCallbackListener);
     }
 
 }
