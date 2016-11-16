@@ -43,6 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String taskStatus = remoteMessage.getData().get("taskStatus");
         Intent intent;
 
+        //TODO: add an option to switch to review dialog for bidder
         if (taskStatus != null) {
             intent = new Intent(this, TaskActivityII.class);
             intent.putExtra("task_id", remoteMessage.getData().get("taskId"));
