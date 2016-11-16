@@ -100,6 +100,7 @@ setInterval(function () {
 
 function taskToTimeout(item) {
     item.status = "TIMED_OUT";
+    var key = item.taskId;
 
     var itemEntry = firebase.database().ref("tasks/timed_out/" + key);
     itemEntry.set(item);
