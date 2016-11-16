@@ -63,7 +63,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         int icon = R.drawable.ic_stat_name;
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(icon)
-                .setContentTitle(remoteMessage.getData().get("title"))
+                .setContentTitle("BidButler")
+                .setContentText(remoteMessage.getData().get("title"))
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
