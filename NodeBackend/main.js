@@ -11,10 +11,16 @@ firebase.initializeApp({
 var GeoFire = require('geofire');
 var geoFireRef = new GeoFire(firebase.database().ref("geofire"));
 
-function sendNotificationToUser(userKey, message, onSuccess) {
+function sendNotificationToUser(userKey, message, onSuccess, taskModel) {
     firebase.database().ref("users/" + userKey).once("value", function (snapshot) {
         var user = snapshot.val();
         var messengerId = user.messengerId;
+
+        if (taskModel == null)
+            taskModel = {
+                taskId: null,
+                taskStatus: null
+            };
 
         request({
             url: 'https://fcm.googleapis.com/fcm/send',
@@ -25,7 +31,9 @@ function sendNotificationToUser(userKey, message, onSuccess) {
             },
             body: JSON.stringify({
                 data: {
-                    title: message
+                    title: message,
+                    taskId: taskModel.taskId,
+                    taskStatus: taskModel.status
                 },
                 to: messengerId
             })
@@ -81,7 +89,7 @@ setInterval(function () {
 
             sendNotificationToUser(item.ownerId, "Your auction has finished.", function () {
                 console.log("Sent auction completion message successfully.  ")
-            });
+            }, item);
         }
     });
 
@@ -198,7 +206,9 @@ firebase.database().ref("tasksCompleted").orderByChild("wasRead").equalTo(false)
         firebase.database().ref("taskWinners/" + snapshot.key).once("value", function (snapshot) {
             var taskWinner = snapshot.val();
 
-            sendNotificationToUser(taskWinner.winnerId, "A task you were assigned has been marked finished.  ");
+            sendNotificationToUser(taskWinner.winnerId, "A task you were assigned has been marked finished.  ", function () {
+                console.log("Sent task finished message successfully.  ")
+            }, task);
         })
 
     });

@@ -12,7 +12,9 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import edu.uwm.ibidder.Activities.ProfileActivity;
+import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.R;
+import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 /**
  * Handles firebase message delivery
@@ -38,7 +40,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      */
     private void sendNotification(RemoteMessage remoteMessage) {
 
-        Intent intent = new Intent(this, ProfileActivity.class);
+        String taskStatus = remoteMessage.getData().get("taskStatus");
+        Intent intent;
+
+        if (taskStatus != null) {
+            intent = new Intent(this, TaskActivityII.class);
+            intent.putExtra("task_id", remoteMessage.getData().get("taskId"));
+            intent.putExtra("task_status", taskStatus);
+            intent.putExtra("ShowToolBar", taskStatus.equals(TaskModel.TaskStatusType.ACCEPTED.toString()));
+        } else {
+            intent = new Intent(this, ProfileActivity.class);
+        }
+
+
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
