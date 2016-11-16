@@ -34,11 +34,9 @@ import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.ItemClickSupport;
 import edu.uwm.ibidder.R;
-import edu.uwm.ibidder.Activities.TaskActivity;
 import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.DateTools;
 import edu.uwm.ibidder.dbaccess.ListAdapter;
-import edu.uwm.ibidder.Activities.TaskActivity;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
