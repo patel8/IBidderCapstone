@@ -82,17 +82,17 @@ setInterval(function () {
     });
 
     ref.orderByChild("isTaskItNow").equalTo(true).once("value", function (snapshot) {
-        var data = snapshot.val();
+        var taskData = snapshot.val();
 
-        for (var key in data) {
-            var item = data[key];
+        for (var key in taskData) {
+            var item = taskData[key];
 
             firebase.database().ref("bids").orderByChild("taskId").equalTo(item.taskId).once("value", function (snapshot) {
-                var data = snapshot.val();
+                var bidData = snapshot.val();
 
-                if (Object.keys(data).length > 0) {
-                    var firstBid = data[Object.keys(data)[0]];
-                    taskToTimeout(firstBid.taskId);
+                if (Object.keys(bidData).length > 0) {
+                    var firstBid = bidData[Object.keys(bidData)[0]];
+                    taskToTimeout(taskData[firstBid.taskId]);
                 }
             });
         }
