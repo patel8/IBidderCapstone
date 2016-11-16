@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.util.GeoUtils;
 import com.github.aakira.expandablelayout.ExpandableLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,15 +91,19 @@ public class all_available_task extends Fragment {
             @Override
             public void getCoordinates(double lat, double longi) {
                 final GeoLocation userLocation = new GeoLocation(lat, longi);
+                final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
                 TaskAccessor taskAccessor = new TaskAccessor();
                 taskAccessor.getTasksOnce(new TaskCallbackListener(TaskModel.TaskStatusType.READY, searchTags) {
                     @Override
                     public void dataWithLocationUpdate(TaskModel task, GeoLocation location) {
+                        //TODO: uncomment this code and its ending brace to prevent users from seeing their own tasks
+                        //if (!task.getTaskId().equals(userId)) {
                         tasksWithLocationMap.put(GeoUtils.distance(userLocation, location), task);
 
                         updateTaskList();
                         swipeRefreshLayout.setRefreshing(false);
+                        //}
                     }
                 }, lat, longi, 5.0);
             }
