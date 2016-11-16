@@ -64,9 +64,8 @@ function deleteAllBidsOnTask(taskId, message) {
     });
 }
 
-//TODO: do listener stuff
 /*
- Check every minute to update task statuses.  This also notifies users when an auction finishes.
+ Check every 10 seconds to update task statuses.  This also notifies users when an auction finishes.
  */
 setInterval(function () {
 
@@ -76,24 +75,45 @@ setInterval(function () {
         var data = snapshot.val();
         for (var key in data) {
             var item = data[key];
-            item.status = "TIMED_OUT";
-
-            var itemEntry = firebase.database().ref("tasks/timed_out/" + key);
-            itemEntry.set(item);
-
-            var itemRemoval = firebase.database().ref("tasks/ready/" + key);
-            itemRemoval.remove();
-
-            if (item.isLocalTask)
-                geoFireRef.remove(key);
-
-            sendNotificationToUser(item.ownerId, "Your auction has finished.", function () {
-                console.log("Sent auction completion message successfully.  ")
-            }, item);
+            taskToTimeout(item);
         }
     });
 
-}, 60 * 1000);
+    ref.orderByChild("isTaskItNow").equalTo(true).once("value", function (snapshot) {
+        var data = snapshot.val();
+
+        for (var key in data) {
+            var item = data[key];
+
+            firebase.database().ref("bids").orderByChild("taskId").equalTo(item.taskId).once("value", function (snapshot) {
+                var data = snapshot.val();
+
+                if (Object.keys(data).length > 0) {
+                    var firstBid = data[Object.keys(data)[0]];
+                    taskToTimeout(firstBid.taskId);
+                }
+            });
+        }
+    });
+
+}, 10 * 1000);
+
+function taskToTimeout(item) {
+    item.status = "TIMED_OUT";
+
+    var itemEntry = firebase.database().ref("tasks/timed_out/" + key);
+    itemEntry.set(item);
+
+    var itemRemoval = firebase.database().ref("tasks/ready/" + key);
+    itemRemoval.remove();
+
+    if (item.isLocalTask)
+        geoFireRef.remove(key);
+
+    sendNotificationToUser(item.ownerId, "Your auction has finished.", function () {
+        console.log("Sent auction completion message successfully.  ")
+    }, item);
+}
 
 /*
  Monitor reports and update tasks and bids as necessary.
@@ -135,6 +155,10 @@ firebase.database().ref("taskWinners").orderByChild("wasNotified").equalTo(false
         task.status = "ACCEPTED";
         taskRef.remove();
         firebase.database().ref("tasks/accepted/" + taskWinner.taskId).set(task);
+
+        sendNotificationToUser(taskWinner.winnerId, "You are the winner of a task.  ", function () {
+            console.log("Sent winner selected message successfully.  ")
+        }, task);
 
         firebase.database().ref("bids").orderByChild("taskId").equalTo(snapshot.key).once("child_added", function (snapshot) {
             var bid = snapshot.val();

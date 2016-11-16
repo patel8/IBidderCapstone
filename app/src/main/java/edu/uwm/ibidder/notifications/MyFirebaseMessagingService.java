@@ -48,6 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra("task_id", remoteMessage.getData().get("taskId"));
             intent.putExtra("task_status", taskStatus);
             intent.putExtra("ShowToolBar", taskStatus.equals(TaskModel.TaskStatusType.ACCEPTED.toString()));
+            intent.putExtra("PickBidder", taskStatus.equals(TaskModel.TaskStatusType.TIMED_OUT.toString()));
         } else {
             intent = new Intent(this, ProfileActivity.class);
         }
