@@ -88,8 +88,8 @@ setInterval(function () {
             firebase.database().ref("bids").orderByChild("taskId").equalTo(item.taskId).once("value", function (snapshot) {
                 var data = snapshot.val();
 
-                if (data.keys().length > 0) {
-                    var firstBid = data[data.keys()[0]];
+                if (Object.keys(data).length > 0) {
+                    var firstBid = data[Object.keys(data)[0]];
                     taskToTimeout(firstBid.taskId);
                 }
             });
