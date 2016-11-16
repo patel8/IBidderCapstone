@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import android.support.v4.app.Fragment;
 
 import edu.uwm.ibidder.Adapters.RecyclerAdapter;
 import edu.uwm.ibidder.DividerItemDecoration;
@@ -24,7 +25,7 @@ import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
-public class bidder_bid_history extends android.support.v4.app.Fragment {
+public class bidder_bid_history extends Fragment {
 
 
     RecyclerView recyclerView;
