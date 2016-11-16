@@ -85,8 +85,13 @@ setInterval(function () {
         for (var key in data) {
             var item = data[key];
 
-            firebase.database().ref("bids").orderByChild("taskId").equalTo(item.taskId).once("child_added", function (snapshot) {
-                taskToTimeout(item);
+            firebase.database().ref("bids").orderByChild("taskId").equalTo(item.taskId).once("value", function (snapshot) {
+                var data = snapshot.val();
+
+                if (data.keys().length > 0) {
+                    var firstBid = data[data.keys()[0]];
+                    taskToTimeout(firstBid.taskId);
+                }
             });
         }
     });
