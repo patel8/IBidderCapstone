@@ -187,9 +187,9 @@ public class TaskFragment extends Fragment {
                     newBid.setTaskId(currentTask.getTaskId());
                     newBid.setBidValue(Float.parseFloat(bidAmount.getText().toString()));
 
-                    if(newBid.getBidValue() < 0 || newBid.getBidValue() > currentTask.getMaxPrice())
+                    if(newBid.getBidValue() > currentTask.getMaxPrice())
                     {
-                        Toast.makeText(getContext(), "Cannot place Bid lower than 0 or higher than Max Price", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Cannot place Bid higher than Max Price", Toast.LENGTH_SHORT).show();
                     }
                     else {
 
