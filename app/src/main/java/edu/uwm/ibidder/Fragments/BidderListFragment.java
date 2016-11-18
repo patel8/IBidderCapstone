@@ -9,6 +9,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
@@ -59,6 +62,7 @@ public class BidderListFragment extends Fragment {
         recyclerView = (RecyclerView) v.findViewById(R.id.bidderListFragmentRecyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        setHasOptionsMenu(true);
 
 
         recyclerView.addItemDecoration(
@@ -163,6 +167,13 @@ public class BidderListFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        for(int i=0; i<menu.size(); i++){
+            menu.getItem(i).setVisible(false);
+        }
+    }
 
     public static class BidderListHolder extends RecyclerView.ViewHolder {
         public TextView userName;

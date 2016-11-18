@@ -26,7 +26,7 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
 
 public class bidder_won_tasks extends android.support.v4.app.Fragment {
 
-
+    private final String FRAGMENT_NAME = "bidder_won_tasks";
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerAdapter recyclerAdapter;
@@ -90,6 +90,7 @@ public class bidder_won_tasks extends android.support.v4.app.Fragment {
                 Intent intent = new Intent(getActivity(), TaskActivityII.class);
                 intent.putExtra("task_id", tm.getTaskId());
                 intent.putExtra("task_status", tm.getStatus().toString());
+                intent.putExtra("caller", FRAGMENT_NAME);
                 startActivity(intent);
             }
         });

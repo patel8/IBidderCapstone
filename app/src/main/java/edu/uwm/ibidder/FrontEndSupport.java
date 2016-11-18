@@ -3,6 +3,8 @@ package edu.uwm.ibidder;
 import android.app.Activity;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -150,6 +152,14 @@ public class FrontEndSupport {
             default:
                 return -1;
         }
+    }
+
+    public static boolean isCurrentUser(String id){
+        if(FirebaseAuth.getInstance().getCurrentUser().getUid().equals(id)){
+            return true;
+        }
+
+        return false;
     }
 
 }

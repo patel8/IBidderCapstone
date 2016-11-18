@@ -50,9 +50,6 @@
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.ForgotPasswordActivity" />
-        <activity
-            android:name=".Fragments.profileFragment"
-            android:label="@string/settings_label" />
         
         <service android:name=".notifications.MyFirebaseInstanceIDService">
             <intent-filter>
@@ -83,7 +80,10 @@
         <activity
             android:name=".Activities.TaskActivityII"
             android:label="TASK" />
-        <activity android:name=".Activities.UserProfileActivity"></activity>
+        <activity
+            android:name=".Activities.UserProfileActivity"
+            android:label="User Profile">
+        </activity>
     </application>
 
 </manifest>

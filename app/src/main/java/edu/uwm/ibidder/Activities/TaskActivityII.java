@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,10 +54,12 @@ public class TaskActivityII extends AppCompatActivity {
     private MenuItem item;
     private String taskID;
     private String taskStatus;
+    private String caller;
     private Button buttonTaskComplete;
     private Toolbar toolbar;
     private boolean showToolBar;
     private boolean enableEditMenu = false;
+    private boolean enableBidMenu = false;
 
     public String getTaskID()
     {
@@ -71,6 +74,7 @@ public class TaskActivityII extends AppCompatActivity {
         setContentView(R.layout.activity_task_ii);
         taskID = getIntent().getStringExtra("task_id");
         taskStatus = getIntent().getStringExtra("task_status");
+        caller = getIntent().getStringExtra("caller");
         showToolBar = getIntent().getBooleanExtra("ShowToolBar", false);
 
         toolbar = (Toolbar) findViewById(R.id.TaskToolBar);
@@ -117,10 +121,19 @@ public class TaskActivityII extends AppCompatActivity {
         taskAccessor.getTaskOnce(taskID, new TaskCallbackListener(FrontEndSupport.getStatus(taskStatus)) {
             @Override
             public void dataUpdate(TaskModel tm) {
-                if (FirebaseAuth.getInstance().getCurrentUser().getUid().equals(tm.getOwnerId())) {
-                    enableEditMenu = true;
-                } else {
+                // outer if statement determines if the calling fragment is one in which a user
+                // should be able to edit/bid on the task still
+                if(caller.equals("all_available_task") || caller.equals("bidder_live_task") || caller.equals("creator_task_in_auction")){
+                    if(FrontEndSupport.isCurrentUser(tm.getOwnerId())){
+                        enableEditMenu = true;
+                        enableBidMenu = false;
+                    } else{
+                        enableEditMenu = false;
+                        enableBidMenu = true;
+                    }
+                } else{
                     enableEditMenu = false;
+                    enableBidMenu = false;
                 }
             }
         });
@@ -218,6 +231,8 @@ public class TaskActivityII extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.task_menu, menu);
         item = menu.findItem(R.id.edit_task_menu);
         item.setVisible(enableEditMenu);
+        item = menu.findItem(R.id.place_bid_menu);
+        item.setVisible(enableBidMenu);
         return true;
     }
 }

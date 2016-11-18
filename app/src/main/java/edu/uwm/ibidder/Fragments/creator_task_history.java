@@ -29,7 +29,7 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
  */
 public class creator_task_history extends Fragment {
 
-
+    private final String FRAGMENT_NAME = "creator_task_history";
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     FirebaseRecyclerAdapter<TaskModel, viewHolder> adapter;
@@ -87,6 +87,7 @@ public class creator_task_history extends Fragment {
                 Intent intent = new Intent(getActivity(), TaskActivityII.class);
                 intent.putExtra("task_id", tm.getTaskId());
                 intent.putExtra("task_status", tm.getStatus().toString());
+                intent.putExtra("caller", FRAGMENT_NAME);
                 startActivity(intent);
             }
         });

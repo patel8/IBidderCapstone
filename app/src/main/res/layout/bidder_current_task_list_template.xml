@@ -18,8 +18,7 @@
             android:maxEms="10"
             android:ellipsize="end"
             android:maxLines="1"
-            android:singleLine="false"
-            android:text="Title" />
+            android:text="Title"/>
 
         <TextView
             android:text="Task it now"
@@ -29,7 +28,8 @@
             android:background="@color/colorAccent"
             android:id="@+id/textViewTaskItNow"
             android:layout_weight=".5"
-            android:gravity="top|center" />
+            android:gravity="top|center"
+            android:layout_margin="5dp"/>
 
     </LinearLayout>
 

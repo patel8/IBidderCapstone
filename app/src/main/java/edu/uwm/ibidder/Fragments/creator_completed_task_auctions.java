@@ -45,7 +45,7 @@ import edu.uwm.ibidder.dbaccess.models.TaskModel;
  */
 public class creator_completed_task_auctions extends Fragment {
 
-
+    private final String FRAGMENT_NAME = "creator_completed_task_auctions";
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     FirebaseRecyclerAdapter<TaskModel, viewHolder> adapter;
@@ -100,6 +100,7 @@ public class creator_completed_task_auctions extends Fragment {
                 intent.putExtra("task_id", tm.getTaskId());
                 intent.putExtra("task_status", tm.getStatus().toString());
                 intent.putExtra("PickBidder", true);
+                intent.putExtra("caller", FRAGMENT_NAME);
                 startActivity(intent);
             }
         });

@@ -87,6 +87,7 @@ public class TaskFragment extends Fragment {
                 savedName = tm.getTitle();
                 savedDescr = tm.getDescription();
                 savedTags = tm.getTags();
+                savedPrice = tm.getMaxPrice();
                 taskname.setText(savedName);
                 taskdescr.setText(savedDescr);
                 currentTask = tm;
@@ -155,14 +156,52 @@ public class TaskFragment extends Fragment {
                 editDialog.show();
                 return true;
             case R.id.place_bid_menu:
-                AlertDialog bidDialog = bidAlertDialog();
-                bidDialog.show();
-                return true;
+                if(!currentTask.getIsTaskItNow()) {
+                    AlertDialog bidDialog = bidAlertDialog();
+                    bidDialog.show();
+                    return true;
+                } else {
+                    AlertDialog taskNowDialog = taskNowDialog();
+                    taskNowDialog.show();
+                    return true;
+                }
             default:
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private AlertDialog taskNowDialog(){
+        final AlertDialog ad = new AlertDialog.Builder(getContext()).create();
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        ad.setTitle("Task it now!");
+        View view = inflater.inflate(R.layout.alertdialog_taskitnow, null);
+        ad.setView(view);
+        ad.setMessage("Would you like this task for $" + currentTask.getMaxPrice() + "?");
+        Button taskAccept = (Button)view.findViewById(R.id.taskitnow_accept);
+        Button taskDecline = (Button)view.findViewById(R.id.taskitnow_decline);
+        taskAccept.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                BidAccessor ba = new BidAccessor();
+                BidModel newBid = new BidModel();
+                newBid.setBidderId(bidderID);
+                newBid.setTaskId(currentTask.getTaskId());
+                newBid.setBidValue(currentTask.getMaxPrice());
+                currentTask.setExpirationTime(0l);
+                ba.createBid(newBid);
+                Toast.makeText(getContext(), "Task accepted for $" + currentTask.getMaxPrice(), Toast.LENGTH_SHORT).show();
+                ad.dismiss();
+            }
+        });
+        taskDecline.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                ad.dismiss();
+            }
+        });
+        return ad;
     }
 
     private AlertDialog bidAlertDialog() {
