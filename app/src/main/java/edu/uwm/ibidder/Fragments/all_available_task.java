@@ -53,7 +53,7 @@ public class all_available_task extends Fragment {
     ExpandableLayout expandableFilterLayout;
     final ArrayList<TaskModel> taskList = new ArrayList<TaskModel>();
 
-    final SortedMap<Double, TaskModel> tasksWithLocationMap = new TreeMap<Double, TaskModel>();
+    final SortedMap<Double, ArrayList<TaskModel>> tasksWithLocationMap = new TreeMap<Double, ArrayList<TaskModel>>();
     final ArrayList<TaskModel> nonLocalTasksList = new ArrayList<TaskModel>();
 
     final ArrayList<String> searchTags = new ArrayList<String>();
@@ -99,10 +99,20 @@ public class all_available_task extends Fragment {
                     public void dataWithLocationUpdate(TaskModel task, GeoLocation location) {
                         //TODO: uncomment this code and its ending brace to prevent users from seeing their own tasks
                         //if (!task.getTaskId().equals(userId)) {
-                        tasksWithLocationMap.put(GeoUtils.distance(userLocation, location), task);
+
+                        double distance = GeoUtils.distance(userLocation, location);
+                        if (tasksWithLocationMap.get(distance) == null) {
+                            ArrayList<TaskModel> newList = new ArrayList<TaskModel>();
+                            newList.add(task);
+                            tasksWithLocationMap.put(distance, newList);
+                        } else {
+                            tasksWithLocationMap.get(distance).add(task);
+                        }
 
                         updateTaskList();
                         swipeRefreshLayout.setRefreshing(false);
+
+
                         //}
                     }
                 }, lat, longi, 5.0);
@@ -204,14 +214,14 @@ public class all_available_task extends Fragment {
         //put non local tasks first
         for (TaskModel t : nonLocalTasksList) {
             taskList.add(t);
-            //We assume non local tasks have a distance of -1.0
             newDistances.add(-1.0);
         }
 
-        for (Map.Entry<Double, TaskModel> entry : tasksWithLocationMap.entrySet()) {
-            taskList.add(entry.getValue());
-            //You can get the distance of a local task by calling entry.getKey() here.
-            newDistances.add(entry.getKey());
+        for (Map.Entry<Double, ArrayList<TaskModel>> listEntry : tasksWithLocationMap.entrySet()) {
+            for (TaskModel entry : listEntry.getValue()) {
+                taskList.add(entry);
+                newDistances.add(listEntry.getKey());
+            }
         }
 
         recyclerAdapter.setDistances(newDistances);
