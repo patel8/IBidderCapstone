@@ -81,7 +81,21 @@ public abstract class TaskCallbackListener implements ValueEventListener {
             TaskModel singleTask = dataSnapshot.getValue(TaskModel.class);
             dataUpdate(singleTask);
 
-            if (locations.size() > 0)
+            boolean canUpdateData = true;
+
+            //check that at least one tag matches when needed
+            if (isTagRestricted) {
+                canUpdateData = false;
+
+                for (String key : singleTask.getTags().keySet()) {
+                    if (tagRestrictions.contains(key)) {
+                        canUpdateData = true;
+                        break;
+                    }
+                }
+            }
+
+            if (canUpdateData && locations.size() > 0)
                 dataWithLocationUpdate(singleTask, locations.get(singleTask.getTaskId()));
         }
 
