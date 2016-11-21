@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
 import edu.uwm.ibidder.Manifest;
 import edu.uwm.ibidder.R;
+import edu.uwm.ibidder.dbaccess.ReviewAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
+import edu.uwm.ibidder.dbaccess.listeners.AggregatedReviewCallbackListener;
+import edu.uwm.ibidder.dbaccess.listeners.ReviewCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
+import edu.uwm.ibidder.dbaccess.models.AggregatedReviewModel;
+import edu.uwm.ibidder.dbaccess.models.ReviewModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class profileFragment extends Fragment {
@@ -32,6 +43,7 @@ public class profileFragment extends Fragment {
     private TextView Email;
     private TextView PhoneNumber;
     private LinearLayout phoneNumberLayout;
+    private LinearLayout userReviewLayout;
 
     public profileFragment()
     {
@@ -49,6 +61,7 @@ public class profileFragment extends Fragment {
         Email = (TextView) view.findViewById(R.id.userProfileEmail);
         PhoneNumber = (TextView) view.findViewById(R.id.userProfilePhone);
         phoneNumberLayout = (LinearLayout) view.findViewById(R.id.phoneNumberLayout);
+        userReviewLayout = (LinearLayout)view.findViewById(R.id.userReviewLayout);
         if(userId!=null)
         {
             UserAccessor userAccessor = new UserAccessor();
@@ -76,7 +89,34 @@ public class profileFragment extends Fragment {
             }
         });
 
+        /* Retrieving reviews */
+        final ReviewAccessor ra = new ReviewAccessor();
+        Query q = ra.getReviewsByUserIdQuery(userId);
 
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                    ra.getReviewByReviewIdOnce(snap.getKey(), new ReviewCallbackListener() {
+                        @Override
+                        public void dataUpdate(ReviewModel rm) {
+                            final TextView tv = new TextView(getContext());
+                            tv.setText(rm.getReviewText());
+                            UserAccessor ua = new UserAccessor();
+                            ua.getUserOnce(rm.getReviewWriterId(), new UserCallbackListener() {
+                                @Override
+                                public void dataUpdate(UserModel um) {
+                                    tv.append(" by " + um.getFirstName());
+                                }
+                            });
+                            userReviewLayout.addView(tv);
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) { }
+        });
 
         return view;
     }

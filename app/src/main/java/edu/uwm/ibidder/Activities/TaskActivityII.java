@@ -84,15 +84,9 @@ public class TaskActivityII extends AppCompatActivity {
         buttonTaskComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Todo: When Task Complete Button is clicked.
-                TaskCompletedAccessor taskCompletedAccessor = new TaskCompletedAccessor();
-                taskCompletedAccessor.markTaskCompleted(taskID);
-                Toast.makeText(TaskActivityII.this, taskID+ "Task is Marked Successfully", Toast.LENGTH_SHORT).show();
+                // When 'Complete Task' is clicked
                 AlertDialog dialog = createReviewDialog(taskID);
                 dialog.show();
-
-
-
             }
         });
         viewPager.setAdapter(new CustomAdapter(getSupportFragmentManager(), getApplicationContext()));
@@ -172,6 +166,7 @@ public class TaskActivityII extends AppCompatActivity {
                 submit.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        // Add review
                         ReviewAccessor reviewAccessor = new ReviewAccessor();
                         ReviewModel reviewModel = new ReviewModel();
                         reviewModel.setReviewScore(ratingBar.getNumStars());
@@ -181,6 +176,12 @@ public class TaskActivityII extends AppCompatActivity {
                         reviewModel.setUserReviewedId(um.getWinnerId());
 
                         reviewAccessor.createReview(reviewModel);
+
+                        // Task completed
+                        TaskCompletedAccessor taskCompletedAccessor = new TaskCompletedAccessor();
+                        taskCompletedAccessor.markTaskCompleted(taskID);
+                        Toast.makeText(TaskActivityII.this, "Task has been completed.", Toast.LENGTH_SHORT).show();
+
                         ad.dismiss();
 
                         startActivity(new Intent(TaskActivityII.this, ProfileActivity.class));
