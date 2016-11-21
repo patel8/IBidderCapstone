@@ -38,6 +38,16 @@ public class ReviewAccessor extends BaseAccessor {
     }
 
     /**
+     * Returns a reference to a single review
+     *
+     * @param reviewId The id of the review to retrieve
+     * @return The reference to the specified review
+     */
+    public DatabaseReference getReviewByReviewId(String reviewId) {
+        return database.getReference("reviews/" + reviewId);
+    }
+
+    /**
      * Creates an individual review for a user.  Automatically sets the reviewId.
      *
      * @param rm The review model to create
