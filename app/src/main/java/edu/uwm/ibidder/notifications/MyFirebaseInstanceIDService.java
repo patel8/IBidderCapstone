@@ -5,7 +5,6 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
@@ -35,8 +34,10 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
                 ua.getUser(userId, new UserCallbackListener() {
                     @Override
                     public void dataUpdate(UserModel um) {
-                        um.setMessengerId(token);
-                        ua.updateUser(um);
+                        if (um != null) {
+                            um.setMessengerId(token);
+                            ua.updateUser(um);
+                        }
                     }
                 });
 
