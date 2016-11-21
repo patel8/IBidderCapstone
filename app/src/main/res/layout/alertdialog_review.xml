@@ -6,13 +6,14 @@
 
     <TextView
         android:text="Person's Name"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textViewUserNameReview" />
 
     <RatingBar
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:numStars="5"
         android:id="@+id/ratingBarReview" />
 
@@ -27,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/buttonSumbitReview"
-
-        />
+        android:text="Submit"
+        android:layout_gravity="center" />
 
 </LinearLayout>
