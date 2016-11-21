@@ -13,11 +13,13 @@
 
     </group>
 
-    <item android:title="As Bidder">
+    <item android:title="TASK BIDDER"
+        android:id="@+id/submenu_bidder">
         <menu>
             <item
                 android:id="@+id/bidder_active_bids"
-                android:title="@string/asbidder_active" />
+                android:title="@string/asbidder_active" >
+            </item>
             <item
                 android:id="@+id/bidder_won_tasks"
                 android:title="@string/asbidder_current"/>
@@ -27,7 +29,8 @@
 
         </menu>
     </item>
-    <item android:title="TASK CREATOR">
+    <item android:title="TASK CREATOR"
+        android:id="@+id/submenu_creator">
         <menu>
             <item
                 android:id="@+id/creator_task_in_auction"

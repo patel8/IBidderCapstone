@@ -123,7 +123,7 @@ public class TaskActivityII extends AppCompatActivity {
             public void dataUpdate(TaskModel tm) {
                 // outer if statement determines if the calling fragment is one in which a user
                 // should be able to edit/bid on the task still
-                if(caller.equals("all_available_task") || caller.equals("bidder_live_task") || caller.equals("creator_task_in_auction")){
+                if(caller.equals("all_available_task") || caller.equals("bidder_live_task") || caller.equals("creator_task_in_auction") || caller.equals("TaskFragment")){
                     if(FrontEndSupport.isCurrentUser(tm.getOwnerId())){
                         enableEditMenu = true;
                         enableBidMenu = false;

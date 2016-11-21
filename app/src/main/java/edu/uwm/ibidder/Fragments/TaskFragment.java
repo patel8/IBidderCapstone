@@ -43,6 +43,7 @@ import edu.uwm.ibidder.dbaccess.models.UserModel;
 
 public class TaskFragment extends Fragment {
 
+    private final String FRAGMENT_NAME = "TaskFragment";
     private TextView taskname;
     private TextView taskdescr;
     private TextView taskowner;
@@ -369,6 +370,7 @@ public class TaskFragment extends Fragment {
                                     Intent intent = new Intent(getActivity(), TaskActivityII.class);
                                     intent.putExtra("task_id", newTM.getTaskId());
                                     intent.putExtra("task_status", newTM.getStatus().toString());
+                                    intent.putExtra("caller", FRAGMENT_NAME);
                                     startActivity(intent);
                                     Toast.makeText(getActivity(), "Successfully created", Toast.LENGTH_SHORT).show();
                                 } else{
