@@ -73,7 +73,7 @@ public abstract class TaskCallbackListener implements ValueEventListener {
                 if (canUpdateData)
                     dataUpdate(taskModel);
 
-                if (locations.size() > 0)
+                if (canUpdateData && locations.size() > 0)
                     dataWithLocationUpdate(taskModel, locations.get(taskModel.getTaskId()));
 
             }
