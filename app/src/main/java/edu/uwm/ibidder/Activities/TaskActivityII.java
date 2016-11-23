@@ -2,7 +2,7 @@ package edu.uwm.ibidder.Activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Rating;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,31 +10,21 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.Calendar;
-import java.util.Date;
 
 import edu.uwm.ibidder.Fragments.BidderListFragment;
 import edu.uwm.ibidder.Fragments.TaskFragment;
 import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.R;
-import edu.uwm.ibidder.dbaccess.BidAccessor;
 import edu.uwm.ibidder.dbaccess.ReviewAccessor;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.TaskCompletedAccessor;
@@ -47,10 +37,12 @@ import edu.uwm.ibidder.dbaccess.models.ReviewModel;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 import edu.uwm.ibidder.dbaccess.models.TaskWinnerModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
+
 public class TaskActivityII extends AppCompatActivity {
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private Menu menu;
     private MenuItem item;
     private String taskID;
     private String taskStatus;
@@ -61,13 +53,14 @@ public class TaskActivityII extends AppCompatActivity {
     private boolean enableEditMenu = false;
     private boolean enableBidMenu = false;
 
-    public String getTaskID()
-    {
+    public String getTaskID() {
         return taskID;
     }
-    public String getTaskStatus(){
+
+    public String getTaskStatus() {
         return taskStatus;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +71,7 @@ public class TaskActivityII extends AppCompatActivity {
         showToolBar = getIntent().getBooleanExtra("ShowToolBar", false);
 
         toolbar = (Toolbar) findViewById(R.id.TaskToolBar);
-        toolbar.setVisibility(showToolBar? View.VISIBLE: View.GONE);
+        toolbar.setVisibility(showToolBar ? View.VISIBLE : View.GONE);
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         buttonTaskComplete = (Button) findViewById(R.id.buttomCompleteTask);
         buttonTaskComplete.setOnClickListener(new View.OnClickListener() {
@@ -117,21 +110,25 @@ public class TaskActivityII extends AppCompatActivity {
             public void dataUpdate(TaskModel tm) {
                 // outer if statement determines if the calling fragment is one in which a user
                 // should be able to edit/bid on the task still
-                if(caller.equals("all_available_task") || caller.equals("bidder_live_task") || caller.equals("creator_task_in_auction") || caller.equals("TaskFragment")){
-                    if(FrontEndSupport.isCurrentUser(tm.getOwnerId())){
+                if (caller.equals("all_available_task") || caller.equals("bidder_live_task") || caller.equals("creator_task_in_auction") || caller.equals("TaskFragment")) {
+                    if (FrontEndSupport.isCurrentUser(tm.getOwnerId())) {
                         enableEditMenu = true;
                         enableBidMenu = false;
-                    } else{
+                    } else {
                         enableEditMenu = false;
                         enableBidMenu = true;
                     }
-                } else{
+                } else {
                     enableEditMenu = false;
                     enableBidMenu = false;
                 }
+
+                if (menu != null)
+                    optionMenuUpdate(menu);
             }
         });
     }
+
     private AlertDialog createReviewDialog(final String TaskId) {
         final AlertDialog ad = new AlertDialog.Builder(this).create();
         final LayoutInflater inflater = this.getLayoutInflater();
@@ -153,7 +150,7 @@ public class TaskActivityII extends AppCompatActivity {
                 userAccessor.getUser(um.getWinnerId(), new UserCallbackListener() {
                     @Override
                     public void dataUpdate(final UserModel um) {
-                        userName.setText(um.getFirstName()+" "+um.getLastName());
+                        userName.setText(um.getFirstName() + " " + um.getLastName());
                         userName.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -198,7 +195,7 @@ public class TaskActivityII extends AppCompatActivity {
 
     private class CustomAdapter extends FragmentPagerAdapter {
 
-        private String fragments [] = {"Task Information","List of Bidder"};
+        private String fragments[] = {"Task Information", "List of Bidder"};
 
         public CustomAdapter(FragmentManager supportFragmentManager, Context applicationContext) {
             super(supportFragmentManager);
@@ -206,7 +203,7 @@ public class TaskActivityII extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position){
+            switch (position) {
                 case 0:
                     return new TaskFragment();
                 case 1:
@@ -227,13 +224,18 @@ public class TaskActivityII extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.task_menu, menu);
+    private void optionMenuUpdate(Menu menu) {
         item = menu.findItem(R.id.edit_task_menu);
         item.setVisible(enableEditMenu);
         item = menu.findItem(R.id.place_bid_menu);
         item.setVisible(enableBidMenu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.task_menu, menu);
+        this.menu = menu;
+        optionMenuUpdate(menu);
         return true;
     }
 }
