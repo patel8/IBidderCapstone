@@ -22,6 +22,7 @@
     <string name="user_profile">Profile</string>
     <string name="title_activity_profile">Available Tasks</string>
     <string name="toggle_filter_text">Show/Hide Filters</string>
+    <string name="search_distance">Distance(km)</string>
     <string name="search_tags">Tags</string>
     <string name="search_non_local_task">Show Non-local Tasks</string>
     <string name="search_local_task">Show Local Tasks</string>

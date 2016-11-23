@@ -21,6 +21,37 @@
             android:orientation="vertical">
 
             <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <!-- Dummy item to prevent EditText from receiving focus -->
+
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true" >
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textView4"
+                    android:layout_weight="1"
+                    android:text="@string/search_distance"
+                    android:gravity="center_vertical|center_horizontal" />
+
+                <NumberPicker
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/distancePicker"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -30,13 +61,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/search_tags" />
-
-                <!-- Dummy item to prevent EditText from receiving focus -->
-                <LinearLayout
-                    android:layout_width="0px"
-                    android:layout_height="0px"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true" />
 
                 <EditText
                     android:id="@+id/searchTagsText"

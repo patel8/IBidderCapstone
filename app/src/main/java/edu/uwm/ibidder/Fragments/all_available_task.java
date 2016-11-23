@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.firebase.geofire.GeoLocation;
@@ -50,6 +51,7 @@ public class all_available_task extends Fragment {
     CheckBox nonLocalCheckbox;
     CheckBox localCheckbox;
     TextView searchTagsText;
+    NumberPicker distancePicker;
     ExpandableLayout expandableFilterLayout;
     final ArrayList<TaskModel> taskList = new ArrayList<TaskModel>();
 
@@ -77,6 +79,7 @@ public class all_available_task extends Fragment {
         nonLocalCheckbox = (CheckBox) v.findViewById(R.id.nonLocalCheckbox);
         localCheckbox = (CheckBox) v.findViewById(R.id.showLocalCheckbox);
         searchTagsText = (TextView) v.findViewById(R.id.searchTagsText);
+        distancePicker = (NumberPicker) v.findViewById(R.id.distancePicker);
 
         recyclerView = (RecyclerView) v.findViewById(R.id.available_task_recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -86,6 +89,10 @@ public class all_available_task extends Fragment {
 
         recyclerAdapter = new RecyclerAdapter(taskList);
         recyclerView.setAdapter(recyclerAdapter);
+
+        distancePicker.setMaxValue(100);
+        distancePicker.setMinValue(1);
+        distancePicker.setValue(5);
 
         final LocationService locationService = new LocationService(getContext()) {
             @Override
@@ -115,7 +122,7 @@ public class all_available_task extends Fragment {
 
                         //}
                     }
-                }, lat, longi, 5.0);
+                }, lat, longi, distancePicker.getValue());
             }
         };
 
