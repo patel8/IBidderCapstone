@@ -170,15 +170,41 @@ public class all_available_task extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (disposableLocation != null)
-            disposableLocation.rebuild();
+        startGPS();
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        stopGPS();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        startGPS();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopGPS();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopGPS();
+    }
+
+    private void stopGPS() {
         if (disposableLocation != null)
             disposableLocation.dispose();
+    }
+
+    private void startGPS() {
+        if (disposableLocation != null)
+            disposableLocation.rebuild();
     }
 
     private void refreshTasks(final LocationService locationService) {
