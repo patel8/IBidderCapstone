@@ -65,6 +65,7 @@ public class TaskActivityII extends AppCompatActivity {
     private boolean enableReportTask = false;
     private Button ReportTaskButton;
     private boolean enableCompleteTask = false;
+    private Menu menu;
 
     public String getTaskID()
     {
