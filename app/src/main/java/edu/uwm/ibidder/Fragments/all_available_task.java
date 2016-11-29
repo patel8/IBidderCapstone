@@ -135,6 +135,8 @@ public class all_available_task extends Fragment {
                 Intent intent = new Intent(getContext(), TaskActivityII.class);
                 intent.putExtra("task_id", tm.getTaskId());
                 intent.putExtra("task_status", tm.getStatus());
+                intent.putExtra("ShowToolBar", true);
+                intent.putExtra("ShowReportTask", true);
                 intent.putExtra("caller", FRAGMENT_NAME);
                 startActivity(intent);
             }

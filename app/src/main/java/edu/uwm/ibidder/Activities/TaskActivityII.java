@@ -35,6 +35,7 @@ import edu.uwm.ibidder.Fragments.TaskFragment;
 import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
+import edu.uwm.ibidder.dbaccess.ReportAccessor;
 import edu.uwm.ibidder.dbaccess.ReviewAccessor;
 import edu.uwm.ibidder.dbaccess.TaskAccessor;
 import edu.uwm.ibidder.dbaccess.TaskCompletedAccessor;
@@ -43,6 +44,7 @@ import edu.uwm.ibidder.dbaccess.UserAccessor;
 import edu.uwm.ibidder.dbaccess.listeners.TaskCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.TaskWinnerCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
+import edu.uwm.ibidder.dbaccess.models.ReportModel;
 import edu.uwm.ibidder.dbaccess.models.ReviewModel;
 import edu.uwm.ibidder.dbaccess.models.TaskModel;
 import edu.uwm.ibidder.dbaccess.models.TaskWinnerModel;
@@ -60,6 +62,9 @@ public class TaskActivityII extends AppCompatActivity {
     private boolean showToolBar;
     private boolean enableEditMenu = false;
     private boolean enableBidMenu = false;
+    private boolean enableReportTask = false;
+    private Button ReportTaskButton;
+    private boolean enableCompleteTask = false;
 
     public String getTaskID()
     {
@@ -75,18 +80,39 @@ public class TaskActivityII extends AppCompatActivity {
         taskID = getIntent().getStringExtra("task_id");
         taskStatus = getIntent().getStringExtra("task_status");
         caller = getIntent().getStringExtra("caller");
-        showToolBar = getIntent().getBooleanExtra("ShowToolBar", false);
 
-        toolbar = (Toolbar) findViewById(R.id.TaskToolBar);
-        toolbar.setVisibility(showToolBar? View.VISIBLE: View.GONE);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        //Get all visibility for Bottom Visibility
+        showToolBar = getIntent().getBooleanExtra("ShowToolBar", false);
+        enableReportTask = getIntent().getBooleanExtra("ShowReportTask", false);
+        enableCompleteTask = getIntent().getBooleanExtra("ShowCompleteTask", false);
+
+        // Initialize All Bottom App bar Visibility
         buttonTaskComplete = (Button) findViewById(R.id.buttomCompleteTask);
+        ReportTaskButton = (Button) findViewById(R.id.buttonReportTask);
+        toolbar = (Toolbar) findViewById(R.id.TaskToolBar);
+
+        //Set Visibility
+        ReportTaskButton.setVisibility(enableReportTask ? View.VISIBLE : View.GONE);
+        toolbar.setVisibility(showToolBar? View.VISIBLE: View.GONE);
+        buttonTaskComplete.setVisibility(enableCompleteTask ? View.VISIBLE: View.GONE);
+
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+
         buttonTaskComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // When 'Complete Task' is clicked
                 AlertDialog dialog = createReviewDialog(taskID);
                 dialog.show();
+            }
+        });
+
+        ReportTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog dialog = reportTaskDialog(taskID);
+                dialog.show();
+
             }
         });
         viewPager.setAdapter(new CustomAdapter(getSupportFragmentManager(), getApplicationContext()));
@@ -131,6 +157,31 @@ public class TaskActivityII extends AppCompatActivity {
                 }
             }
         });
+    }
+    private AlertDialog reportTaskDialog(final String TaskId) {
+        final AlertDialog ad = new AlertDialog.Builder(this).create();
+        final LayoutInflater inflater = this.getLayoutInflater();
+        ad.setTitle("Review");
+        View view = inflater.inflate(R.layout.alertdialog_addreport, null);
+        ad.setView(view);
+        final EditText Description = (EditText) view.findViewById(R.id.editTextDescriptionReport);
+        final Button submit = (Button) view.findViewById(R.id.buttonSubmitReport);
+    submit.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            ReportAccessor reportAccessor = new ReportAccessor();
+            ReportModel reportModel = new ReportModel();
+            reportModel.setDescription(Description.getText().toString().trim());
+            reportModel.setTaskId(taskID);
+            reportModel.setReporterId(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            reportAccessor.createReport(reportModel);
+            Toast.makeText(TaskActivityII.this, "Report has been placed", Toast.LENGTH_SHORT).show();
+            ad.dismiss();
+            startActivity(new Intent(TaskActivityII.this, ProfileActivity.class));
+        }
+    });
+
+        return ad;
     }
     private AlertDialog createReviewDialog(final String TaskId) {
         final AlertDialog ad = new AlertDialog.Builder(this).create();
