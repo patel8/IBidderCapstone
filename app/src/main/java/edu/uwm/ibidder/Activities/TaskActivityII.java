@@ -143,18 +143,21 @@ public class TaskActivityII extends AppCompatActivity {
             public void dataUpdate(TaskModel tm) {
                 // outer if statement determines if the calling fragment is one in which a user
                 // should be able to edit/bid on the task still
-                if(caller.equals("all_available_task") || caller.equals("bidder_live_task") || caller.equals("creator_task_in_auction") || caller.equals("TaskFragment")){
-                    if(FrontEndSupport.isCurrentUser(tm.getOwnerId())){
+                if (caller.equals("all_available_task") || caller.equals("bidder_live_task") || caller.equals("creator_task_in_auction") || caller.equals("TaskFragment")) {
+                    if (FrontEndSupport.isCurrentUser(tm.getOwnerId())) {
                         enableEditMenu = true;
                         enableBidMenu = false;
-                    } else{
+                    } else {
                         enableEditMenu = false;
                         enableBidMenu = true;
                     }
-                } else{
+                } else {
                     enableEditMenu = false;
                     enableBidMenu = false;
                 }
+
+                if (menu != null)
+                    optionMenuUpdate(menu);
             }
         });
     }
@@ -249,7 +252,7 @@ public class TaskActivityII extends AppCompatActivity {
 
     private class CustomAdapter extends FragmentPagerAdapter {
 
-        private String fragments [] = {"Task Information","List of Bidder"};
+        private String fragments[] = {"Task Information", "List of Bidder"};
 
         public CustomAdapter(FragmentManager supportFragmentManager, Context applicationContext) {
             super(supportFragmentManager);
@@ -278,13 +281,18 @@ public class TaskActivityII extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.task_menu, menu);
+    private void optionMenuUpdate(Menu menu) {
         item = menu.findItem(R.id.edit_task_menu);
         item.setVisible(enableEditMenu);
         item = menu.findItem(R.id.place_bid_menu);
         item.setVisible(enableBidMenu);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.task_menu, menu);
+        this.menu = menu;
+        optionMenuUpdate(menu);
         return true;
     }
 }

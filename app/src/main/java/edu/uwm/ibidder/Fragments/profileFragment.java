@@ -1,38 +1,29 @@
 package edu.uwm.ibidder.Fragments;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import edu.uwm.ibidder.Manifest;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.dbaccess.ReviewAccessor;
 import edu.uwm.ibidder.dbaccess.UserAccessor;
-import edu.uwm.ibidder.dbaccess.listeners.AggregatedReviewCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.ReviewCallbackListener;
 import edu.uwm.ibidder.dbaccess.listeners.UserCallbackListener;
-import edu.uwm.ibidder.dbaccess.models.AggregatedReviewModel;
 import edu.uwm.ibidder.dbaccess.models.ReviewModel;
 import edu.uwm.ibidder.dbaccess.models.UserModel;
 
@@ -45,15 +36,14 @@ public class profileFragment extends Fragment {
     private LinearLayout phoneNumberLayout;
     private LinearLayout userReviewLayout;
 
-    public profileFragment()
-    {
+    public profileFragment() {
 
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.activity_settings, container, false);
+        View view = inflater.inflate(R.layout.activity_settings, container, false);
 
         String userId = getActivity().getIntent().getStringExtra("UserID");
         firstName = (TextView) view.findViewById(R.id.userProfileFirstName);
@@ -61,9 +51,8 @@ public class profileFragment extends Fragment {
         Email = (TextView) view.findViewById(R.id.userProfileEmail);
         PhoneNumber = (TextView) view.findViewById(R.id.userProfilePhone);
         phoneNumberLayout = (LinearLayout) view.findViewById(R.id.phoneNumberLayout);
-        userReviewLayout = (LinearLayout)view.findViewById(R.id.userReviewLayout);
-        if(userId!=null)
-        {
+        userReviewLayout = (LinearLayout) view.findViewById(R.id.userReviewLayout);
+        if (userId != null) {
             UserAccessor userAccessor = new UserAccessor();
             userAccessor.getUser(userId, new UserCallbackListener() {
                 @Override
@@ -84,6 +73,10 @@ public class profileFragment extends Fragment {
                         new String[]{android.Manifest.permission.CALL_PHONE},
                         3);
 
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + PhoneNumber.getText().toString()));
                 startActivity(intent);
             }
@@ -96,7 +89,7 @@ public class profileFragment extends Fragment {
         q.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
+                for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     ra.getReviewByReviewIdOnce(snap.getKey(), new ReviewCallbackListener() {
                         @Override
                         public void dataUpdate(ReviewModel rm) {
@@ -114,8 +107,10 @@ public class profileFragment extends Fragment {
                     });
                 }
             }
+
             @Override
-            public void onCancelled(DatabaseError databaseError) { }
+            public void onCancelled(DatabaseError databaseError) {
+            }
         });
 
         return view;

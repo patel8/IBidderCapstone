@@ -13,11 +13,16 @@ import android.support.v4.app.ActivityCompat;
  * Manages a user's location updates
  */
 public abstract class LocationService implements LocationListener {
+    private static final int MAX_IGNORES = 5;
+
     private Location lastLocation;
     private boolean waitingForLocation;
 
     private LocationManager locationManager;
     private Context context;
+
+    private float lastLocationAccuracy;
+    private int ignoredUpdates;
 
     /**
      * Creates a locationService that starts listening immediately, permissions must be requested before calling.
@@ -29,6 +34,8 @@ public abstract class LocationService implements LocationListener {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         waitingForLocation = false;
         lastLocation = null;
+        lastLocationAccuracy = Float.MAX_VALUE;
+        ignoredUpdates = 0;
 
         rebuild();
     }
@@ -56,20 +63,28 @@ public abstract class LocationService implements LocationListener {
      * This locationservice starts listening again
      */
     public void rebuild() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        if (
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+
         lastLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
         locationManager.requestSingleUpdate(LocationManager.PASSIVE_PROVIDER, this, null);
-        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 1000, 1, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
     }
 
     /**
      * This location service stops listening
      */
     public void dispose() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        if (
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -88,10 +103,17 @@ public abstract class LocationService implements LocationListener {
     public void onLocationChanged(Location location) {
         if (waitingForLocation) {
             getCoordinates(location.getLatitude(), location.getLongitude());
+            lastLocation = location;
             waitingForLocation = false;
         }
 
-        lastLocation = location;
+        if (location.getAccuracy() < lastLocationAccuracy || ignoredUpdates > MAX_IGNORES) {
+            ignoredUpdates = 0;
+            lastLocationAccuracy = location.getAccuracy();
+            lastLocation = location;
+        } else {
+            ignoredUpdates++;
+        }
     }
 
     @Override

@@ -140,7 +140,7 @@
           "expirationTime"
         ],
         ".read": "auth !== null",
-        ".write": false
+        ".write": "auth !== null"
       },
       "reported": {
         //nobody can read/write reported tasks
