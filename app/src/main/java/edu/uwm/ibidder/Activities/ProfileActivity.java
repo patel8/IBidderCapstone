@@ -114,7 +114,7 @@ public class ProfileActivity extends AppCompatActivity
         fabuttonTaskCreator.setOnClickListener(this);
         final UserAccessor userAccessor = new UserAccessor();
 
-        userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+        userAccessor.getUserOnce(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
                 //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
@@ -251,7 +251,7 @@ public class ProfileActivity extends AppCompatActivity
 
                 final UserAccessor userAccessor = new UserAccessor();
 
-                userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+                userAccessor.getUserOnce(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
                     @Override
                     public void dataUpdate(UserModel um) {
                         if (um == null) {
