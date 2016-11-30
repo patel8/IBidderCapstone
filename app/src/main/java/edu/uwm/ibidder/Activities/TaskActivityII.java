@@ -165,7 +165,7 @@ public class TaskActivityII extends AppCompatActivity {
     private AlertDialog reportTaskDialog(final String TaskId) {
         final AlertDialog ad = new AlertDialog.Builder(this).create();
         final LayoutInflater inflater = this.getLayoutInflater();
-        ad.setTitle("Review");
+        ad.setTitle("Report");
         View view = inflater.inflate(R.layout.alertdialog_addreport, null);
         ad.setView(view);
         final EditText Description = (EditText) view.findViewById(R.id.editTextDescriptionReport);

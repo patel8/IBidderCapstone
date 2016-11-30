@@ -51,7 +51,6 @@ public class profileFragment extends Fragment {
         Email = (TextView) view.findViewById(R.id.userProfileEmail);
         PhoneNumber = (TextView) view.findViewById(R.id.userProfilePhone);
         phoneNumberLayout = (LinearLayout) view.findViewById(R.id.phoneNumberLayout);
-        userReviewLayout = (LinearLayout) view.findViewById(R.id.userReviewLayout);
         if (userId != null) {
             UserAccessor userAccessor = new UserAccessor();
             userAccessor.getUser(userId, new UserCallbackListener() {
@@ -79,37 +78,6 @@ public class profileFragment extends Fragment {
 
                 Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + PhoneNumber.getText().toString()));
                 startActivity(intent);
-            }
-        });
-
-        /* Retrieving reviews */
-        final ReviewAccessor ra = new ReviewAccessor();
-        Query q = ra.getReviewsByUserIdQuery(userId);
-
-        q.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snap : dataSnapshot.getChildren()) {
-                    ra.getReviewByReviewIdOnce(snap.getKey(), new ReviewCallbackListener() {
-                        @Override
-                        public void dataUpdate(ReviewModel rm) {
-                            final TextView tv = new TextView(getContext());
-                            tv.setText(rm.getReviewText());
-                            UserAccessor ua = new UserAccessor();
-                            ua.getUserOnce(rm.getReviewWriterId(), new UserCallbackListener() {
-                                @Override
-                                public void dataUpdate(UserModel um) {
-                                    tv.append(" by " + um.getFirstName());
-                                }
-                            });
-                            userReviewLayout.addView(tv);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
             }
         });
 

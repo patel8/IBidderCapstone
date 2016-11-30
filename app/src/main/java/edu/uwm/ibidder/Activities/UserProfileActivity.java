@@ -11,7 +11,6 @@ import android.os.Bundle;
 
 import edu.uwm.ibidder.Fragments.BidderListFragment;
 import edu.uwm.ibidder.Fragments.ReviewFragment;
-import edu.uwm.ibidder.Fragments.RewardsFragment;
 import edu.uwm.ibidder.Fragments.profileFragment;
 import edu.uwm.ibidder.R;
 public class UserProfileActivity extends AppCompatActivity {
@@ -50,7 +49,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
     private class CustomAdapter extends FragmentPagerAdapter {
 
-        private String fragments [] = {"User Information","Reviews","Rewards"};
+        private String fragments [] = {"User Information","Reviews"};
 
         public CustomAdapter(FragmentManager supportFragmentManager, Context applicationContext) {
             super(supportFragmentManager);
@@ -63,8 +62,6 @@ public class UserProfileActivity extends AppCompatActivity {
                     return new profileFragment();
                 case 1:
                     return new ReviewFragment();
-                case 2:
-                    return new RewardsFragment();
                 default:
                     return null;
             }
