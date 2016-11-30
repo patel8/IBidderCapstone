@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -134,7 +135,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         callbackManager = CallbackManager.Factory.create();
         buttonFacebookLogin = (LoginButton) findViewById(R.id.facebookLogin);
-
+        buttonFacebookLogin.setReadPermissions("email", "public_profile");
 
         buttonFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -149,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             @Override
             public void onError(FacebookException error) {
-
+                Log.d("asdf", error.toString());
             }
         });
 
@@ -308,6 +309,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 // Google Sign In failed, update UI appropriately
 
             }
+        } else {
+            callbackManager.onActivityResult(requestCode,resultCode, data);
         }
     }
 
