@@ -25,7 +25,7 @@ public class UserModel {
      * @return True if there ar eno missing fields.
      */
     public boolean validate() {
-        return phoneNumber != null && email != null && firstName != null && lastName != null && userId != null;
+        return phoneNumber != null && firstName != null && lastName != null && userId != null;
     }
 
     public UserModel(String phoneNumber, String email, String firstName, String lastName) {
