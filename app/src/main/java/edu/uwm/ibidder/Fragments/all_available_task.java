@@ -4,6 +4,7 @@ package edu.uwm.ibidder.Fragments;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -227,6 +228,18 @@ public class all_available_task extends Fragment {
 
         if (localCheckbox.isChecked())
             locationService.updateLocation();
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //hide loader if nothing is found in 5 seconds (probably no tasks)
+                if(swipeRefreshLayout.isRefreshing()){
+                    swipeRefreshLayout.setRefreshing(false);
+                    updateTaskList();
+                }
+            }
+        }, 5000);
     }
 
     private void nonLocalTaskUpdate() {
