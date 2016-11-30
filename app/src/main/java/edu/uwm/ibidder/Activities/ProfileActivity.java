@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
@@ -172,6 +173,8 @@ public class ProfileActivity extends AppCompatActivity
                 break;
             case R.id.action_logOut:
                 FirebaseAuth.getInstance().signOut();
+                if (LoginManager.getInstance() != null)
+                    LoginManager.getInstance().logOut();
                 startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                 break;
         }
