@@ -48,6 +48,13 @@
             android:layout_gravity="center"
             android:text="@string/complete_task"
              />
+        <Button
+            android:id="@+id/buttonReportTask"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="@string/report_task"
+            />
     </android.support.v7.widget.Toolbar>
 
 </RelativeLayout>

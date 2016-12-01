@@ -92,6 +92,8 @@ public class creator_task_in_progress extends Fragment {
                 intent.putExtra("task_id", tm.getTaskId());
                 intent.putExtra("task_status", tm.getStatus().toString());
                 intent.putExtra("ShowToolBar", true);
+                intent.putExtra("ShowCompleteTask", true);
+
                 intent.putExtra("caller", FRAGMENT_NAME);
                 startActivity(intent);
             }

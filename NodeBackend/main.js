@@ -53,6 +53,32 @@ function sendNotificationToUser(userKey, message, onSuccess, taskModel) {
     });
 }
 
+function incrementUserBidsCompleted(userId) {
+    var userRef = firebase.database().ref("/users/" + userId);
+    userRef.once("value", function (snapshot) {
+        var user = snapshot.val();
+        if (user.bidsCompleted)
+            user.bidsCompleted++;
+        else
+            user.bidsCompleted = 1;
+
+        userRef.set(user);
+    });
+}
+
+function incrementUserTasksCompleted(userId) {
+    var userRef = firebase.database().ref("/users/" + userId);
+    userRef.once("value", function (snapshot) {
+        var user = snapshot.val();
+        if (user.tasksCompleted)
+            user.tasksCompleted++;
+        else
+            user.tasksCompleted = 1;
+
+        userRef.set(user);
+    });
+}
+
 function deleteAllBidsOnTask(taskId, message) {
     firebase.database().ref("bids").orderByChild("taskId").equalTo(taskId).once("child_added", function (snapshot) {
         var bid = snapshot.val();
@@ -230,12 +256,16 @@ firebase.database().ref("tasksCompleted").orderByChild("wasRead").equalTo(false)
         var task = snapshot.val();
         task.status = "FINISHED";
 
+        incrementUserTasksCompleted(task.ownerId);
+
         taskRef.remove();
 
         firebase.database().ref("tasks/finished/" + snapshot.key).set(task);
 
         firebase.database().ref("taskWinners/" + snapshot.key).once("value", function (snapshot) {
             var taskWinner = snapshot.val();
+
+            incrementUserBidsCompleted(taskWinner.winnerId);
 
             sendNotificationToUser(taskWinner.winnerId, "A task you were assigned has been marked finished.  ", function () {
                 console.log("Sent task finished message successfully.  ")

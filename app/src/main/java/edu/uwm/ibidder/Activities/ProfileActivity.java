@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Calendar;
@@ -114,7 +115,7 @@ public class ProfileActivity extends AppCompatActivity
         fabuttonTaskCreator.setOnClickListener(this);
         final UserAccessor userAccessor = new UserAccessor();
 
-        userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+        userAccessor.getUserOnce(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
             @Override
             public void dataUpdate(UserModel um) {
                 //Case where user is Signed in for the first Time. Set all the fields. Ask for Required Fields.
@@ -172,6 +173,8 @@ public class ProfileActivity extends AppCompatActivity
                 break;
             case R.id.action_logOut:
                 FirebaseAuth.getInstance().signOut();
+                if (LoginManager.getInstance() != null)
+                    LoginManager.getInstance().logOut();
                 startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
                 break;
         }
@@ -251,7 +254,7 @@ public class ProfileActivity extends AppCompatActivity
 
                 final UserAccessor userAccessor = new UserAccessor();
 
-                userAccessor.getUser(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
+                userAccessor.getUserOnce(FirebaseAuth.getInstance().getCurrentUser().getUid(), new UserCallbackListener() {
                     @Override
                     public void dataUpdate(UserModel um) {
                         if (um == null) {

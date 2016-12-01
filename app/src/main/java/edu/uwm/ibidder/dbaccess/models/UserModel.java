@@ -13,6 +13,8 @@ public class UserModel {
     private String lastName;
     private String userId;
     private String messengerId; //field used by messenger- you don't have to set this yourself.
+    private int bidsCompleted = 0; //Number of tasks this user has finished (handled by backend)
+    private int tasksCompleted = 0; //Number of tasks this user has created that were finished (handled by backend)
 
     public UserModel() {
     }
@@ -23,7 +25,7 @@ public class UserModel {
      * @return True if there ar eno missing fields.
      */
     public boolean validate() {
-        return phoneNumber != null && email != null && firstName != null && lastName != null && userId != null;
+        return phoneNumber != null && firstName != null && lastName != null && userId != null;
     }
 
     public UserModel(String phoneNumber, String email, String firstName, String lastName) {
@@ -79,5 +81,13 @@ public class UserModel {
 
     public void setMessengerId(String messengerId) {
         this.messengerId = messengerId;
+    }
+
+    public int getBidsCompleted() {
+        return bidsCompleted;
+    }
+
+    public int getTasksCompleted() {
+        return tasksCompleted;
     }
 }
