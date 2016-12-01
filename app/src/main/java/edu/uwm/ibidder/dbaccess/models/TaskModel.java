@@ -16,7 +16,7 @@ public class TaskModel {
     private String title;
     private boolean isTaskItNow;
     private boolean isLocalTask; //True if the task requires someone to be in a physical location.
-    private HashMap<String, Boolean> tags; //stores the tags in format <Tag, True>
+    private HashMap<String, String> tags; //stores the tags in format <Tag, True>
     private int reportCount = 0; //Used by node server, not user editable
     private boolean wasDeleted = false; //Used by node server, false by default
     private String taskId;
@@ -28,7 +28,7 @@ public class TaskModel {
 
     }
 
-    public TaskModel(String taskName, String taskDescr, float maxPrice, String ownId, long exprTime, boolean isLocal, boolean isTaskNow, HashMap tags) {
+    public TaskModel(String taskName, String taskDescr, float maxPrice, String ownId, long exprTime, boolean isLocal, boolean isTaskNow, HashMap<String, String> tags) {
         this.title = taskName;
         this.description = taskDescr;
         this.maxPrice = maxPrice;
@@ -47,11 +47,11 @@ public class TaskModel {
         this.taskId = taskId;
     }
 
-    public HashMap<String, Boolean> getTags() {
+    public HashMap<String, String> getTags() {
         return tags;
     }
 
-    public void setTags(HashMap<String, Boolean> tags) {
+    public void setTags(HashMap<String, String> tags) {
         this.tags = tags;
     }
 

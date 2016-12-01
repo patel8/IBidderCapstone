@@ -43,6 +43,9 @@ public class TaskAccessor extends BaseAccessor {
         DatabaseReference pushedRef = ref.push();
         taskToCreate.setTaskId(pushedRef.getKey());
         taskToCreate.setStatus(TaskModel.TaskStatusType.READY.toString());
+
+
+
         pushedRef.setValue(taskToCreate);
 
         return pushedRef.getKey();
@@ -70,16 +73,16 @@ public class TaskAccessor extends BaseAccessor {
         return pushedRef.getKey();
     }
 
-    /**
+    /* Probably best not to use this method given the nature of tasks
      * Updates a task with the ID of taskKey to be equal to the TaskModel taskToUpdate.
      *
      * @param taskKey      The task to update's string key
      * @param taskToUpdate The model to update the task to
-     */
+
     public void updateTask(String taskKey, TaskModel taskToUpdate) {
         DatabaseReference ref = database.getReference("tasks/" + taskToUpdate.getStatus().toLowerCase() + "/" + taskKey);
         ref.setValue(taskToUpdate);
-    }
+    }*/
 
     /**
      * Deletes a task with the ID of taskKey.  This is done asynchronously.

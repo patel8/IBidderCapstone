@@ -303,7 +303,7 @@ public class ProfileActivity extends AppCompatActivity
                 String tskprice = taskprice.getText().toString();
                 String tsktags = tasktags.getText().toString();
                 String tagitems[] = tsktags.split(" ");
-                HashMap<String, Boolean> tags = new HashMap();
+                HashMap<String, String> tags = new HashMap<String, String>();
 
                 if (FrontEndSupport.taskCreateValidation(tskname, tskdesc, tskprice, expireDate, ProfileActivity.this)) {
                     final TaskAccessor ta = new TaskAccessor();
@@ -327,8 +327,10 @@ public class ProfileActivity extends AppCompatActivity
                         tm.setIsLocalTask(false);
                     }
                     // tags
+                    int i = 0;
                     for (String item : tagitems) {
-                        tags.put(item, true);
+                        tags.put(Integer.toString(i) + "x", item);
+                        i++;
                     }
                     tm.setTags(tags);
                     tm.setIsTaskItNow(taskItNow.isChecked());

@@ -63,7 +63,8 @@ public abstract class TaskCallbackListener implements ValueEventListener {
                     canUpdateData = false;
 
                     for (String key : taskModel.getTags().keySet()) {
-                        if (tagRestrictions.contains(key)) {
+                        String tag = taskModel.getTags().get(key);
+                        if (tagRestrictions.contains(tag)) {
                             canUpdateData = true;
                             break;
                         }
@@ -88,7 +89,8 @@ public abstract class TaskCallbackListener implements ValueEventListener {
                 canUpdateData = false;
 
                 for (String key : singleTask.getTags().keySet()) {
-                    if (tagRestrictions.contains(key)) {
+                    String tag = singleTask.getTags().get(key);
+                    if (tagRestrictions.contains(tag)) {
                         canUpdateData = true;
                         break;
                     }

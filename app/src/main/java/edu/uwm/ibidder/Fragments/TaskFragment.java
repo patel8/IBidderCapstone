@@ -52,7 +52,7 @@ public class TaskFragment extends Fragment {
     private TextView tasklowbid;
     private String savedName, savedDescr;
     private Date savedDate;
-    private HashMap<String, Boolean> savedTags;
+    private HashMap<String, String> savedTags;
     private float savedPrice;
     private boolean resetSave = false;
     private UserModel taskOwner;
@@ -319,7 +319,8 @@ public class TaskFragment extends Fragment {
         taskdate = (TextView)view.findViewById(R.id.label_taskEndTime);
         String tagbuilder = "";
         for(String key : savedTags.keySet()){
-            tagbuilder += key + " ";
+            String tag = savedTags.get(key);
+            tagbuilder += tag + " ";
         }
         tskname.setText(savedName);
         tskdescr.setText(savedDescr);
@@ -346,9 +347,11 @@ public class TaskFragment extends Fragment {
                 savedDescr = tskdescr.getText().toString();
                 String tags = tsktags.getText().toString();
                 String[] items = tags.split(" ");
-                savedTags = new HashMap<String, Boolean>();
+                savedTags = new HashMap<String, String>();
+                int i = 0;
                 for(String item : items){
-                    savedTags.put(item, true);
+                    savedTags.put(Integer.toString(i) + "x", item);
+                    i++;
                 }
                 if(!tskprice.getText().toString().equals("")){
                     savedPrice = Float.parseFloat(tskprice.getText().toString());
