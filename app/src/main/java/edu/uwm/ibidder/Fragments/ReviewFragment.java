@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.Query;
 
 import edu.uwm.ibidder.Activities.TaskActivityII;
+import edu.uwm.ibidder.Activities.UserProfileActivity;
 import edu.uwm.ibidder.DividerItemDecoration;
 import edu.uwm.ibidder.ItemClickSupport;
 import edu.uwm.ibidder.R;
@@ -77,7 +78,7 @@ public class ReviewFragment extends Fragment {
                 });
                 viewHolder.ratingBar.setRating(reviewModel.getReviewScore());
                 viewHolder.Description.setText(reviewModel.getReviewText());
-
+                viewHolder.ratingBar.setIsIndicator(true);
             }
         };
 
@@ -86,7 +87,8 @@ public class ReviewFragment extends Fragment {
         ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView rv, int position, View v) {
-
+                ReviewModel rm = adapter.getItem(position);
+                startActivity(new Intent(getContext(), UserProfileActivity.class).putExtra("UserID", rm.getReviewWriterId()));
             }
         });
 
