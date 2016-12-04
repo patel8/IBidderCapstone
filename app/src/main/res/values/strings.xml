@@ -58,5 +58,13 @@
     <string name="complete_task">Complete Task</string>
     <string name="report_task">Report Task</string>
 
+    <!-- Reward titles -->
+    <string name="reward_unknown">UNKNOWN</string>
+    <string name="reward_novice">NOVICE</string>
+    <string name="reward_revered">REVERED</string>
+    <string name="reward_master">MASTER</string>
+    <string name="reward_elite">ELITE</string>
+    <string name="reward_emperor">EMPEROR</string>
+
 
 </resources>

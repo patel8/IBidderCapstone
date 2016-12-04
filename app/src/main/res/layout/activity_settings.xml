@@ -108,7 +108,7 @@
         android:layout_marginTop="5dp">
 
         <TextView
-            android:text="Awards"
+            android:text="Rewards"
             android:gravity="center|top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -120,31 +120,64 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/awardsOuterLayout">
+                android:id="@+id/rewardsOuterLayout">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:id="@+id/awardsBidderLayout"
-                android:background="@drawable/back"
-                >
+                android:id="@+id/rewardsBidderLayout"
+                android:background="@drawable/back">
 
-                <TextView
-                    android:text=" BIDDER"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/lightgray"
-                    android:textColor="@color/black"
-                    android:textSize="17sp">
-                </TextView>
+                    android:orientation="horizontal"
+                    android:background="@color/lightgray">
+
+                    <TextView
+                        android:text="BIDDER"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/black"
+                        android:gravity="right"
+                        android:textSize="17sp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@color/lightgray"
+                        android:gravity="right">
+
+                        <TextView
+                            android:id="@+id/rewardsBidderRewardTitle"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/rewardsBidderRewardCount"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/awardsBidderAwardImage"
-                    android:src="@drawable/bidbutler_icon"
+                    android:id="@+id/rewardsBidderRewardImage"
                     android:layout_gravity="center"
                     android:padding="5dp"/>
 
@@ -155,26 +188,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:id="@+id/awardsCreatorLayout"
+                android:id="@+id/rewardsCreatorLayout"
                 android:background="@drawable/back"
-                >
+                android:weightSum="1">
 
-                <TextView
-                    android:text=" CREATOR"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/lightgray"
-                    android:textColor="@color/black"
-                    android:textSize="17sp">
-                </TextView>
+                    android:orientation="horizontal"
+                    android:background="@color/lightgray">
+
+                    <TextView
+                        android:text="CREATOR"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/lightgray"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        android:layout_marginLeft="5dp">
+                    </TextView>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="@color/lightgray"
+                        android:gravity="right">
+
+                        <TextView
+                            android:id="@+id/rewardsCreatorRewardTitle"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/rewardsCreatorRewardCount"
+                            android:textSize="17sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"/>
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/bidbutler_icon"
-                    android:id="@+id/awardsCreatorAwardImage"
+                    android:id="@+id/rewardsCreatorRewardImage"
                     android:layout_gravity="center"
-                    android:padding="5dp"/>
+                    />
 
             </LinearLayout>
 
