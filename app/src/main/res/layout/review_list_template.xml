@@ -13,9 +13,9 @@
         android:textSize="17sp" />
 
     <RatingBar
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ratingBarReviewRating" />
+        android:id="@+id/ratingBarReviewRating"/>
 
     <TextView
         android:text="TextView"
