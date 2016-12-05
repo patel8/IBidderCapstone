@@ -91,6 +91,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             }
         }.start();
 
+        //Todo - Set holder.pendingReview Visibility. And also Attach OnClickListener to add Review For Task Creator
     }
 
     private String timeConversion(int totalSeconds) {
@@ -125,6 +126,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public CountDownTimer countDownTimer;
         public TextView taskItNow;
         public TextView distance;
+        public TextView pendingReview;
 
         public ViewHolderForAvailTasks(View v) {
             super(v);
@@ -134,6 +136,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             CountDown = (TextView) v.findViewById(R.id.textViewListDateTime);
             taskItNow = (TextView) v.findViewById(R.id.textViewTaskItNow);
             distance = (TextView) v.findViewById(R.id.textViewListDistance);
+            pendingReview = (TextView) v.findViewById(R.id.textViewPendingReview);
 
         }
 

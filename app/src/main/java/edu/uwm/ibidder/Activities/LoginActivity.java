@@ -238,12 +238,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                     Toast.LENGTH_SHORT).show();
                             loginSuccess();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Authentication Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Authentication Failed" + task.toString(), Toast.LENGTH_SHORT).show();
                         }
 
                         // ...
                     }
                 });
+
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -333,6 +334,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        FirebaseAuth.getInstance().getCurrentUser().getProviderData().get(0).getEmail();
     }
 
 
