@@ -8,9 +8,11 @@ public class ReviewModel {
     private String reviewId;
     private String reviewWriterId;
     private String userReviewedId;
+    private String associatedTaskId;
     private float reviewScore;
     private String reviewText;
     private boolean wasRead = false; //used by backend
+    private boolean isBidderReview;
 
     public String getReviewId() {
         return reviewId;
@@ -54,5 +56,21 @@ public class ReviewModel {
 
     public void setUserReviewedId(String userReviewedId) {
         this.userReviewedId = userReviewedId;
+    }
+
+    public String getAssociatedTaskId() {
+        return associatedTaskId;
+    }
+
+    public void setAssociatedTaskId(String associatedTaskId) {
+        this.associatedTaskId = associatedTaskId;
+    }
+
+    public boolean getIsBidderReview() {
+        return isBidderReview;
+    }
+
+    public void setIsBidderReview(boolean isBidderReview) {
+        this.isBidderReview = isBidderReview;
     }
 }

@@ -19,6 +19,7 @@ public class TaskModel {
     private HashMap<String, String> tags; //stores the tags in format <Tag, True>
     private int reportCount = 0; //Used by node server, not user editable
     private boolean wasDeleted = false; //Used by node server, false by default
+    private boolean wasReviewedByBidder = false; //Used by node server, false by default
     private String taskId;
 
     /**
@@ -129,6 +130,10 @@ public class TaskModel {
 
     public void setWasDeleted(boolean wasDeleted) {
         this.wasDeleted = wasDeleted;
+    }
+
+    public boolean getWasReviewedByBidder() {
+        return wasReviewedByBidder;
     }
 
     public enum TaskStatusType {

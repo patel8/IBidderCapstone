@@ -216,18 +216,27 @@ firebase.database().ref("reviews").orderByChild("wasRead").equalTo(false).on("ch
             // make a new aggregated review
             aggregatedReview = {
                 reviewScore: review.reviewScore,
-                totalReviews: 1,
+                totalReviews: 1.0,
                 userId: review.userReviewedId
             };
 
             aggRef.set(aggregatedReview);
         } else {
             aggregatedReview.reviewScore = (aggregatedReview.reviewScore * aggregatedReview.totalReviews) + review.reviewScore;
-            aggregatedReview.totalReviews += 1;
+            aggregatedReview.totalReviews += 1.0;
             aggregatedReview.reviewScore /= aggregatedReview.totalReviews;
             aggRef.set(aggregatedReview);
         }
     });
+
+    if(review.isBidderReview) {
+        var taskRef = firebase.database().ref("tasks/finished/" + review.associatedTaskId);
+        taskRef.once("value", function(snapshot){
+           var task = snapshot.val();
+           task.wasReviewedByBidder = true;
+           taskRef.set(task);
+        });
+    }
 
     review.wasRead = true;
     firebase.database().ref("reviews/" + snapshot.key).set(review);

@@ -229,6 +229,7 @@ public class TaskActivityII extends AppCompatActivity {
 
                         reviewModel.setReviewWriterId(um.getTaskOwnerId());
                         reviewModel.setUserReviewedId(um.getWinnerId());
+                        reviewModel.setAssociatedTaskId(TaskId);
 
                         reviewAccessor.createReview(reviewModel);
 

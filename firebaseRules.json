@@ -105,6 +105,10 @@
           "wasDeleted": {
             ".validate": "newData.val() !== null && newData.isBoolean()"
           },
+          // wasReviewedByBidder must be a boolean
+          "wasReviewedByBidder": {
+            ".validate": "newData.val() !== null && newData.isBoolean()"
+          },
           // No other fields are allowed on a task
           "$other": {
             ".validate": false
@@ -150,7 +154,7 @@
           "expirationTime"
         ],
         ".read": false,
-        ".write": false,
+        ".write": false
       }
     },
     "bids": {
@@ -253,7 +257,6 @@
     "reviews": {
       ".read": "auth !== null",
       ".write": "auth !== null",
-
       ".indexOn": [
         "wasRead",
         "reviewWriterId",
@@ -278,6 +281,12 @@
         "wasRead": {
           ".validate": "newData.val() !== null && newData.isBoolean()"
         },
+        "isBidderReview": {
+          ".validate": "newData.val() !== null && newData.isBoolean()"
+        },
+        "associatedTaskId": {
+          ".validate": "newData.val() !== null && newData.isString()"
+        },
         // No other fields are allowed on a review
         "$other": {
           ".validate": false
@@ -286,7 +295,6 @@
     },
     "aggregatedReviews": {
       ".read": "auth !== null",
-
       "$aggregatedreviewid": {
         "reviewScore": {
           ".validate": "newData.val() !== null && newData.isNumber()"
@@ -306,7 +314,6 @@
     "tasksCompleted": {
       ".read": "auth !== null",
       ".write": "auth !== null",
-
       ".indexOn": [
         "wasRead"
       ],
