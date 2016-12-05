@@ -276,7 +276,7 @@ firebase.database().ref("tasksCompleted").orderByChild("wasRead").equalTo(false)
 
             incrementUserBidsCompleted(taskWinner.winnerId);
 
-            sendNotificationToUser(taskWinner.winnerId, "A task you were assigned has been marked finished.  ", function () {
+            sendNotificationToUser(taskWinner.winnerId, "A task you were assigned has been marked finished.  Please review your task creator.  ", function () {
                 console.log("Sent task finished message successfully.  ")
             }, task);
         })
