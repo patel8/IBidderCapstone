@@ -1,6 +1,9 @@
 {
   "rules": {
     "users": {
+      ".indexOn": [
+        "messengerId"
+      ],
       "$uid": {
         // only the user themself can read/write their own data
         ".read": "auth !== null",

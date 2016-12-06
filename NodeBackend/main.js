@@ -126,6 +126,21 @@ setInterval(function () {
 
 }, 10 * 1000);
 
+firebase.database().ref("/users").on("child_added", function (snapshot) {
+    var user = snapshot.val();
+
+    if (user.messengerId) {
+        firebase.database().ref("/users").orderByChild("messengerId").equalTo(user.messengerId).once("child_added", function (snapshot) {
+            var otherUser = snapshot.val();
+
+            if (otherUser.userId != user.userId) {
+                otherUser.messengerId = null;
+                firebase.database().ref("/users/" + otherUser.userId).set(otherUser);
+            }
+        });
+    }
+});
+
 /**
  * Moves a task to timeout queue
  * @param item The task model to timeout
@@ -229,12 +244,12 @@ firebase.database().ref("reviews").orderByChild("wasRead").equalTo(false).on("ch
         }
     });
 
-    if(review.isBidderReview) {
+    if (review.isBidderReview) {
         var taskRef = firebase.database().ref("tasks/finished/" + review.associatedTaskId);
-        taskRef.once("value", function(snapshot){
-           var task = snapshot.val();
-           task.wasReviewedByBidder = true;
-           taskRef.set(task);
+        taskRef.once("value", function (snapshot) {
+            var task = snapshot.val();
+            task.wasReviewedByBidder = true;
+            taskRef.set(task);
         });
     }
 
