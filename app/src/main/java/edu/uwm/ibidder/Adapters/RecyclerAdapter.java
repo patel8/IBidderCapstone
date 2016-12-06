@@ -1,6 +1,7 @@
 package edu.uwm.ibidder.Adapters;
 
 import android.graphics.Color;
+import android.opengl.Visibility;
 import android.os.CountDownTimer;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -92,6 +93,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }.start();
 
         //Todo - Set holder.pendingReview Visibility. And also Attach OnClickListener to add Review For Task Creator
+        holder.pendingReview.setVisibility(!model.getWasReviewedByBidder() && model.getStatus().equals(TaskModel.TaskStatusType.FINISHED.toString()) ? View.VISIBLE : View.GONE);
     }
 
     private String timeConversion(int totalSeconds) {

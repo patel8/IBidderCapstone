@@ -91,6 +91,8 @@ public class bidder_bid_history extends Fragment {
                 Intent intent = new Intent(getActivity(), TaskActivityII.class);
                 intent.putExtra("task_id", tm.getTaskId());
                 intent.putExtra("task_status", tm.getStatus().toString());
+                intent.putExtra("ShowToolBar", !tm.getWasReviewedByBidder());
+                intent.putExtra("ShowCompleteTask", true);
                 intent.putExtra("caller", FRAGMENT_NAME);
                 startActivity(intent);
             }

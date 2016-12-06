@@ -222,15 +222,22 @@ public class TaskActivityII extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         // Add review
+
                         ReviewAccessor reviewAccessor = new ReviewAccessor();
                         ReviewModel reviewModel = new ReviewModel();
+                        if(!caller.equals("bidder_bid_history")){
+                            reviewModel.setIsBidderReview(false);
+                            reviewModel.setReviewWriterId(um.getTaskOwnerId());
+                            reviewModel.setUserReviewedId(um.getWinnerId());
+                        }
+                        else{
+                            reviewModel.setIsBidderReview(true);
+                            reviewModel.setReviewWriterId(um.getWinnerId());
+                            reviewModel.setUserReviewedId(um.getTaskOwnerId());
+                        }
                         reviewModel.setReviewScore(ratingBar.getNumStars());
                         reviewModel.setReviewText(description.getText().toString());
-
-                        reviewModel.setReviewWriterId(um.getTaskOwnerId());
-                        reviewModel.setUserReviewedId(um.getWinnerId());
                         reviewModel.setAssociatedTaskId(TaskId);
-                        reviewModel.setIsBidderReview(false);
 
                         reviewAccessor.createReview(reviewModel);
 
