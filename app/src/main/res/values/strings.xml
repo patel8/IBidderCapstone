@@ -17,6 +17,8 @@
 
     <string name="fb_login_protocol_scheme">fb633724556807673</string>
 
+    <string name="sign_up_warning">Warning: This app is in alpha and does not currently support payments.</string>
+
     <!-- All following Strings are related to Profile Activity-->
     <string name="action_logout">Log out</string>
     <string name="user_profile">Profile</string>

@@ -66,7 +66,7 @@
                     android:id="@+id/textViewSignUp"
                     android:gravity="center"
                     android:text="@string/no_account_yet_create_one"
-                    android:textColor="@color/LabelColor"
+                    android:textColor="@android:color/white"
                     android:layout_weight="1" />
 
                 <TextView
@@ -75,7 +75,7 @@
                     android:id="@+id/textForgotPassword"
                     android:gravity="center"
                     android:text="@string/forgot_your_password"
-                    android:textColor="@color/LabelColor"
+                    android:textColor="@android:color/white"
                     android:layout_weight="1" />
             </LinearLayout>
 
