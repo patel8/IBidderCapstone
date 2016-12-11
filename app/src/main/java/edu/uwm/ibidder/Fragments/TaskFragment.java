@@ -26,6 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
+import edu.uwm.ibidder.Activities.ProfileActivity;
 import edu.uwm.ibidder.Activities.UserProfileActivity;
 import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.R;
@@ -282,18 +283,28 @@ public class TaskFragment extends Fragment {
         final TimePicker tp = (TimePicker) view.findViewById(R.id.timePicker);
         final CalendarView cv = (CalendarView) view.findViewById(R.id.calendarView);
         setTimePickerAndCalendarDate(tp, cv);
-        ad.setButton(AlertDialog.BUTTON_NEUTRAL, "Choose", new DialogInterface.OnClickListener() {
+        final Calendar calendar = Calendar.getInstance();
+
+        cv.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                calendar.set(year, month, dayOfMonth);
+            }
+        });
+
+        Button chooseButton = (Button) view.findViewById(R.id.buttonPickTimeDate);
+        chooseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 Date d = new Date(cv.getDate());
                 Calendar cal = FrontEndSupport.fillCalendar(d, tp.getHour(), tp.getMinute());
                 savedDate = cal.getTime();
                 taskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
+                ad.dismiss();
             }
         });
 
         return ad;
-
     }
 
     private AlertDialog editAlertDialog(){
@@ -364,16 +375,12 @@ public class TaskFragment extends Fragment {
                         .setPositiveButton("Do it", new DialogInterface.OnClickListener(){
                             // Delete old task, go back to new task page for the updated task
                             public void onClick(DialogInterface dialog, int id){
-                                //TODO: perform Firebase password validation to replace the task with a new one
                                 if(FrontEndSupport.taskCreateValidation(savedName, savedDescr, Float.toString(savedPrice), savedDate, getActivity())){
                                     final TaskAccessor ta = new TaskAccessor();
                                     TaskModel newTM = new TaskModel(savedName, savedDescr, savedPrice, taskOwner.getUserId(), DateTools.dateToEpoch(savedDate), false, false, savedTags);
                                     ta.createTask(newTM);
-                                    ta.removeTask(currentTask.getTaskId());//doesnt seem to be removing
-                                    Intent intent = new Intent(getActivity(), TaskActivityII.class);
-                                    intent.putExtra("task_id", newTM.getTaskId());
-                                    intent.putExtra("task_status", newTM.getStatus().toString());
-                                    intent.putExtra("caller", FRAGMENT_NAME);
+                                    ta.removeTask(currentTask.getTaskId());
+                                    Intent intent = new Intent(getActivity(), ProfileActivity.class);
                                     startActivity(intent);
                                     Toast.makeText(getActivity(), "Successfully created", Toast.LENGTH_SHORT).show();
                                 } else{
