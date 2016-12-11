@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:id="@+id/editTextPassword"
-            android:hint="password"
+            android:hint="Password"
             android:background="@android:drawable/editbox_background"
             android:layout_weight="1" />
 
