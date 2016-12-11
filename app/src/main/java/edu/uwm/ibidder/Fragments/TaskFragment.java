@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 import edu.uwm.ibidder.Activities.ProfileActivity;
 import edu.uwm.ibidder.Activities.UserProfileActivity;
 import edu.uwm.ibidder.FrontEndSupport;
+import edu.uwm.ibidder.Location.LocationService;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.dbaccess.BidAccessor;
@@ -327,6 +329,8 @@ public class TaskFragment extends Fragment {
         final EditText tskdescr = (EditText)view.findViewById(R.id.editText_taskdescription);
         final EditText tsktags = (EditText)view.findViewById(R.id.editText_tasktags);
         final EditText tskprice = (EditText)view.findViewById(R.id.editText_startprice);
+        final CheckBox isTaskLocal = (CheckBox) view.findViewById(R.id.checkbox_taskLocal);
+        final CheckBox taskItNow = (CheckBox) view.findViewById(R.id.checkbox_taskItNow);
         taskdate = (TextView)view.findViewById(R.id.label_taskEndTime);
         String tagbuilder = "";
         for(String key : savedTags.keySet()){
@@ -377,8 +381,20 @@ public class TaskFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int id){
                                 if(FrontEndSupport.taskCreateValidation(savedName, savedDescr, Float.toString(savedPrice), savedDate, getActivity())){
                                     final TaskAccessor ta = new TaskAccessor();
-                                    TaskModel newTM = new TaskModel(savedName, savedDescr, savedPrice, taskOwner.getUserId(), DateTools.dateToEpoch(savedDate), false, false, savedTags);
-                                    ta.createTask(newTM);
+                                    final TaskModel newTM = new TaskModel(savedName, savedDescr, savedPrice, taskOwner.getUserId(), DateTools.dateToEpoch(savedDate), isTaskLocal.isChecked(), taskItNow.isChecked(), savedTags);
+                                    if (isTaskLocal.isChecked()) {
+                                        final LocationService locationService = new LocationService(getContext()) {//?
+                                            @Override
+                                            public void getCoordinates(double lat, double longi) {
+                                                final String tskId = ta.createTask(newTM, lat, longi);
+                                                Toast.makeText(getActivity(), "created " + tskId, Toast.LENGTH_LONG).show();
+                                            }
+                                        };
+                                        locationService.updateLocation();
+                                    } else {
+                                        String tskId = ta.createTask(newTM);
+                                        Toast.makeText(getActivity(), "created " + tskId, Toast.LENGTH_LONG).show();
+                                    }
                                     ta.removeTask(currentTask.getTaskId());
                                     Intent intent = new Intent(getActivity(), ProfileActivity.class);
                                     startActivity(intent);
@@ -386,7 +402,6 @@ public class TaskFragment extends Fragment {
                                 } else{
                                     Toast.makeText(getActivity(), "Invalid information", Toast.LENGTH_SHORT).show();
                                 }
-
                             }
                         }).setNegativeButton("No", new DialogInterface.OnClickListener(){
                     // Go back to task page, no change
