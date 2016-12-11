@@ -21,6 +21,7 @@ import com.google.firebase.database.Query;
 
 import edu.uwm.ibidder.Activities.TaskActivityII;
 import edu.uwm.ibidder.DividerItemDecoration;
+import edu.uwm.ibidder.FrontEndSupport;
 import edu.uwm.ibidder.ItemClickSupport;
 import edu.uwm.ibidder.R;
 import edu.uwm.ibidder.Activities.TaskActivityII;
@@ -74,8 +75,8 @@ public class creator_task_in_progress extends Fragment {
             @Override
             protected void populateViewHolder(viewHolder viewHolder, TaskModel taskModel, int i) {
                 viewHolder.title.setText(taskModel.getTitle());
-                viewHolder.DateTime.setText(taskModel.getExpirationTime() + "");
-                viewHolder.Price.setText(taskModel.getMaxPrice() + "");
+                viewHolder.DateTime.setText(FrontEndSupport.getFormattedTime(DateTools.epochToDate(taskModel.getExpirationTime()).toString()) + "");
+                viewHolder.Price.setText("$"+taskModel.getMaxPrice());
                 viewHolder.distance.setVisibility(View.GONE);
 
                 viewHolder.taskItNow.setVisibility(taskModel.getIsTaskItNow()?View.VISIBLE:View.GONE);
