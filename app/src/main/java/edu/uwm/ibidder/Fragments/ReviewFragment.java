@@ -79,6 +79,15 @@ public class ReviewFragment extends Fragment {
                 viewHolder.ratingBar.setRating(reviewModel.getReviewScore());
                 viewHolder.Description.setText(reviewModel.getReviewText());
                 viewHolder.ratingBar.setIsIndicator(true);
+                if(reviewModel.getIsBidderReview()){
+                    viewHolder.reviewType.setText("AS BIDDER");
+                }
+                else{
+                    viewHolder.reviewType.setText("AS CREATOR");
+
+                }
+
+
             }
         };
 
@@ -99,11 +108,13 @@ public class ReviewFragment extends Fragment {
          public TextView userName;
          public  TextView Description;
          public RatingBar ratingBar;
+        public TextView reviewType;
         public ReviewFragmentHolder(View v){
             super(v);
             userName = (TextView) v.findViewById(R.id.textViewReviewUserName);
             Description = (TextView) v.findViewById(R.id.textViewReviewDescription);
             ratingBar = (RatingBar) v.findViewById(R.id.ratingBarReviewRating);
+            reviewType = (TextView) v.findViewById(R.id.textViewAsType);
         }
     }
 
