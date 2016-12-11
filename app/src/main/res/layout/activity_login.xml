@@ -5,96 +5,93 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.uwm.ibidder.Activities.LoginActivity"
-    android:background="@drawable/bidbutler_login"
-    android:gravity="center|bottom">
+    android:background="@color/black"
+    android:gravity="center">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_weight="1"
+        android:layout_gravity="center">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/bidbutler_title"/>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="350dp"
-            android:layout_height="350dp"
-            android:layout_weight="1"
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:ems="10"
+            android:id="@+id/editTextEmail"
+            android:hint="Email"
+            android:background="@android:drawable/editbox_background"
             android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="70dp">
+            android:layout_weight="1" />
 
-            <ImageView
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:id="@+id/editTextPassword"
+            android:hint="password"
+            android:background="@android:drawable/editbox_background"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:id="@+id/buttonLogin"
+            android:textColor="#ffffff"
+            android:background="@color/LabelColor"
+            android:textSize="20dp"
+            android:layout_weight="1" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="10dp"
+            android:layout_height="wrap_content">
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/bidbutler_title"/>
+                android:id="@+id/textViewSignUp"
+                android:gravity="center"
+                android:text="@string/no_account_yet_create_one"
+                android:textColor="@android:color/white"
+                android:layout_weight="1"
+                android:padding="5dp"/>
 
-            <EditText
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
-                android:ems="10"
-                android:id="@+id/editTextEmail"
-                android:hint="Email"
-                android:background="@android:drawable/editbox_background"
-                android:layout_gravity="center"
-                android:layout_weight="1" />
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:id="@+id/editTextPassword"
-                android:hint="password"
-                android:background="@android:drawable/editbox_background"
-                android:layout_weight="1" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Login"
-                android:id="@+id/buttonLogin"
-                android:textColor="#ffffff"
-                android:background="@color/LabelColor"
-                android:textSize="20dp"
-                android:layout_weight="1" />
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_margin="10dp"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textViewSignUp"
-                    android:gravity="center"
-                    android:text="@string/no_account_yet_create_one"
-                    android:textColor="@android:color/white"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textForgotPassword"
-                    android:gravity="center"
-                    android:text="@string/forgot_your_password"
-                    android:textColor="@android:color/white"
-                    android:layout_weight="1" />
-            </LinearLayout>
-
-            <com.facebook.login.widget.LoginButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/facebookLogin"
-                android:layout_weight="1" />
-
-            <com.google.android.gms.common.SignInButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/googleSignInButton"
-                ></com.google.android.gms.common.SignInButton>
-
-
+                android:id="@+id/textForgotPassword"
+                android:gravity="center"
+                android:text="@string/forgot_your_password"
+                android:textColor="@android:color/white"
+                android:layout_weight="1"
+                android:padding="5dp"/>
         </LinearLayout>
+
+        <com.facebook.login.widget.LoginButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/facebookLogin"
+            android:layout_weight="1" />
+
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/googleSignInButton"
+            ></com.google.android.gms.common.SignInButton>
+
+
+    </LinearLayout>
 
 
 
