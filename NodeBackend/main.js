@@ -126,7 +126,7 @@ setInterval(function () {
 
 }, 10 * 1000);
 
-firebase.database().ref("/users").on("child_added", function (snapshot) {
+firebase.database().ref("/users").on("child_changed", function (snapshot) {
     var user = snapshot.val();
 
     if (user.messengerId) {
