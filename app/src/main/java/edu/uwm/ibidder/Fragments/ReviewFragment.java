@@ -74,7 +74,7 @@ public class ReviewFragment extends Fragment {
                     @Override
                     public void dataUpdate(UserModel um) {
                         viewHolder.userName.setText(um.getFirstName()+" "+um.getLastName());
-                                            }
+                    }
                 });
                 viewHolder.ratingBar.setRating(reviewModel.getReviewScore());
                 viewHolder.Description.setText(reviewModel.getReviewText());
