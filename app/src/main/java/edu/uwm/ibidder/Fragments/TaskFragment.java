@@ -298,7 +298,7 @@ public class TaskFragment extends Fragment {
         chooseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Date d = new Date(cv.getDate());
+                Date d = new Date(calendar.getTimeInMillis());
                 Calendar cal = FrontEndSupport.fillCalendar(d, tp.getHour(), tp.getMinute());
                 savedDate = cal.getTime();
                 taskdate.setText(FrontEndSupport.getFormattedTime(savedDate.toString()));
