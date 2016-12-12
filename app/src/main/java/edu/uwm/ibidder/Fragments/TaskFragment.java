@@ -176,6 +176,26 @@ public class TaskFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private AlertDialog taskNowInfoDialog(){
+        final AlertDialog ad = new AlertDialog.Builder(getContext()).create();
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        ad.setTitle("Task accepted for $"+currentTask.getMaxPrice());
+        View view = inflater.inflate(R.layout.alertdialog_taskitnowinfo, null);
+        ad.setView(view);
+        ad.setCancelable(false);
+        ad.setCanceledOnTouchOutside(false);
+        Button okButton = (Button)view.findViewById(R.id.taskitnowinfo_button);
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        return ad;
+    }
+
     private AlertDialog taskNowDialog(){
         final AlertDialog ad = new AlertDialog.Builder(getContext()).create();
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -195,8 +215,9 @@ public class TaskFragment extends Fragment {
                 newBid.setBidValue(currentTask.getMaxPrice());
                 currentTask.setExpirationTime(0l);
                 ba.createBid(newBid);
-                Toast.makeText(getContext(), "Task accepted for $" + currentTask.getMaxPrice(), Toast.LENGTH_SHORT).show();
                 ad.dismiss();
+                AlertDialog infoad = taskNowInfoDialog();
+                infoad.show();
             }
         });
         taskDecline.setOnClickListener(new View.OnClickListener(){

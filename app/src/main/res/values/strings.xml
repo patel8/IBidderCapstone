@@ -68,5 +68,8 @@
     <string name="reward_elite">ELITE</string>
     <string name="reward_emperor">EMPEROR</string>
 
+    <!-- Task it now info -->
+    <string name="taskitnowinfomessage">Please wait for confirmation from the creator.</string>
+
 
 </resources>
